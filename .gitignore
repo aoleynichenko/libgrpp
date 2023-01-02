@@ -1,2 +1,4 @@
 build/
+libgrpp_c_*
+libgrpp_f90_*
 

@@ -58,14 +58,15 @@ add_test(
 )
 
 add_test(
-        NAME HgH+
-        WORKING_DIRECTORY ../test/HgH+
+        NAME H2O
+        WORKING_DIRECTORY ../test/H2O
         COMMAND bash run_test.sh
 )
 
-#add_test(
-#        NAME H2O
-#        WORKING_DIRECTORY ../test/H2O
-#        COMMAND bash run_test.sh
-#)
+add_test(
+        NAME ThO
+        WORKING_DIRECTORY ../test/ThO
+        COMMAND bash run_test.sh
+)
+
 

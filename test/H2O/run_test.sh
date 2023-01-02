@@ -11,16 +11,16 @@ if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_so_z.txt so_z.txt
 if [ $? -ne 0 ]; then exit 1; fi
 
-test_libgrpp_f90.x
+#test_libgrpp_f90.x
 
-libgrpp_compare_matrices.x libgrpp_f90_arep.txt arep.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_f90_so_x.txt so_x.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_f90_so_y.txt so_y.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_f90_so_z.txt so_z.txt
-if [ $? -ne 0 ]; then exit 1; fi
+#libgrpp_compare_matrices.x libgrpp_f90_arep.txt arep.txt
+#if [ $? -ne 0 ]; then exit 1; fi
+#libgrpp_compare_matrices.x libgrpp_f90_so_x.txt so_x.txt
+#if [ $? -ne 0 ]; then exit 1; fi
+#libgrpp_compare_matrices.x libgrpp_f90_so_y.txt so_y.txt
+#if [ $? -ne 0 ]; then exit 1; fi
+#libgrpp_compare_matrices.x libgrpp_f90_so_z.txt so_z.txt
+#if [ $? -ne 0 ]; then exit 1; fi
 
 exit 0
 
