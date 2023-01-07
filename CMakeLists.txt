@@ -69,4 +69,10 @@ add_test(
         COMMAND bash run_test.sh
 )
 
+add_test(
+        NAME UO2
+        WORKING_DIRECTORY ../test/UO2
+        COMMAND bash run_test.sh
+)
+
 
