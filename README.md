@@ -33,7 +33,7 @@ LIBGRPP: A Library for the Evaluation of Molecular Integrals of the Generalized 
 doi: [10.3390/sym15010197](https://doi.org/10.3390/sym15010197)
 
 ```
-@article{Oleynichenko2022,
+@article{Oleynichenko2023,
   title = {{LIBGRPP}: A library for the evaluation of molecular integrals of the generalized relativistic pseudopotential operator over {G}aussian functions},
   author = {A. V. Oleynichenko and A. Zaitsevskii and N. S. Mosyagin and A. N. Petrov and E. Eliav and A. V. Titov},
   year = {2022},
