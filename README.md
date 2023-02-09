@@ -28,18 +28,22 @@ A. V. Oleynichenko, A. Zaitsevskii, N. S. Mosyagin, A. N. Petrov, E. Eliav, A. V
 
 LIBGRPP: A Library for the Evaluation of Molecular Integrals of the Generalized Relativistic Pseudopotential Operator over Gaussian Functions.
 
-Submitted to <i>Symmetry</i>, 2022
+<i>Symmetry</i>, 15(1), 197 (2022)
 
-doi: [10.20944/preprints202212.0530.v1](https://dx.doi.org/10.20944/preprints202212.0530.v1)
+doi: [10.3390/sym15010197](https://doi.org/10.3390/sym15010197)
 
 ```
 @article{Oleynichenko2022,
   title = {{LIBGRPP}: A library for the evaluation of molecular integrals of the generalized relativistic pseudopotential operator over {G}aussian functions},
   author = {A. V. Oleynichenko and A. Zaitsevskii and N. S. Mosyagin and A. N. Petrov and E. Eliav and A. V. Titov},
   year = {2022},
-  journal = {Submitted to Symmetry},
-  doi = {10.20944/preprints202212.0530.v1},
-  url = {https://doi.org/10.20944/preprints202212.0530.v1}
+  journal = {Symmetry},
+  volume = {15},
+  year = {2023},
+  number = {1},
+  article-number = {197},
+  url = {https://www.mdpi.com/2073-8994/15/1/197},
+  doi = {10.3390/sym15010197}
 }
 ```
 
@@ -74,5 +78,5 @@ Alexander Oleynichenko, alexvoleynichenko@gmail.com
 
 * integrals non-local terms (with projectors onto subvalence shells):
 
-  * A. V. Oleynichenko, A. Zaitsevskii, N. S. Mosyagin, A. N. Petrov, E. Eliav, A. V. Titov. LIBGRPP: A library for the evaluation of molecular integrals of the generalized relativistic pseudopotential operator over Gaussian functions. [Submitted to <i>Symmetry</i> (2022).](https://dx.doi.org/10.20944/preprints202212.0530.v1)
+  * A. V. Oleynichenko, A. Zaitsevskii, N. S. Mosyagin, A. N. Petrov, E. Eliav, A. V. Titov. LIBGRPP: A library for the evaluation of molecular integrals of the generalized relativistic pseudopotential operator over Gaussian functions. [<i>Symmetry</i>, 15(1), 197 (2022).](https://doi.org/10.3390/sym15010197)
 
