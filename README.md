@@ -23,6 +23,16 @@ A library for the evaluation of molecular integrals of the generalized relativis
 * no dependence on external libraries
   * GNU Scientific Library (GSL) comes with LIBGRPP and haven't to be build separately
 
+# How to compile examples and run tests
+
+```
+mkdir build
+cd build
+CC=icc FC=ifort cmake ..
+make
+make test
+```
+
 # Citation
 A. V. Oleynichenko, A. Zaitsevskii, N. S. Mosyagin, A. N. Petrov, E. Eliav, A. V. Titov.
 
