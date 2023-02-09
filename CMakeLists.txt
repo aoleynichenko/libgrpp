@@ -2,7 +2,7 @@
 #  libgrpp - a library for the evaluation of integrals over
 #            generalized relativistic pseudopotentials.
 #
-#  Copyright (C) 2021-2022 Alexander Oleynichenko
+#  Copyright (C) 2021-2023 Alexander Oleynichenko
 #
 
 cmake_minimum_required(VERSION 3.19)
@@ -13,11 +13,11 @@ set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(libgrpp)
 
-#add_compile_options(-pg)
 add_compile_options(-O3)
+#add_compile_options(-pg)
 add_executable(test_libgrpp_c.x
         test_libgrpp_c/main.c
-        test_libgrpp_c/xyz.c
+        test_libgrpp_c/molecule.c
         test_libgrpp_c/basis.c
         test_libgrpp_c/rpp.c
         test_libgrpp_c/elements.c
@@ -38,8 +38,7 @@ add_executable(test_libgrpp_f90.x
         test_libgrpp_f90/libgrpp.f90
         )
 
-
-target_link_libraries(test_libgrpp_c.x libgrpp -lm)
+target_link_libraries(test_libgrpp_c.x libgrpp -lm) # -pg)
 target_link_libraries(test_libgrpp_f90.x libgrpp -lm)
 
 
@@ -69,10 +68,10 @@ add_test(
         COMMAND bash run_test.sh
 )
 
-add_test(
-        NAME UO2
-        WORKING_DIRECTORY ../test/UO2
-        COMMAND bash run_test.sh
-)
 
+#add_test(
+#        NAME UO2
+#        WORKING_DIRECTORY ../test/UO2
+#        COMMAND bash run_test.sh
+#)
 

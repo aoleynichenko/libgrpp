@@ -2,7 +2,7 @@
  *  libgrpp - a library for the evaluation of integrals over
  *            generalized relativistic pseudopotentials.
  *
- *  Copyright (C) 2021-2022 Alexander Oleynichenko
+ *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
 #ifndef LIBGRPP_SPHERICAL_HARMONICS_H

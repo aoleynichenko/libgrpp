@@ -2,14 +2,14 @@
  *  libgrpp - a library for the evaluation of integrals over
  *            generalized relativistic pseudopotentials.
  *
- *  Copyright (C) 2021-2022 Alexander Oleynichenko
+ *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
 #ifndef SHELL_LIST_H_INCLUDED
 #define SHELL_LIST_H_INCLUDED
 
 #include "../libgrpp/libgrpp.h"
-#include "xyz.h"
+#include "molecule.h"
 #include "basis.h"
 
 

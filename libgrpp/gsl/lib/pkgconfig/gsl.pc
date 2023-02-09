@@ -1,0 +1,11 @@
+prefix=/home/alexander/Science/libgrpp/libgrpp/gsl
+exec_prefix=/home/alexander/Science/libgrpp/libgrpp/gsl
+libdir=/home/alexander/Science/libgrpp/libgrpp/gsl/lib
+includedir=/home/alexander/Science/libgrpp/libgrpp/gsl/include
+GSL_CBLAS_LIB=-lgslcblas
+
+Name: GSL
+Description: GNU Scientific Library
+Version: 2.7
+Libs: -L/home/alexander/Science/libgrpp/libgrpp/gsl/lib -lgsl ${GSL_CBLAS_LIB} -lm -lm 
+Cflags: -I/home/alexander/Science/libgrpp/libgrpp/gsl/include

@@ -2,7 +2,7 @@
 !  libgrpp - a library for the evaluation of integrals over
 !            generalized relativistic pseudopotentials.
 !
-!  Copyright (C) 2021-2022 Alexander Oleynichenko
+!  Copyright (C) 2021-2023 Alexander Oleynichenko
 !
 
 module evalints
@@ -91,7 +91,7 @@ contains
                                 nprim_A = block_num_prim(z1, iblock1)
                                 nprim_B = block_num_prim(z2, iblock2)
 
-                                print '(a,i3,a,i3)', ' ishell=', ishell, '    jshell=', jshell
+                                print '(a,i3,a,i3)', ' grpp: ishell=', ishell, '    jshell=', jshell
 
                                 ! sum over atoms with pseudopotentials
                                 do ic = 1, natoms
@@ -216,6 +216,105 @@ contains
     end subroutine calculate_ecp_integrals
 
 
+    subroutine calculate_overlap_integrals(overlap_matrix)
+
+        use ecp
+        use basis
+        use xyz
+        use libgrpp
+        implicit none
+
+        ! output matrices
+        real(8) :: overlap_matrix(:, :)
+
+        ! local variables
+        integer :: basis_dim
+        integer :: iatom1, iatom2
+        integer :: iblock1, iblock2
+        integer :: ifun1, ifun2
+        integer :: nprim
+        integer :: ncontr
+        integer :: z1, z2
+        integer :: L_A, L_B
+        integer :: r, s, t
+        integer :: cart_A
+        integer :: ncart1, ncart2
+        integer :: icart1, icart2
+        integer :: ishell, jshell
+        integer(4) :: nprim_A, nprim_B
+        integer :: cart_list_1(100, 3)
+        integer :: cart_list_2(100, 3)
+        real(8) :: origin_A(3), origin_B(3)
+        integer, parameter :: MAX_BUF = 10000
+        real(8) :: buf(MAX_BUF)
+        integer :: ic, zc
+        integer :: mass_number
+        integer :: ioffs, joffs
+        integer :: i, j
+        integer(4) :: err_code
+        real(8) :: r_rms
+        real(8) :: fermi_c
+        real(8) :: fermi_a
+        real(8) :: nuclear_model_params(10)
+        real(8), parameter :: FERMI_UNITS_TO_ATOMIC = 1.0 / 52917.7249
+
+        print *
+        print *, 'evaluation of overlap integrals'
+        print *
+
+        overlap_matrix = 0.0d0
+
+        ioffs = 0
+        ishell = 0
+        do iatom1 = 1, natoms
+            z1 = charges(iatom1)
+            do iblock1 = 1, num_blocks(z1)
+                do ifun1 = 1, block_num_contr(z1, iblock1)
+                    call generate_cartesians(iblock1 - 1, cart_list_1, ncart1)
+                    ishell = ishell + 1
+
+                    joffs = 0
+                    jshell = 0
+                    do iatom2 = 1, natoms
+                        z2 = charges(iatom2)
+                        do iblock2 = 1, num_blocks(z2)
+                            do ifun2 = 1, block_num_contr(z2, iblock2)
+                                call generate_cartesians(iblock2 - 1, cart_list_2, ncart2)
+                                jshell = jshell + 1
+
+                                L_A = iblock1 - 1
+                                L_B = iblock2 - 1
+                                nprim_A = block_num_prim(z1, iblock1)
+                                nprim_B = block_num_prim(z2, iblock2)
+
+                                print '(a,i3,a,i3)', ' overlap: ishell=', ishell, '    jshell=', jshell
+
+                                ! calculate integrals for the shell pair
+                                call libgrpp_overlap_integrals( &
+                                        coord(iatom1, :), L_A, nprim_A, &
+                                        coeffs(z1, iblock1, ifun1, :), exponents(z1, iblock1, :), &
+                                        coord(iatom2, :), L_B, nprim_B, &
+                                        coeffs(z2, iblock2, ifun2, :), exponents(z2, iblock2, :), &
+                                        buf &
+                                        )
+
+                                call update_matrix_part(overlap_matrix, ioffs, joffs, buf, ncart1, ncart2)
+
+                                joffs = joffs + ncart2
+
+                            end do
+                        end do
+                    end do
+
+                    ioffs = ioffs + ncart1
+
+                end do
+            end do
+        end do
+
+    end subroutine calculate_overlap_integrals
+
+
     subroutine calculate_nuclear_attraction_integrals(nuc_attr_matrix, nuclear_model)
 
         use ecp
@@ -288,7 +387,7 @@ contains
                                 nprim_A = block_num_prim(z1, iblock1)
                                 nprim_B = block_num_prim(z2, iblock2)
 
-                                print '(a,i3,a,i3)', ' ishell=', ishell, '    jshell=', jshell
+                                print '(a,i3,a,i3)', ' nuc attr: ishell=', ishell, '    jshell=', jshell
 
                                 ! loop over atoms
                                 do ic = 1, natoms

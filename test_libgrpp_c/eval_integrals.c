@@ -2,7 +2,7 @@
  *  libgrpp - a library for the evaluation of integrals over
  *            generalized relativistic pseudopotentials.
  *
- *  Copyright (C) 2021-2022 Alexander Oleynichenko
+ *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
 #include "eval_integrals.h"
@@ -63,7 +63,7 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
             int ket_dim = libgrpp_get_shell_size(ket);
 
             double t1 = abs_time();
-            printf("ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
+            printf("grpp: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
 
             for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
                 int z = molecule->charges[iatom];
@@ -175,6 +175,43 @@ void evaluate_grpp_integrals_shell_pair(
 }
 
 
+void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, double *overlap_matrix)
+{
+    double buf[MAX_BUF];
+
+    int dim = calculate_basis_dim(shell_list, num_shells);
+
+    memset(overlap_matrix, 0, sizeof(double) * dim * dim);
+
+    int ioffset = 0;
+    for (int ishell = 0; ishell < num_shells; ishell++) {
+
+        libgrpp_shell_t *bra_shell = shell_list[ishell];
+        int bra_dim = libgrpp_get_shell_size(bra_shell);
+
+        int joffset = 0;
+        for (int jshell = 0; jshell < num_shells; jshell++) {
+
+            libgrpp_shell_t *ket_shell = shell_list[jshell];
+            int ket_dim = libgrpp_get_shell_size(ket_shell);
+
+            double t1 = abs_time();
+            printf("overlap: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+
+            libgrpp_overlap_integrals(bra_shell, ket_shell, buf);
+            add_block_to_matrix(dim, dim, overlap_matrix, bra_dim, ket_dim, buf, ioffset, joffset, 1.0);
+
+            double t2 = abs_time();
+            printf("%10.3f sec\n", t2 - t1);
+
+            joffset += ket_dim;
+        }
+
+        ioffset += bra_dim;
+    }
+}
+
+
 void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
                                            double *nucattr_matrix, int nuclear_model)
 {
@@ -197,7 +234,7 @@ void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **she
             int ket_dim = libgrpp_get_shell_size(ket);
 
             double t1 = abs_time();
-            printf("ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
+            printf("nuc attr: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
 
             for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
                 double charge_origin[3];

@@ -2,10 +2,10 @@
 !  libgrpp - a library for the evaluation of integrals over
 !            generalized relativistic pseudopotentials.
 !
-!  Copyright (C) 2021-2022 Alexander Oleynichenko
+!  Copyright (C) 2021-2023 Alexander Oleynichenko
 !
 
-program new_molgep
+program test_libgrpp_f90
 
     use xyz
     use basis
@@ -21,6 +21,7 @@ program new_molgep
     integer :: i
     character(len=32), allocatable :: basis_labels(:)
     real(8), allocatable :: nuc_attr_matrix(:,:)
+    real(8), allocatable :: overlap_matrix(:,:)
     real(8), allocatable :: arep_matrix(:,:)
     real(8), allocatable :: esop_matrices(:,:,:)
 
@@ -28,7 +29,7 @@ program new_molgep
     print *, '    -----------------------------------------------------'
     print *, '        the fortran front-end to the libgrpp library     '
     print *, '    -----------------------------------------------------'
-    print *, '    a. oleynichenko                           27 jun 2022'
+    print *, '    a. oleynichenko                            9 feb 2023'
     print *, '    -----------------------------------------------------'
     print *
 
@@ -73,31 +74,41 @@ program new_molgep
     end do
     print *
 
-    ! calculate matrix elements of the ECP operator
-    allocate(nuc_attr_matrix(basis_dim,basis_dim))
+    ! calculate matrix elements of the GRPP operator
     allocate(arep_matrix(basis_dim,basis_dim))
     allocate(esop_matrices(3,basis_dim,basis_dim))
-
-    nuc_attr_matrix = 0.0
     arep_matrix = 0.0
     esop_matrices = 0.0
 
     call calculate_ecp_integrals(arep_matrix, esop_matrices)
-    !call calculate_nuclear_attraction_integrals(nuc_attr_matrix, LIBGRPP_NUCLEAR_MODEL_FERMI)
 
-    ! flush nuclear attraction, AREP, ESOP matrices to files
-    call print_matrix('libgrpp_f90_coulomb.txt', nuc_attr_matrix, basis_dim, basis_dim)
+    ! overlap matrix
+    allocate(overlap_matrix(basis_dim,basis_dim))
+    overlap_matrix = 0.0
+
+    call calculate_overlap_integrals(overlap_matrix)
+
+    ! nuclear attraction integrals
+    allocate(nuc_attr_matrix(basis_dim,basis_dim))
+    nuc_attr_matrix = 0.0
+
+    call calculate_nuclear_attraction_integrals(nuc_attr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE)
+
+    ! flush matrices of AO integrals to files
     call print_matrix('libgrpp_f90_arep.txt', arep_matrix, basis_dim, basis_dim)
     call print_matrix('libgrpp_f90_so_x.txt', esop_matrices(1,:,:), basis_dim, basis_dim)
     call print_matrix('libgrpp_f90_so_y.txt', esop_matrices(2,:,:), basis_dim, basis_dim)
     call print_matrix('libgrpp_f90_so_z.txt', esop_matrices(3,:,:), basis_dim, basis_dim)
+    call print_matrix('libgrpp_f90_overlap.txt', overlap_matrix, basis_dim, basis_dim)
+    call print_matrix('libgrpp_f90_nucattr.txt', nuc_attr_matrix, basis_dim, basis_dim)
 
     ! cleanup
+    deallocate(overlap_matrix)
     deallocate(nuc_attr_matrix)
     deallocate(arep_matrix)
     deallocate(esop_matrices)
     deallocate(basis_labels)
 
-end program new_molgep
+end program test_libgrpp_f90
 
 
