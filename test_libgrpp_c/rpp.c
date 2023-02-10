@@ -14,7 +14,7 @@ int skip_line(FILE *fp);
 void print_rpp_expansion(FILE *out, libgrpp_potential_t *ecp);
 
 
-grpp_t *read_grpp(char *path, int nuc_charge)
+libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
 {
     FILE *inp_file;
     char buf[256];
@@ -54,15 +54,11 @@ grpp_t *read_grpp(char *path, int nuc_charge)
     }
 
     // create template for the effective core potential
-    grpp_t *grecp = (grpp_t *) malloc(sizeof(grpp_t) * 1);
-    grecp->n_arep = 0;
-    grecp->n_esop = 0;
-    grecp->n_oc_shells = 0;
-    grecp->U_L = NULL;
-    grecp->U_arep = (libgrpp_potential_t **) malloc(sizeof(libgrpp_potential_t *) * n_arep);
-    grecp->U_esop = (libgrpp_potential_t **) malloc(sizeof(libgrpp_potential_t *) * n_arep);
-    grecp->U_oc = (libgrpp_potential_t **) malloc(sizeof(libgrpp_potential_t *) * MAX_NUM_OC_SHELLS);
-    grecp->oc_shells = (libgrpp_shell_t **) malloc(sizeof(libgrpp_shell_t *) * MAX_NUM_OC_SHELLS);
+    libgrpp_grpp_t *grpp = libgrpp_new_grpp();
+
+    int n_oc_shells = 0;
+    libgrpp_shell_t *buf_oc_shells[MAX_NUM_OC_SHELLS];
+    libgrpp_potential_t *buf_oc_potentials[MAX_NUM_OC_SHELLS];
 
     // read outercore pseudospinor expansions
     for (int iblock = 0; iblock < n_blocks; iblock++) {
@@ -83,13 +79,13 @@ grpp_t *read_grpp(char *path, int nuc_charge)
         // add basis functions to the set
         for (int ifun = 0; ifun < n_contr; ifun++) {
             libgrpp_shell_t *shell = libgrpp_new_shell(origin, iblock, n_alpha, coef_buf[ifun], exp_buf);
-            grecp->oc_shells[grecp->n_oc_shells] = shell;
-            grecp->n_oc_shells++;
+            buf_oc_shells[n_oc_shells++] = shell;
         }
     }
 
     // read ECP expansions
-    grecp->n_oc_shells = 0;
+    //grpp->n_oc_shells = 0;
+    n_oc_shells = 0;
     for (int iblock = 0; iblock < n_arep; iblock++) {
         int n_prim;
         int n_oc;
@@ -119,75 +115,41 @@ grpp_t *read_grpp(char *path, int nuc_charge)
 
         libgrpp_potential_t *arep = libgrpp_new_potential(L, 0, n_prim, pow_buf, coef_buf[0], exp_buf);
         if (L == n_arep - 1) { // special case of the U_L radially-local potential
-            grecp->U_L = arep;
-            grecp->U_arep[L] = NULL;
+            libgrpp_grpp_set_local_potential(grpp, arep);
         }
         else {
-            grecp->U_arep[L] = arep;
+            libgrpp_grpp_add_averaged_potential(grpp, arep);
         }
 
         if (L == 0) {
-            // no SO term for angular momentum S
-            grecp->U_esop[0] = NULL;
+            // no SO term for angular momentum S => put NULL
+            libgrpp_grpp_add_spin_orbit_potential(grpp, NULL);
         }
         else {
             libgrpp_potential_t *esop = libgrpp_new_potential(L, 0, n_prim, pow_buf, coef_buf[1], exp_buf);
-            grecp->U_esop[L] = esop;
+            libgrpp_grpp_add_spin_orbit_potential(grpp, esop);
         }
 
+        // save OC potentials to buffer
         for (int ioc = 0; ioc < n_oc; ioc++) {
             int J = abs(2 * L + ((ioc % 2 == 0) ? -1 : +1));
             libgrpp_potential_t *oc_pot = libgrpp_new_potential(L, J, n_prim, pow_buf, coef_buf[2 + ioc], exp_buf);
-            grecp->U_oc[grecp->n_oc_shells] = oc_pot;
-            grecp->n_oc_shells++;
+            buf_oc_potentials[n_oc_shells++] = oc_pot;
         }
     }
 
-    grecp->n_arep = n_arep - 1;
-    grecp->n_esop = n_arep - 1;
+    // add pairs (OC potential, OC shell) to the GRPP
+    for (int ioc = 0; ioc < n_oc_shells; ioc++) {
+        libgrpp_grpp_add_outercore_potential(grpp, buf_oc_potentials[ioc], buf_oc_shells[ioc]);
+    }
 
     fclose(inp_file);
 
-    return grecp;
+    return grpp;
 }
 
 
-void delete_grpp(grpp_t *grpp)
-{
-    for (int ioc = 0; ioc < grpp->n_oc_shells; ioc++) {
-        libgrpp_delete_shell(grpp->oc_shells[ioc]);
-    }
-
-    if (grpp->U_L != NULL) {
-        libgrpp_delete_potential(grpp->U_L);
-    }
-
-    for (int L = 0; L < grpp->n_arep; L++) {
-        if (grpp->U_arep[L] != NULL) {
-            libgrpp_delete_potential(grpp->U_arep[L]);
-        }
-    }
-
-    for (int L = 1; L <= grpp->n_esop; L++) {
-        if (grpp->U_esop[L] != NULL) {
-            libgrpp_delete_potential(grpp->U_esop[L]);
-        }
-    }
-
-    for (int ioc = 0; ioc < grpp->n_oc_shells; ioc++) {
-        libgrpp_delete_potential(grpp->U_oc[ioc]);
-    }
-
-    free(grpp->U_arep);
-    free(grpp->U_esop);
-    free(grpp->U_oc);
-    free(grpp->oc_shells);
-
-    free(grpp);
-}
-
-
-void print_grpp(FILE *out, grpp_t *grpp)
+void print_grpp(FILE *out, libgrpp_grpp_t *grpp)
 {
     char ang_mom_labels[] = "SPDFGHIKLMNOPQ";
 
@@ -215,7 +177,7 @@ void print_grpp(FILE *out, grpp_t *grpp)
     }
 
     printf("\t\tsemi-local spin-orbit potentials:\n\n");
-    for (int L = 1; L <= grpp->n_esop; L++) {
+    for (int L = 1; L < grpp->n_esop; L++) {
         print_rpp_expansion(stdout, grpp->U_esop[L]);
         printf("\n");
     }

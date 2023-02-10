@@ -14,7 +14,7 @@
 
 #define MAX_NUM_OC_SHELLS 100
 
-typedef struct {
+/*typedef struct {
     int n_arep;
     int n_esop;
     int n_oc_shells;
@@ -23,12 +23,12 @@ typedef struct {
     libgrpp_potential_t **U_esop;
     libgrpp_potential_t **U_oc;
     libgrpp_shell_t **oc_shells;
-} grpp_t;
+} grpp_t;*/
 
-grpp_t *read_grpp(char *path, int nuc_charge);
+libgrpp_grpp_t *read_grpp(char *path, int nuc_charge);
 
-void delete_grpp(grpp_t *grpp);
+void delete_grpp(libgrpp_grpp_t *grpp);
 
-void print_grpp(FILE *out, grpp_t *grpp);
+void print_grpp(FILE *out, libgrpp_grpp_t *grpp);
 
 #endif /* RPP_H_INCLUDED */

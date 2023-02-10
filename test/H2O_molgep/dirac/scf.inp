@@ -1,0 +1,15 @@
+!                                                                                                   
+!                                                                                                   
+**GENERAL
+.PCMOUT
+**DIRAC                                                                                             
+.WAVE F                                                                                             
+**HAMILTONIAN                                                                                       
+.ECP                                                                                                
+**WAVE FUNCTIONS                                                                                    
+.SCF                                                                                             
+*SCF                                                                                                
+.CLOSED SHELL                                                                                       
+ 80
+*END OF DIRAC     
+

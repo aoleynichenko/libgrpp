@@ -68,6 +68,13 @@ void evaluate_radially_local_potential_integral_primitive_gaussians(
         double *matrix
 );
 
+double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
+        libgrpp_shell_t *shell_A, double alpha_A,
+        libgrpp_shell_t *shell_B, double alpha_B,
+        double *rpp_origin, double rpp_alpha,
+        double *rpp_matrix
+);
+
 double wrapper_coulomb_potential_point(double r, void *params);
 
 double wrapper_coulomb_potential_ball(double r, void *params);
@@ -97,14 +104,28 @@ void libgrpp_nuclear_attraction_integrals(
 
     // loop over primitives in contractions
     for (int i = 0; i < shell_A->num_primitives; i++) {
+        double coef_A_i = shell_A->coeffs[i];
+
         for (int j = 0; j < shell_B->num_primitives; j++) {
-            double coef_A_i = shell_A->coeffs[i];
             double coef_B_j = shell_B->coeffs[j];
 
             if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE) {
 
+                // use code for RPP type-1 integrals with RPP exponent = 0.0
+                evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
+                        shell_A, shell_A->alpha[i],
+                        shell_B, shell_B->alpha[j],
+                        charge_origin, 0.0,
+                        buf
+                );
+
+                for (int k = 0; k < size_A * size_B; k++) {
+                    buf[k] *= (-1) * charge;
+                }
+
+
                 // loop over cartesian functions inside the shells
-                for (int m = 0; m < size_A; m++) {
+                /*for (int m = 0; m < size_A; m++) {
                     for (int n = 0; n < size_B; n++) {
                         int n_A = shell_A->cart_list[3 * m + 0];
                         int l_A = shell_A->cart_list[3 * m + 1];
@@ -121,7 +142,7 @@ void libgrpp_nuclear_attraction_integrals(
 
                         buf[m * size_B + n] = s;
                     }
-                }
+                }*/
             }
             else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL ||
                      nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||

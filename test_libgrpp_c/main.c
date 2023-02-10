@@ -18,7 +18,7 @@
 #include "rpp.h"
 #include "shell_list.h"
 #include "eval_integrals.h"
-#include "overlap_gradients.h"
+#include "eval_integrals_grad.h"
 #include "grpp_gradients.h"
 #include "print_matrix.h"
 #include "abs_time.h"
@@ -27,7 +27,10 @@
 int main(int argc, char **argv)
 {
     basis_set_t *basis_sets[N_CHEM_ELEMENTS];
-    grpp_t *grpps[N_CHEM_ELEMENTS];
+    libgrpp_grpp_t *grpps[N_CHEM_ELEMENTS];
+
+    // turn off buffering for stdout (for seeing output immediately)
+    setvbuf(stdout, NULL, _IONBF, 0);
 
     libgrpp_set_cartesian_order(LIBGRPP_CART_ORDER_TURBOMOLE);
 
@@ -79,7 +82,7 @@ int main(int argc, char **argv)
     for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
         int nuc_charge = molecule->charges[iatom];
         if (grpps[nuc_charge] == NULL) {
-            grpp_t *grecp = read_grpp("ecp.inp", nuc_charge);
+            libgrpp_grpp_t *grecp = read_grpp("ecp.inp", nuc_charge);
             grpps[nuc_charge] = grecp;
         }
     }
@@ -138,7 +141,7 @@ int main(int argc, char **argv)
     time_start = abs_time();
     double *nucattr_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
 
-    //evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
+    evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
 
     time_finish = abs_time();
     printf("\ntime for nuclear attraction integrals: %.3f sec\n\n", time_finish - time_start);
@@ -154,6 +157,36 @@ int main(int argc, char **argv)
     print_matrix_lower_triangle("libgrpp_c_nucattr.txt", basis_dim, nucattr_matrix);
 
     /*
+     * gradients with respect to nuclear coordinates: overlap integrals
+     */
+    time_start = abs_time();
+
+    double **grad = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        grad[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    }
+
+    evaluate_overlap_integrals_gradient(num_shells, shell_list, molecule, grad);
+    for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+        char file_name_buf_x[100];
+        char file_name_buf_y[100];
+        char file_name_buf_z[100];
+
+        sprintf(file_name_buf_x, "libgrpp_c_overlap_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_y, "libgrpp_c_overlap_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_z, "libgrpp_c_overlap_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_x, basis_dim, grad[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_y, basis_dim, grad[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_z, basis_dim, grad[3 * iatom + 2]);
+    }
+
+    time_finish = abs_time();
+    printf("\ntime for overlap integrals gradients: %.3f sec\n\n", time_finish - time_start);
+
+    //evaluate_grpp_integrals_gradients(num_shells, shell_list, molecule, grpps);
+
+    /*
      * cleanup
      */
     free(arep_matrix);
@@ -163,6 +196,11 @@ int main(int argc, char **argv)
     free(nucattr_matrix);
     free(overlap_matrix);
 
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad[icoord]);
+    }
+    free(grad);
+
     delete_molecule(molecule);
     delete_shell_list(shell_list, num_shells);
     for (int i = 0; i < N_CHEM_ELEMENTS; i++) {
@@ -170,7 +208,7 @@ int main(int argc, char **argv)
             delete_basis_set(basis_sets[i]);
         }
         if (grpps[i] != NULL) {
-            delete_grpp(grpps[i]);
+            libgrpp_delete_grpp(grpps[i]);
         }
     }
 }

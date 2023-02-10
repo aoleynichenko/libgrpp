@@ -1,0 +1,742 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 63.98      2.70     2.70                             bessel_il_CF1
+  5.69      2.94     0.24  2223344     0.00     0.00  evaluate_real_spherical_harmonic
+  4.38      3.12     0.18                             gsl_sf_bessel_il_scaled_e
+  4.27      3.31     0.18  2667872     0.00     0.00  libgrpp_potential_value
+  4.03      3.48     0.17    52922     0.00     0.00  expand_radial_type2_grid
+  3.32      3.62     0.14   733573     0.00     0.00  angular_type2_integral
+  2.96      3.74     0.12 25150528     0.00     0.00  radial_type2_integrand_fun_contracted
+  2.13      3.83     0.09    61696     0.00     0.00  calculate_radial_type2_integral
+  1.18      3.88     0.05      256     0.00     0.00  libgrpp_spin_orbit_integrals
+  1.18      3.93     0.05                             cheb_eval_e
+  0.95      3.97     0.04                             gsl_sf_gammainv_e
+  0.83      4.00     0.04                             gsl_sf_bessel_IJ_taylor_e
+  0.71      4.04     0.03                             lnpoch_pos
+  0.59      4.06     0.03                             gsl_sf_bessel_i2_scaled_e
+  0.47      4.08     0.02    61696     0.00     0.00  screening_radial_type2
+  0.47      4.10     0.02                             _init
+  0.24      4.11     0.01 26314500     0.00     0.00  modified_bessel_scaled
+  0.24      4.12     0.01 10562742     0.00     0.00  binomial
+  0.24      4.13     0.01  3690490     0.00     0.00  get_real_spherical_harmonic_table
+  0.24      4.14     0.01  2787320     0.00     0.00  double_factorial
+  0.24      4.15     0.01      256     0.00     0.00  libgrpp_type2_integrals
+  0.24      4.16     0.01                             GSL_MAX_DBL
+  0.24      4.17     0.01                             gamma_xgthalf
+  0.24      4.18     0.01                             gsl_set_error_handler_off
+  0.24      4.19     0.01                             gsl_sf_bessel_i0_scaled_e
+  0.24      4.20     0.01                             gsl_sf_bessel_i1_scaled_e
+  0.24      4.21     0.01                             gsl_sf_exp_err_e
+  0.12      4.21     0.01     7258     0.00     0.00  calc_k_values
+  0.12      4.22     0.01                             gsl_sf_bessel_Jnu_asympx_e
+  0.00      4.22     0.00  2348415     0.00     0.00  integrate_unitary_sphere_polynomial
+  0.00      4.22     0.00   757128     0.00     0.00  screening_radial_type2_integral_primitive
+  0.00      4.22     0.00   441556     0.00     0.00  get_radial_type2_integral
+  0.00      4.22     0.00   236689     0.00     0.00  screening_type2_equation_for_maximum
+  0.00      4.22     0.00   127202     0.00     0.00  type3_angular_sum
+  0.00      4.22     0.00   113276     0.00     0.00  int_max2
+  0.00      4.22     0.00    82840     0.00     0.00  type2_angular_sum
+  0.00      4.22     0.00    11776     0.00     0.00  csh_to_rsh
+  0.00      4.22     0.00     8794     0.00     0.00  alloc_zeros_1d
+  0.00      4.22     0.00     2145     0.00     0.00  spherical_to_cartesian_coef
+  0.00      4.22     0.00     1665     0.00     0.00  factorial
+  0.00      4.22     0.00     1536     0.00     0.00  alloc_zeros_2d
+  0.00      4.22     0.00     1536     0.00     0.00  free_2d
+  0.00      4.22     0.00     1152     0.00     0.00  libgrpp_get_shell_size
+  0.00      4.22     0.00     1064     0.00     0.00  cartesian_generator_turbomole
+  0.00      4.22     0.00     1064     0.00     0.00  libgrpp_generate_shell_cartesians
+  0.00      4.22     0.00     1064     0.00     0.00  libgrpp_new_shell
+  0.00      4.22     0.00     1063     0.00     0.00  libgrpp_delete_shell
+  0.00      4.22     0.00     1047     0.00     0.00  factorial_ratio
+  0.00      4.22     0.00     1040     0.00     0.00  gaussian_norm_factor
+  0.00      4.22     0.00     1024     0.00     0.00  libgrpp_shell_deep_copy
+  0.00      4.22     0.00     1024     0.00     0.00  libgrpp_shell_mult_normcoef
+  0.00      4.22     0.00     1024     0.00     0.00  libgrpp_shell_shrink
+  0.00      4.22     0.00     1024     0.00     0.00  update_vector
+  0.00      4.22     0.00      537     0.00     0.00  libgrpp_delete_potential
+  0.00      4.22     0.00      537     0.00     0.00  libgrpp_new_potential
+  0.00      4.22     0.00      512     0.00     0.00  add_block_to_matrix
+  0.00      4.22     0.00      512     0.00     0.00  create_radial_type2_grid
+  0.00      4.22     0.00      512     0.00     0.00  create_real_spherical_harmonic_coeffs_tables
+  0.00      4.22     0.00      512     0.00     0.00  delete_radial_type2_grid
+  0.00      4.22     0.00      512     0.00     0.00  delete_radial_type2_integrals
+  0.00      4.22     0.00      512     0.00     0.00  int_max3
+  0.00      4.22     0.00      512     0.00     0.00  libgrpp_shrink_potential
+  0.00      4.22     0.00      512     0.00     0.00  tabulate_radial_type2_integrals
+  0.00      4.22     0.00      256     0.00     0.00  construct_angular_momentum_matrices_csh
+  0.00      4.22     0.00      256     0.00     0.00  construct_angular_momentum_matrices_rsh
+  0.00      4.22     0.00      130     0.00     0.00  abs_time
+  0.00      4.22     0.00      128     0.00     0.01  evaluate_grpp_integrals_shell_pair
+  0.00      4.22     0.00      116     0.00     0.00  gcd_ui
+  0.00      4.22     0.00      110     0.00     0.00  skip_line
+  0.00      4.22     0.00       60     0.00     0.00  get_cartesian_label
+  0.00      4.22     0.00       25     0.00     0.00  print_rpp_expansion
+  0.00      4.22     0.00        9     0.00     0.00  generate_cartesian_combinations
+  0.00      4.22     0.00        9     0.00     0.00  tabulate_real_spherical_harmonic_coeffs
+  0.00      4.22     0.00        8     0.00     0.00  add_basis_function
+  0.00      4.22     0.00        8     0.00     0.00  delete_basis_function
+  0.00      4.22     0.00        8     0.00     0.00  evaluate_overlap_integral_contracted_
+  0.00      4.22     0.00        8     0.00     0.00  libgrpp_daxpy
+  0.00      4.22     0.00        8     0.00     0.00  libgrpp_overlap_integrals
+  0.00      4.22     0.00        8     0.00     0.00  new_basis_function
+  0.00      4.22     0.00        8     0.00     0.00  overlap_integrals_shell_pair_OS86
+  0.00      4.22     0.00        8     0.00     0.00  radial_gto_norm_factor_
+  0.00      4.22     0.00        4     0.00     0.00  print_matrix_lower_triangle
+  0.00      4.22     0.00        2     0.00     0.00  calculate_basis_dim
+  0.00      4.22     0.00        2     0.00     0.00  delete_basis_set
+  0.00      4.22     0.00        2     0.00     0.00  delete_grpp
+  0.00      4.22     0.00        2     0.00     0.00  get_element_nuc_charge
+  0.00      4.22     0.00        2     0.00     0.00  new_basis_set
+  0.00      4.22     0.00        2     0.00     0.00  print_basis_set
+  0.00      4.22     0.00        2     0.00     0.00  print_grpp
+  0.00      4.22     0.00        2     0.00     0.00  read_basis_set
+  0.00      4.22     0.00        2     0.00     0.00  read_grpp
+  0.00      4.22     0.00        1     0.00     0.00  construct_shell_list
+  0.00      4.22     0.00        1     0.00     0.00  delete_molecule
+  0.00      4.22     0.00        1     0.00     0.00  delete_shell_list
+  0.00      4.22     0.00        1     0.00     1.07  evaluate_grpp_integrals
+  0.00      4.22     0.00        1     0.00     0.00  libgrpp_set_cartesian_generator
+  0.00      4.22     0.00        1     0.00     0.00  libgrpp_set_cartesian_order
+  0.00      4.22     0.00        1     0.00     0.00  libgrpp_set_radial_tolerance
+  0.00      4.22     0.00        1     0.00     0.00  new_molecule
+  0.00      4.22     0.00        1     0.00     0.00  print_molecule
+  0.00      4.22     0.00        1     0.00     0.00  print_shell_list
+  0.00      4.22     0.00        1     0.00     0.00  read_molecule
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.24% of 4.22 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     64.0    2.70    0.00                 bessel_il_CF1 [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]     25.4    0.00    1.07                 main [2]
+                0.00    1.07       1/1           evaluate_grpp_integrals [4]
+                0.00    0.00       2/2           read_basis_set [44]
+                0.00    0.00       4/4           print_matrix_lower_triangle [85]
+                0.00    0.00       2/2           print_basis_set [91]
+                0.00    0.00       2/2           read_grpp [93]
+                0.00    0.00       2/2           print_grpp [92]
+                0.00    0.00       2/130         abs_time [72]
+                0.00    0.00       2/2           delete_basis_set [87]
+                0.00    0.00       2/2           delete_grpp [88]
+                0.00    0.00       1/1           libgrpp_set_cartesian_order [98]
+                0.00    0.00       1/1           read_molecule [103]
+                0.00    0.00       1/1           print_molecule [101]
+                0.00    0.00       1/1           construct_shell_list [94]
+                0.00    0.00       1/1           print_shell_list [102]
+                0.00    0.00       1/2           calculate_basis_dim [86]
+                0.00    0.00       1/1           libgrpp_set_radial_tolerance [99]
+                0.00    0.00       1/1           delete_molecule [95]
+                0.00    0.00       1/1           delete_shell_list [96]
+-----------------------------------------------
+                0.00    1.07     128/128         evaluate_grpp_integrals [4]
+[3]     25.4    0.00    1.07     128         evaluate_grpp_integrals_shell_pair [3]
+                0.05    0.59     256/256         libgrpp_spin_orbit_integrals [5]
+                0.01    0.42     256/256         libgrpp_type2_integrals [9]
+                0.00    0.00    1024/1024        update_vector [62]
+-----------------------------------------------
+                0.00    1.07       1/1           main [2]
+[4]     25.4    0.00    1.07       1         evaluate_grpp_integrals [4]
+                0.00    1.07     128/128         evaluate_grpp_integrals_shell_pair [3]
+                0.00    0.00     512/512         add_block_to_matrix [65]
+                0.00    0.00     128/130         abs_time [72]
+                0.00    0.00      72/1152        libgrpp_get_shell_size [52]
+                0.00    0.00       1/2           calculate_basis_dim [86]
+-----------------------------------------------
+                0.05    0.59     256/256         evaluate_grpp_integrals_shell_pair [3]
+[5]     15.2    0.05    0.59     256         libgrpp_spin_orbit_integrals [5]
+                0.00    0.30     256/512         tabulate_radial_type2_integrals [6]
+                0.00    0.29  127202/127202      type3_angular_sum [10]
+                0.00    0.00 5279064/10562742     binomial [25]
+                0.00    0.00     256/512         create_real_spherical_harmonic_coeffs_tables [41]
+                0.00    0.00  260114/441556      get_radial_type2_integral [45]
+                0.00    0.00   56126/113276      int_max2 [46]
+                0.00    0.00     512/1152        libgrpp_get_shell_size [52]
+                0.00    0.00     256/256         construct_angular_momentum_matrices_rsh [71]
+                0.00    0.00     256/512         int_max3 [68]
+                0.00    0.00     256/512         delete_radial_type2_integrals [67]
+-----------------------------------------------
+                0.00    0.30     256/512         libgrpp_type2_integrals [9]
+                0.00    0.30     256/512         libgrpp_spin_orbit_integrals [5]
+[6]     14.2    0.00    0.60     512         tabulate_radial_type2_integrals [6]
+                0.09    0.51   61696/61696       calculate_radial_type2_integral [7]
+                0.00    0.00     512/512         create_radial_type2_grid [37]
+                0.00    0.00    1024/1024        libgrpp_shell_deep_copy [59]
+                0.00    0.00    1024/1024        libgrpp_shell_shrink [61]
+                0.00    0.00    1024/1024        libgrpp_shell_mult_normcoef [60]
+                0.00    0.00    1024/1063        libgrpp_delete_shell [56]
+                0.00    0.00     512/512         libgrpp_shrink_potential [69]
+                0.00    0.00     512/537         libgrpp_delete_potential [63]
+                0.00    0.00     512/512         delete_radial_type2_grid [66]
+-----------------------------------------------
+                0.09    0.51   61696/61696       tabulate_radial_type2_integrals [6]
+[7]     14.2    0.09    0.51   61696         calculate_radial_type2_integral [7]
+                0.17    0.32   52922/52922       expand_radial_type2_grid [8]
+                0.02    0.00   61696/61696       screening_radial_type2 [22]
+-----------------------------------------------
+                0.17    0.32   52922/52922       calculate_radial_type2_integral [7]
+[8]     11.5    0.17    0.32   52922         expand_radial_type2_grid [8]
+                0.18    0.00 2652000/2667872     libgrpp_potential_value [13]
+                0.12    0.01 25015616/25150528     radial_type2_integrand_fun_contracted [15]
+                0.00    0.00    6234/7258        calc_k_values [35]
+                0.00    0.00    6234/8794        alloc_zeros_1d [48]
+-----------------------------------------------
+                0.01    0.42     256/256         evaluate_grpp_integrals_shell_pair [3]
+[9]     10.1    0.01    0.42     256         libgrpp_type2_integrals [9]
+                0.00    0.30     256/512         tabulate_radial_type2_integrals [6]
+                0.00    0.11   82840/82840       type2_angular_sum [16]
+                0.00    0.00 5279064/10562742     binomial [25]
+                0.00    0.00     256/512         create_real_spherical_harmonic_coeffs_tables [41]
+                0.00    0.00  181442/441556      get_radial_type2_integral [45]
+                0.00    0.00   56126/113276      int_max2 [46]
+                0.00    0.00     512/1152        libgrpp_get_shell_size [52]
+                0.00    0.00     256/512         int_max3 [68]
+                0.00    0.00     256/512         delete_radial_type2_integrals [67]
+-----------------------------------------------
+                0.00    0.29  127202/127202      libgrpp_spin_orbit_integrals [5]
+[10]     6.8    0.00    0.29  127202         type3_angular_sum [10]
+                0.15    0.00 1431552/2223344     evaluate_real_spherical_harmonic [11]
+                0.12    0.01  611298/733573      angular_type2_integral [14]
+-----------------------------------------------
+                0.09    0.00  791792/2223344     type2_angular_sum [16]
+                0.15    0.00 1431552/2223344     type3_angular_sum [10]
+[11]     5.8    0.24    0.01 2223344         evaluate_real_spherical_harmonic [11]
+                0.01    0.00 2223344/3690490     get_real_spherical_harmonic_table [26]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     4.4    0.18    0.00                 gsl_sf_bessel_il_scaled_e [12]
+-----------------------------------------------
+                0.00    0.00   15872/2667872     create_radial_type2_grid [37]
+                0.18    0.00 2652000/2667872     expand_radial_type2_grid [8]
+[13]     4.3    0.18    0.00 2667872         libgrpp_potential_value [13]
+-----------------------------------------------
+                0.02    0.00  122275/733573      type2_angular_sum [16]
+                0.12    0.01  611298/733573      type3_angular_sum [10]
+[14]     3.6    0.14    0.01  733573         angular_type2_integral [14]
+                0.00    0.01 2348415/2348415     integrate_unitary_sphere_polynomial [34]
+                0.00    0.00 1467146/3690490     get_real_spherical_harmonic_table [26]
+-----------------------------------------------
+                0.00    0.00  134912/25150528     create_radial_type2_grid [37]
+                0.12    0.01 25015616/25150528     expand_radial_type2_grid [8]
+[15]     3.2    0.12    0.01 25150528         radial_type2_integrand_fun_contracted [15]
+                0.01    0.00 25150528/26314500     modified_bessel_scaled [24]
+-----------------------------------------------
+                0.00    0.11   82840/82840       libgrpp_type2_integrals [9]
+[16]     2.7    0.00    0.11   82840         type2_angular_sum [16]
+                0.09    0.00  791792/2223344     evaluate_real_spherical_harmonic [11]
+                0.02    0.00  122275/733573      angular_type2_integral [14]
+-----------------------------------------------
+                                                 <spontaneous>
+[17]     1.2    0.05    0.00                 cheb_eval_e [17]
+-----------------------------------------------
+                                                 <spontaneous>
+[18]     0.9    0.04    0.00                 gsl_sf_gammainv_e [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[19]     0.8    0.04    0.00                 gsl_sf_bessel_IJ_taylor_e [19]
+-----------------------------------------------
+                                                 <spontaneous>
+[20]     0.7    0.03    0.00                 lnpoch_pos [20]
+-----------------------------------------------
+                                                 <spontaneous>
+[21]     0.6    0.03    0.00                 gsl_sf_bessel_i2_scaled_e [21]
+-----------------------------------------------
+                0.02    0.00   61696/61696       calculate_radial_type2_integral [7]
+[22]     0.5    0.02    0.00   61696         screening_radial_type2 [22]
+                0.00    0.00  757128/757128      screening_radial_type2_integral_primitive [38]
+-----------------------------------------------
+                                                 <spontaneous>
+[23]     0.5    0.02    0.00                 _init [23]
+-----------------------------------------------
+                0.00    0.00  217216/26314500     screening_radial_type2_integral_primitive [38]
+                0.00    0.00  946756/26314500     screening_type2_equation_for_maximum [39]
+                0.01    0.00 25150528/26314500     radial_type2_integrand_fun_contracted [15]
+[24]     0.2    0.01    0.00 26314500         modified_bessel_scaled [24]
+-----------------------------------------------
+                0.00    0.00    4614/10562742     spherical_to_cartesian_coef [40]
+                0.00    0.00 5279064/10562742     libgrpp_type2_integrals [9]
+                0.00    0.00 5279064/10562742     libgrpp_spin_orbit_integrals [5]
+[25]     0.2    0.01    0.00 10562742         binomial [25]
+                0.00    0.00     116/116         gcd_ui [73]
+-----------------------------------------------
+                0.00    0.00 1467146/3690490     angular_type2_integral [14]
+                0.01    0.00 2223344/3690490     evaluate_real_spherical_harmonic [11]
+[26]     0.2    0.01    0.00 3690490         get_real_spherical_harmonic_table [26]
+-----------------------------------------------
+                0.00    0.00       8/2787320     radial_gto_norm_factor_ [43]
+                0.01    0.00 2787312/2787320     integrate_unitary_sphere_polynomial [34]
+[27]     0.2    0.01    0.00 2787320         double_factorial [27]
+-----------------------------------------------
+                                                 <spontaneous>
+[28]     0.2    0.01    0.00                 GSL_MAX_DBL [28]
+-----------------------------------------------
+                                                 <spontaneous>
+[29]     0.2    0.01    0.00                 gamma_xgthalf [29]
+-----------------------------------------------
+                                                 <spontaneous>
+[30]     0.2    0.01    0.00                 gsl_set_error_handler_off [30]
+-----------------------------------------------
+                                                 <spontaneous>
+[31]     0.2    0.01    0.00                 gsl_sf_bessel_i0_scaled_e [31]
+-----------------------------------------------
+                                                 <spontaneous>
+[32]     0.2    0.01    0.00                 gsl_sf_bessel_i1_scaled_e [32]
+-----------------------------------------------
+                                                 <spontaneous>
+[33]     0.2    0.01    0.00                 gsl_sf_exp_err_e [33]
+-----------------------------------------------
+                0.00    0.01 2348415/2348415     angular_type2_integral [14]
+[34]     0.2    0.00    0.01 2348415         integrate_unitary_sphere_polynomial [34]
+                0.01    0.00 2787312/2787320     double_factorial [27]
+-----------------------------------------------
+                0.00    0.00    1024/7258        create_radial_type2_grid [37]
+                0.00    0.00    6234/7258        expand_radial_type2_grid [8]
+[35]     0.1    0.01    0.00    7258         calc_k_values [35]
+-----------------------------------------------
+                                                 <spontaneous>
+[36]     0.1    0.01    0.00                 gsl_sf_bessel_Jnu_asympx_e [36]
+-----------------------------------------------
+                0.00    0.00     512/512         tabulate_radial_type2_integrals [6]
+[37]     0.1    0.00    0.00     512         create_radial_type2_grid [37]
+                0.00    0.00   15872/2667872     libgrpp_potential_value [13]
+                0.00    0.00  134912/25150528     radial_type2_integrand_fun_contracted [15]
+                0.00    0.00    1024/7258        calc_k_values [35]
+                0.00    0.00    2560/8794        alloc_zeros_1d [48]
+                0.00    0.00    1536/1536        alloc_zeros_2d [50]
+-----------------------------------------------
+                0.00    0.00  757128/757128      screening_radial_type2 [22]
+[38]     0.0    0.00    0.00  757128         screening_radial_type2_integral_primitive [38]
+                0.00    0.00  236689/236689      screening_type2_equation_for_maximum [39]
+                0.00    0.00  217216/26314500     modified_bessel_scaled [24]
+-----------------------------------------------
+                0.00    0.00  236689/236689      screening_radial_type2_integral_primitive [38]
+[39]     0.0    0.00    0.00  236689         screening_type2_equation_for_maximum [39]
+                0.00    0.00  946756/26314500     modified_bessel_scaled [24]
+-----------------------------------------------
+                0.00    0.00    2145/2145        tabulate_real_spherical_harmonic_coeffs [42]
+[40]     0.0    0.00    0.00    2145         spherical_to_cartesian_coef [40]
+                0.00    0.00    4614/10562742     binomial [25]
+                0.00    0.00    1665/1665        factorial [49]
+                0.00    0.00    1047/1047        factorial_ratio [57]
+-----------------------------------------------
+                0.00    0.00     256/512         libgrpp_type2_integrals [9]
+                0.00    0.00     256/512         libgrpp_spin_orbit_integrals [5]
+[41]     0.0    0.00    0.00     512         create_real_spherical_harmonic_coeffs_tables [41]
+                0.00    0.00       9/9           tabulate_real_spherical_harmonic_coeffs [42]
+-----------------------------------------------
+                0.00    0.00       9/9           create_real_spherical_harmonic_coeffs_tables [41]
+[42]     0.0    0.00    0.00       9         tabulate_real_spherical_harmonic_coeffs [42]
+                0.00    0.00    2145/2145        spherical_to_cartesian_coef [40]
+                0.00    0.00       9/9           generate_cartesian_combinations [77]
+-----------------------------------------------
+                0.00    0.00       8/8           read_basis_set [44]
+[43]     0.0    0.00    0.00       8         radial_gto_norm_factor_ [43]
+                0.00    0.00       8/2787320     double_factorial [27]
+                0.00    0.00       8/8           evaluate_overlap_integral_contracted_ [80]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[44]     0.0    0.00    0.00       2         read_basis_set [44]
+                0.00    0.00       8/8           radial_gto_norm_factor_ [43]
+                0.00    0.00       8/110         skip_line [74]
+                0.00    0.00       8/8           new_basis_function [83]
+                0.00    0.00       8/8           add_basis_function [78]
+                0.00    0.00       2/2           new_basis_set [90]
+-----------------------------------------------
+                0.00    0.00  181442/441556      libgrpp_type2_integrals [9]
+                0.00    0.00  260114/441556      libgrpp_spin_orbit_integrals [5]
+[45]     0.0    0.00    0.00  441556         get_radial_type2_integral [45]
+-----------------------------------------------
+                0.00    0.00    1024/113276      int_max3 [68]
+                0.00    0.00   56126/113276      libgrpp_type2_integrals [9]
+                0.00    0.00   56126/113276      libgrpp_spin_orbit_integrals [5]
+[46]     0.0    0.00    0.00  113276         int_max2 [46]
+-----------------------------------------------
+                0.00    0.00   11776/11776       construct_angular_momentum_matrices_rsh [71]
+[47]     0.0    0.00    0.00   11776         csh_to_rsh [47]
+-----------------------------------------------
+                0.00    0.00    2560/8794        create_radial_type2_grid [37]
+                0.00    0.00    6234/8794        expand_radial_type2_grid [8]
+[48]     0.0    0.00    0.00    8794         alloc_zeros_1d [48]
+-----------------------------------------------
+                0.00    0.00    1665/1665        spherical_to_cartesian_coef [40]
+[49]     0.0    0.00    0.00    1665         factorial [49]
+-----------------------------------------------
+                0.00    0.00    1536/1536        create_radial_type2_grid [37]
+[50]     0.0    0.00    0.00    1536         alloc_zeros_2d [50]
+-----------------------------------------------
+                0.00    0.00    1536/1536        delete_radial_type2_grid [66]
+[51]     0.0    0.00    0.00    1536         free_2d [51]
+-----------------------------------------------
+                0.00    0.00       8/1152        print_shell_list [102]
+                0.00    0.00      16/1152        calculate_basis_dim [86]
+                0.00    0.00      16/1152        libgrpp_overlap_integrals [82]
+                0.00    0.00      16/1152        overlap_integrals_shell_pair_OS86 [84]
+                0.00    0.00      72/1152        evaluate_grpp_integrals [4]
+                0.00    0.00     512/1152        libgrpp_type2_integrals [9]
+                0.00    0.00     512/1152        libgrpp_spin_orbit_integrals [5]
+[52]     0.0    0.00    0.00    1152         libgrpp_get_shell_size [52]
+-----------------------------------------------
+                0.00    0.00    1064/1064        libgrpp_generate_shell_cartesians [54]
+[53]     0.0    0.00    0.00    1064         cartesian_generator_turbomole [53]
+-----------------------------------------------
+                0.00    0.00    1064/1064        libgrpp_new_shell [55]
+[54]     0.0    0.00    0.00    1064         libgrpp_generate_shell_cartesians [54]
+                0.00    0.00    1064/1064        cartesian_generator_turbomole [53]
+-----------------------------------------------
+                0.00    0.00       8/1064        construct_shell_list [94]
+                0.00    0.00      16/1064        read_grpp [93]
+                0.00    0.00      16/1064        evaluate_overlap_integral_contracted_ [80]
+                0.00    0.00    1024/1064        libgrpp_shell_deep_copy [59]
+[55]     0.0    0.00    0.00    1064         libgrpp_new_shell [55]
+                0.00    0.00    1064/1064        libgrpp_generate_shell_cartesians [54]
+-----------------------------------------------
+                0.00    0.00       8/1063        delete_shell_list [96]
+                0.00    0.00      15/1063        delete_grpp [88]
+                0.00    0.00      16/1063        evaluate_overlap_integral_contracted_ [80]
+                0.00    0.00    1024/1063        tabulate_radial_type2_integrals [6]
+[56]     0.0    0.00    0.00    1063         libgrpp_delete_shell [56]
+-----------------------------------------------
+                0.00    0.00    1047/1047        spherical_to_cartesian_coef [40]
+[57]     0.0    0.00    0.00    1047         factorial_ratio [57]
+-----------------------------------------------
+                0.00    0.00      16/1040        overlap_integrals_shell_pair_OS86 [84]
+                0.00    0.00    1024/1040        libgrpp_shell_mult_normcoef [60]
+[58]     0.0    0.00    0.00    1040         gaussian_norm_factor [58]
+-----------------------------------------------
+                0.00    0.00    1024/1024        tabulate_radial_type2_integrals [6]
+[59]     0.0    0.00    0.00    1024         libgrpp_shell_deep_copy [59]
+                0.00    0.00    1024/1064        libgrpp_new_shell [55]
+-----------------------------------------------
+                0.00    0.00    1024/1024        tabulate_radial_type2_integrals [6]
+[60]     0.0    0.00    0.00    1024         libgrpp_shell_mult_normcoef [60]
+                0.00    0.00    1024/1040        gaussian_norm_factor [58]
+-----------------------------------------------
+                0.00    0.00    1024/1024        tabulate_radial_type2_integrals [6]
+[61]     0.0    0.00    0.00    1024         libgrpp_shell_shrink [61]
+-----------------------------------------------
+                0.00    0.00    1024/1024        evaluate_grpp_integrals_shell_pair [3]
+[62]     0.0    0.00    0.00    1024         update_vector [62]
+-----------------------------------------------
+                0.00    0.00      25/537         delete_grpp [88]
+                0.00    0.00     512/537         tabulate_radial_type2_integrals [6]
+[63]     0.0    0.00    0.00     537         libgrpp_delete_potential [63]
+-----------------------------------------------
+                0.00    0.00      25/537         read_grpp [93]
+                0.00    0.00     512/537         libgrpp_shrink_potential [69]
+[64]     0.0    0.00    0.00     537         libgrpp_new_potential [64]
+-----------------------------------------------
+                0.00    0.00     512/512         evaluate_grpp_integrals [4]
+[65]     0.0    0.00    0.00     512         add_block_to_matrix [65]
+-----------------------------------------------
+                0.00    0.00     512/512         tabulate_radial_type2_integrals [6]
+[66]     0.0    0.00    0.00     512         delete_radial_type2_grid [66]
+                0.00    0.00    1536/1536        free_2d [51]
+-----------------------------------------------
+                0.00    0.00     256/512         libgrpp_type2_integrals [9]
+                0.00    0.00     256/512         libgrpp_spin_orbit_integrals [5]
+[67]     0.0    0.00    0.00     512         delete_radial_type2_integrals [67]
+-----------------------------------------------
+                0.00    0.00     256/512         libgrpp_type2_integrals [9]
+                0.00    0.00     256/512         libgrpp_spin_orbit_integrals [5]
+[68]     0.0    0.00    0.00     512         int_max3 [68]
+                0.00    0.00    1024/113276      int_max2 [46]
+-----------------------------------------------
+                0.00    0.00     512/512         tabulate_radial_type2_integrals [6]
+[69]     0.0    0.00    0.00     512         libgrpp_shrink_potential [69]
+                0.00    0.00     512/537         libgrpp_new_potential [64]
+-----------------------------------------------
+                0.00    0.00     256/256         construct_angular_momentum_matrices_rsh [71]
+[70]     0.0    0.00    0.00     256         construct_angular_momentum_matrices_csh [70]
+-----------------------------------------------
+                0.00    0.00     256/256         libgrpp_spin_orbit_integrals [5]
+[71]     0.0    0.00    0.00     256         construct_angular_momentum_matrices_rsh [71]
+                0.00    0.00   11776/11776       csh_to_rsh [47]
+                0.00    0.00     256/256         construct_angular_momentum_matrices_csh [70]
+-----------------------------------------------
+                0.00    0.00       2/130         main [2]
+                0.00    0.00     128/130         evaluate_grpp_integrals [4]
+[72]     0.0    0.00    0.00     130         abs_time [72]
+-----------------------------------------------
+                0.00    0.00     116/116         binomial [25]
+[73]     0.0    0.00    0.00     116         gcd_ui [73]
+-----------------------------------------------
+                0.00    0.00       8/110         read_basis_set [44]
+                0.00    0.00     102/110         read_grpp [93]
+[74]     0.0    0.00    0.00     110         skip_line [74]
+-----------------------------------------------
+                0.00    0.00      60/60          print_shell_list [102]
+[75]     0.0    0.00    0.00      60         get_cartesian_label [75]
+-----------------------------------------------
+                0.00    0.00      25/25          print_grpp [92]
+[76]     0.0    0.00    0.00      25         print_rpp_expansion [76]
+-----------------------------------------------
+                0.00    0.00       9/9           tabulate_real_spherical_harmonic_coeffs [42]
+[77]     0.0    0.00    0.00       9         generate_cartesian_combinations [77]
+-----------------------------------------------
+                0.00    0.00       8/8           read_basis_set [44]
+[78]     0.0    0.00    0.00       8         add_basis_function [78]
+-----------------------------------------------
+                0.00    0.00       8/8           delete_basis_set [87]
+[79]     0.0    0.00    0.00       8         delete_basis_function [79]
+-----------------------------------------------
+                0.00    0.00       8/8           radial_gto_norm_factor_ [43]
+[80]     0.0    0.00    0.00       8         evaluate_overlap_integral_contracted_ [80]
+                0.00    0.00      16/1064        libgrpp_new_shell [55]
+                0.00    0.00      16/1063        libgrpp_delete_shell [56]
+                0.00    0.00       8/8           libgrpp_overlap_integrals [82]
+-----------------------------------------------
+                0.00    0.00       8/8           libgrpp_overlap_integrals [82]
+[81]     0.0    0.00    0.00       8         libgrpp_daxpy [81]
+-----------------------------------------------
+                0.00    0.00       8/8           evaluate_overlap_integral_contracted_ [80]
+[82]     0.0    0.00    0.00       8         libgrpp_overlap_integrals [82]
+                0.00    0.00      16/1152        libgrpp_get_shell_size [52]
+                0.00    0.00       8/8           overlap_integrals_shell_pair_OS86 [84]
+                0.00    0.00       8/8           libgrpp_daxpy [81]
+-----------------------------------------------
+                0.00    0.00       8/8           read_basis_set [44]
+[83]     0.0    0.00    0.00       8         new_basis_function [83]
+-----------------------------------------------
+                0.00    0.00       8/8           libgrpp_overlap_integrals [82]
+[84]     0.0    0.00    0.00       8         overlap_integrals_shell_pair_OS86 [84]
+                0.00    0.00      16/1152        libgrpp_get_shell_size [52]
+                0.00    0.00      16/1040        gaussian_norm_factor [58]
+-----------------------------------------------
+                0.00    0.00       4/4           main [2]
+[85]     0.0    0.00    0.00       4         print_matrix_lower_triangle [85]
+-----------------------------------------------
+                0.00    0.00       1/2           main [2]
+                0.00    0.00       1/2           evaluate_grpp_integrals [4]
+[86]     0.0    0.00    0.00       2         calculate_basis_dim [86]
+                0.00    0.00      16/1152        libgrpp_get_shell_size [52]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[87]     0.0    0.00    0.00       2         delete_basis_set [87]
+                0.00    0.00       8/8           delete_basis_function [79]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[88]     0.0    0.00    0.00       2         delete_grpp [88]
+                0.00    0.00      25/537         libgrpp_delete_potential [63]
+                0.00    0.00      15/1063        libgrpp_delete_shell [56]
+-----------------------------------------------
+                0.00    0.00       2/2           read_molecule [103]
+[89]     0.0    0.00    0.00       2         get_element_nuc_charge [89]
+-----------------------------------------------
+                0.00    0.00       2/2           read_basis_set [44]
+[90]     0.0    0.00    0.00       2         new_basis_set [90]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[91]     0.0    0.00    0.00       2         print_basis_set [91]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[92]     0.0    0.00    0.00       2         print_grpp [92]
+                0.00    0.00      25/25          print_rpp_expansion [76]
+-----------------------------------------------
+                0.00    0.00       2/2           main [2]
+[93]     0.0    0.00    0.00       2         read_grpp [93]
+                0.00    0.00     102/110         skip_line [74]
+                0.00    0.00      25/537         libgrpp_new_potential [64]
+                0.00    0.00      16/1064        libgrpp_new_shell [55]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[94]     0.0    0.00    0.00       1         construct_shell_list [94]
+                0.00    0.00       8/1064        libgrpp_new_shell [55]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[95]     0.0    0.00    0.00       1         delete_molecule [95]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[96]     0.0    0.00    0.00       1         delete_shell_list [96]
+                0.00    0.00       8/1063        libgrpp_delete_shell [56]
+-----------------------------------------------
+                0.00    0.00       1/1           libgrpp_set_cartesian_order [98]
+[97]     0.0    0.00    0.00       1         libgrpp_set_cartesian_generator [97]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[98]     0.0    0.00    0.00       1         libgrpp_set_cartesian_order [98]
+                0.00    0.00       1/1           libgrpp_set_cartesian_generator [97]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[99]     0.0    0.00    0.00       1         libgrpp_set_radial_tolerance [99]
+-----------------------------------------------
+                0.00    0.00       1/1           read_molecule [103]
+[100]    0.0    0.00    0.00       1         new_molecule [100]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[101]    0.0    0.00    0.00       1         print_molecule [101]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[102]    0.0    0.00    0.00       1         print_shell_list [102]
+                0.00    0.00      60/60          get_cartesian_label [75]
+                0.00    0.00       8/1152        libgrpp_get_shell_size [52]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[103]    0.0    0.00    0.00       1         read_molecule [103]
+                0.00    0.00       2/2           get_element_nuc_charge [89]
+                0.00    0.00       1/1           new_molecule [100]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [28] GSL_MAX_DBL            [49] factorial              [99] libgrpp_set_radial_tolerance
+  [23] _init                  [57] factorial_ratio        [59] libgrpp_shell_deep_copy
+  [72] abs_time               [51] free_2d                [60] libgrpp_shell_mult_normcoef
+  [78] add_basis_function     [29] gamma_xgthalf          [61] libgrpp_shell_shrink
+  [65] add_block_to_matrix    [58] gaussian_norm_factor   [69] libgrpp_shrink_potential
+  [48] alloc_zeros_1d         [73] gcd_ui                  [5] libgrpp_spin_orbit_integrals
+  [50] alloc_zeros_2d         [77] generate_cartesian_combinations [9] libgrpp_type2_integrals
+  [14] angular_type2_integral [75] get_cartesian_label    [20] lnpoch_pos
+   [1] bessel_il_CF1          [89] get_element_nuc_charge [24] modified_bessel_scaled
+  [25] binomial               [45] get_radial_type2_integral [83] new_basis_function
+  [35] calc_k_values          [26] get_real_spherical_harmonic_table [90] new_basis_set
+  [86] calculate_basis_dim    [30] gsl_set_error_handler_off [100] new_molecule
+   [7] calculate_radial_type2_integral [19] gsl_sf_bessel_IJ_taylor_e [84] overlap_integrals_shell_pair_obara_saika
+  [53] cartesian_generator_turbomole [36] gsl_sf_bessel_Jnu_asympx_e [91] print_basis_set
+  [17] cheb_eval_e            [31] gsl_sf_bessel_i0_scaled_e [92] print_grpp
+  [70] construct_angular_momentum_matrices_csh [32] gsl_sf_bessel_i1_scaled_e [85] print_matrix_lower_triangle
+  [71] construct_angular_momentum_matrices_rsh [21] gsl_sf_bessel_i2_scaled_e [101] print_molecule
+  [94] construct_shell_list   [12] gsl_sf_bessel_il_scaled_e [76] print_rpp_expansion
+  [37] create_radial_type2_grid [33] gsl_sf_exp_err_e    [102] print_shell_list
+  [41] create_real_spherical_harmonic_coeffs_tables [18] gsl_sf_gammainv_e [43] radial_gto_norm_factor_
+  [47] get_transformation_coeffs_csh_to_rsh             [46] int_max2               [15] radial_type2_integrand_fun_contracted
+  [79] delete_basis_function  [68] int_max3               [44] read_basis_set
+  [87] delete_basis_set       [34] integrate_unitary_sphere_polynomial [93] read_grpp
+  [88] delete_grpp            [81] libgrpp_daxpy         [103] read_molecule
+  [95] delete_molecule        [63] libgrpp_delete_potential [22] screening_radial_type2
+  [66] delete_radial_type2_grid [56] libgrpp_delete_shell [38] screening_radial_type2_integral_primitive
+  [67] delete_radial_type2_integrals [54] libgrpp_generate_shell_cartesians [39] screening_type2_equation_for_maximum
+  [96] delete_shell_list      [52] libgrpp_get_shell_size [74] skip_line
+  [27] double_factorial       [64] libgrpp_new_potential  [40] spherical_to_cartesian_coef
+   [4] evaluate_grpp_integrals [55] libgrpp_new_shell      [6] tabulate_radial_type2_integrals
+   [3] evaluate_grpp_integrals_shell_pair [82] libgrpp_overlap_integrals [42] tabulate_real_spherical_harmonic_coeffs
+  [80] evaluate_overlap_integral_contracted_ [13] libgrpp_potential_value [16] type2_angular_sum
+  [11] evaluate_real_spherical_harmonic [97] libgrpp_set_cartesian_generator [10] type3_angular_sum
+   [8] expand_radial_type2_grid [98] libgrpp_set_cartesian_order [62] update_vector

@@ -15,7 +15,7 @@
 #include "molecule.h"
 
 void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
-                             molecule_t *molecule, grpp_t **grpp_list,
+                             molecule_t *molecule, libgrpp_grpp_t **grpp_list,
                              double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix);
 
 void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, double *overlap_matrix);

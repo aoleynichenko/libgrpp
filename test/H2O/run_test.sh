@@ -11,6 +11,33 @@ if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_so_z.txt so_z.txt
 if [ $? -ne 0 ]; then exit 1; fi
 
+libgrpp_compare_matrices.x libgrpp_c_overlap.txt overlap.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_nucattr.txt coulomb.txt
+if [ $? -ne 0 ]; then exit 1; fi
+
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0x.txt overlap_grad_0x.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0y.txt overlap_grad_0y.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0z.txt overlap_grad_0z.txt
+if [ $? -ne 0 ]; then exit 1; fi
+
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1x.txt overlap_grad_1x.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1y.txt overlap_grad_1y.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1z.txt overlap_grad_1z.txt
+if [ $? -ne 0 ]; then exit 1; fi
+
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_2x.txt overlap_grad_2x.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_2y.txt overlap_grad_2y.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_overlap_grad_2z.txt overlap_grad_2z.txt
+if [ $? -ne 0 ]; then exit 1; fi
+
+
 #test_libgrpp_f90.x
 
 #libgrpp_compare_matrices.x libgrpp_f90_arep.txt arep.txt

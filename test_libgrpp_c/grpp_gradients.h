@@ -16,7 +16,7 @@ void evaluate_grpp_integrals_gradients(
         int num_shells,
         libgrpp_shell_t **shell_list,
         molecule_t *molecule,
-        grpp_t **grpp_list
+        libgrpp_grpp_t **grpp_list
 );
 
 #endif /* TEST_LIBGRPP_F90_X_GRPP_GRADIENTS_H */

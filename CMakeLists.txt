@@ -23,7 +23,7 @@ add_executable(test_libgrpp_c.x
         test_libgrpp_c/elements.c
         test_libgrpp_c/shell_list.c
         test_libgrpp_c/eval_integrals.c
-        test_libgrpp_c/overlap_gradients.c
+        test_libgrpp_c/eval_integrals_grad.c
         test_libgrpp_c/grpp_gradients.c
         test_libgrpp_c/print_matrix.c
         test_libgrpp_c/abs_time.c
@@ -68,10 +68,10 @@ add_test(
         COMMAND bash run_test.sh
 )
 
-
 #add_test(
 #        NAME UO2
 #        WORKING_DIRECTORY ../test/UO2
 #        COMMAND bash run_test.sh
 #)
+
 

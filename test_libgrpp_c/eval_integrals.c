@@ -27,7 +27,7 @@ void add_block_to_matrix(int dim_1, int dim_2, double *matrix,
 void evaluate_grpp_integrals_shell_pair(
         libgrpp_shell_t *shell_A,
         libgrpp_shell_t *shell_B,
-        grpp_t *grpp_operator,
+        libgrpp_grpp_t *grpp_operator,
         double *grpp_origin,
         double *arep_matrix,
         double *so_x_matrix,
@@ -36,8 +36,11 @@ void evaluate_grpp_integrals_shell_pair(
 );
 
 
+/**
+ * evaluates matrix elements of the GRPP operator
+ */
 void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
-                             molecule_t *molecule, grpp_t **grpp_list,
+                             molecule_t *molecule, libgrpp_grpp_t **grpp_list,
                              double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix)
 {
     double buf_arep[MAX_BUF];
@@ -67,7 +70,7 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
 
             for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
                 int z = molecule->charges[iatom];
-                grpp_t *grpp = grpp_list[z];
+                libgrpp_grpp_t *grpp = grpp_list[z];
                 if (grpp == NULL) {
                     continue;
                 }
@@ -102,7 +105,7 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
 void evaluate_grpp_integrals_shell_pair(
         libgrpp_shell_t *shell_A,
         libgrpp_shell_t *shell_B,
-        grpp_t *grpp_operator,
+        libgrpp_grpp_t *grpp_operator,
         double *grpp_origin,
         double *arep_matrix,
         double *so_x_matrix,
@@ -138,7 +141,7 @@ void evaluate_grpp_integrals_shell_pair(
     /*
      * semilocal SO ("type-3") integrals
      */
-    for (int L = 1; L <= grpp_operator->n_esop; L++) {
+    for (int L = 1; L < grpp_operator->n_esop; L++) {
         libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, grpp_operator->U_esop[L],
                                      buf_so_x, buf_so_y, buf_so_z);
 
@@ -175,6 +178,9 @@ void evaluate_grpp_integrals_shell_pair(
 }
 
 
+/**
+ * evaluates overlap matrix
+ */
 void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, double *overlap_matrix)
 {
     double buf[MAX_BUF];
@@ -212,6 +218,9 @@ void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, do
 }
 
 
+/**
+ * evaluates nuclear attraction integrals
+ */
 void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
                                            double *nucattr_matrix, int nuclear_model)
 {

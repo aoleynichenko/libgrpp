@@ -88,3 +88,20 @@ double distance(double *A, double *B)
 {
     return sqrt(distance_squared(A, B));
 }
+
+
+/**
+ * Checks if two 3d points coincide with each other.
+ */
+int points_are_equal(double *a, double *b)
+{
+    double const thresh = 1e-12;
+
+    if (fabs(a[0] - b[0]) < thresh &&
+        fabs(a[1] - b[1]) < thresh &&
+        fabs(a[2] - b[2]) < thresh) {
+        return 1;
+    }
+
+    return 0;
+}

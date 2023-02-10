@@ -1,0 +1,16 @@
+-- Hg2+ ion
+-- HF calculation using gatchina ECP and basis set
+
+title = "Hg2+ ion recp/hartree-fock test"
+
+molecule = {
+    {"Hg",  0, 0, 0, basis='hg-small.bas', ecp='hg-small.bas'},
+    {"H",   0, 0, 4, basis='cc-pvdz.bas'}
+}
+
+wf.occ = 18
+scf.print_orbs = 'no'
+scf.use_grecp = false
+
+run('scf')
+

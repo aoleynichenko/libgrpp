@@ -61,7 +61,7 @@ void libgrpp_type1_integrals(
         double pot_alpha = potential->alpha[k];
         int pot_n = potential->powers[k];
 
-        libgrpp_type1_integrals_obara_saika(shell_A, shell_B, rpp_origin, pot_alpha, pot_n, buf);
+        libgrpp_type1_integrals_mcmurchie_davidson_1978(shell_A, shell_B, rpp_origin, pot_alpha, pot_n, buf);
 
         libgrpp_daxpy(size_A * size_B, pot_coef, buf, matrix);
     }

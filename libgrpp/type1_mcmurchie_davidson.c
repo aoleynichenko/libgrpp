@@ -101,11 +101,13 @@ void setup_G_array(struct mmd_data *data, int L_A, int L_B);
 
 
 /**
- * General interface for the Obara-Saika algorithm for integrals
+ * General interface for the McMurchie-Davidson algorithm for integrals
  * over the radially local RPP operator.
  */
-void libgrpp_type1_integrals_obara_saika(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                         double *origin_C, double alpha_C, int ecp_power, double *rpp_matrix)
+void libgrpp_type1_integrals_mcmurchie_davidson_1978(
+        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+        double *origin_C, double alpha_C, int ecp_power, double *rpp_matrix
+)
 {
     assert((ecp_power == 0) || (ecp_power == 1) || (ecp_power == 2));
 
@@ -478,21 +480,21 @@ void setup_R_array(struct mmd_data *data, int L_A, int L_B)
                     }
                     else if (t + u == 0) {
                         if (v > 1) {
-                            val += (v - 1) * data->R[t][u][v-2][n+1];
+                            val += (v - 1) * data->R[t][u][v - 2][n + 1];
                         }
-                        val += Z_QC * data->R[t][u][v-1][n+1];
+                        val += Z_QC * data->R[t][u][v - 1][n + 1];
                     }
                     else if (t == 0) {
                         if (u > 1) {
-                            val += (u - 1) * data->R[t][u-2][v][n+1];
+                            val += (u - 1) * data->R[t][u - 2][v][n + 1];
                         }
-                        val += Y_QC * data->R[t][u-1][v][n+1];
+                        val += Y_QC * data->R[t][u - 1][v][n + 1];
                     }
                     else {
                         if (t > 1) {
-                            val += (t - 1) * data->R[t-2][u][v][n+1];
+                            val += (t - 1) * data->R[t - 2][u][v][n + 1];
                         }
-                        val += X_QC * data->R[t-1][u][v][n+1];
+                        val += X_QC * data->R[t - 1][u][v][n + 1];
                     }
 
                     data->R[t][u][v][n] = val;
@@ -533,21 +535,21 @@ void setup_G_array(struct mmd_data *data, int L_A, int L_B)
                     }
                     else if (t + u == 0) {
                         if (v > 1) {
-                            val += (v - 1) * (data->R[t][u][v-2][n+1] - 2.0 * q * data->R[t][u][v-2][n]);
+                            val += (v - 1) * (data->R[t][u][v - 2][n + 1] - 2.0 * q * data->R[t][u][v - 2][n]);
                         }
-                        val += Z_QC * (data->R[t][u][v-1][n+1] -2.0 * q * data->R[t][u][v-1][n]);
+                        val += Z_QC * (data->R[t][u][v - 1][n + 1] - 2.0 * q * data->R[t][u][v - 1][n]);
                     }
                     else if (t == 0) {
                         if (u > 1) {
-                            val += (u - 1) * (data->R[t][u-2][v][n+1] - 2.0 * q * data->R[t][u-2][v][n]);
+                            val += (u - 1) * (data->R[t][u - 2][v][n + 1] - 2.0 * q * data->R[t][u - 2][v][n]);
                         }
-                        val += Y_QC * (data->R[t][u-1][v][n+1] - 2.0 * q * data->R[t][u-1][v][n]);
+                        val += Y_QC * (data->R[t][u - 1][v][n + 1] - 2.0 * q * data->R[t][u - 1][v][n]);
                     }
                     else {
                         if (t > 1) {
-                            val += (t - 1) * (data->R[t-2][u][v][n+1] - 2.0 * q * data->R[t-2][u][v][n]);
+                            val += (t - 1) * (data->R[t - 2][u][v][n + 1] - 2.0 * q * data->R[t - 2][u][v][n]);
                         }
-                        val += X_QC * (data->R[t-1][u][v][n+1] - 2.0 * q * data->R[t-1][u][v][n]);
+                        val += X_QC * (data->R[t - 1][u][v][n + 1] - 2.0 * q * data->R[t - 1][u][v][n]);
                     }
 
                     data->R[t][u][v][n] = val;
@@ -590,12 +592,12 @@ void setup_E_array(struct mmd_data *data, int L_A, int L_B)
                         }
                         else if (i == 0) {
                             double X_QB = data->Q[coord] - data->B[coord];
-                            data->E[coord][i][j][0] = X_QB * data->E[coord][i][j-1][0] + data->E[coord][i][j-1][1];
+                            data->E[coord][i][j][0] = X_QB * data->E[coord][i][j - 1][0] + data->E[coord][i][j - 1][1];
                             continue;
                         }
                         else {
                             double X_QA = data->Q[coord] - data->A[coord];
-                            data->E[coord][i][j][0] = X_QA * data->E[coord][i-1][j][0] + data->E[coord][i-1][j][1];
+                            data->E[coord][i][j][0] = X_QA * data->E[coord][i - 1][j][0] + data->E[coord][i - 1][j][1];
                             continue;
                         }
                     }
@@ -604,10 +606,10 @@ void setup_E_array(struct mmd_data *data, int L_A, int L_B)
                         double factor = 1.0 / (2.0 * q * t);
 
                         if (i > 0) {
-                            E_ijt += factor * i * data->E[coord][i-1][j][t-1];
+                            E_ijt += factor * i * data->E[coord][i - 1][j][t - 1];
                         }
                         if (j > 0) {
-                            E_ijt += factor * j * data->E[coord][i][j-1][t-1];
+                            E_ijt += factor * j * data->E[coord][i][j - 1][t - 1];
                         }
 
                         data->E[coord][i][j][t] = E_ijt;

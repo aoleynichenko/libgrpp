@@ -83,6 +83,34 @@ void libgrpp_shell_shrink(libgrpp_shell_t *shell);
 void libgrpp_shell_mult_normcoef(libgrpp_shell_t *shell);
 
 
+/**
+ * Generalized relativistic pseudopotential: all-in-one
+ */
+typedef struct {
+    int n_arep;
+    int n_esop;
+    int n_oc_shells;
+    libgrpp_potential_t *U_L;
+    libgrpp_potential_t **U_arep;
+    libgrpp_potential_t **U_esop;
+    libgrpp_potential_t **U_oc;
+    libgrpp_shell_t **oc_shells;
+} libgrpp_grpp_t;
+
+
+libgrpp_grpp_t *libgrpp_new_grpp();
+
+void libgrpp_grpp_set_local_potential(libgrpp_grpp_t *grpp, libgrpp_potential_t *pot);
+
+void libgrpp_grpp_add_averaged_potential(libgrpp_grpp_t *grpp, libgrpp_potential_t *pot);
+
+void libgrpp_grpp_add_spin_orbit_potential(libgrpp_grpp_t *grpp, libgrpp_potential_t *pot);
+
+void libgrpp_grpp_add_outercore_potential(libgrpp_grpp_t *grpp, libgrpp_potential_t *pot, libgrpp_shell_t *oc_shell);
+
+void libgrpp_delete_grpp(libgrpp_grpp_t *);
+
+
 /*
  * integrators: pseudopotential
  */
@@ -130,7 +158,8 @@ void libgrpp_outercore_potential_integrals(
  * other integrals
  */
 
-void libgrpp_overlap_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B, double *overlap_matrix);
+#include "overlap.h"
+#include "overlap_gradient.h"
 
 /*
  * integrator for nuclear attraction integrals

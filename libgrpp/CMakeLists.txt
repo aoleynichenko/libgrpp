@@ -15,31 +15,34 @@ add_subdirectory(gsl)
 add_compile_options(-O3)
 #add_compile_options(-pg)
 add_library(libgrpp
-        spherical_harmonics.c
+        angular_integrals.c
         binomial.c
         boys.c
-        gfun.c
+        diff_gaussian.c
         factorial.c
-        norm_gaussian.c
+        fortran.c
+        gfun.c
+        grpp.c
         gslbessel.c
-        type1_integrals.c
-        type1_mcmurchie_davidson.c
-        angular_integrals.c
-        type2_integrals.c
-        spin_orbit_integrals.c
-        utils.c
+        lmatrix.c
+        norm_gaussian.c
+        nuclear_attraction.c
+        nuclear_models.c
+        outercore_integrals.c
+        overlap.c
+        overlap_gradient.c
+        parameters.c
+        potential.c
         radial_type1_integral.c
         radial_type2_integral.c
-        overlap.c
-        nuclear_models.c
-        nuclear_attraction.c
-        outercore_integrals.c
-        fortran.c
-        parameters.c
-        lmatrix.c
-        potential.c
-        shell.c
         screening.c
+        shell.c
+        spherical_harmonics.c
+        spin_orbit_integrals.c
+        type1_integrals.c
+        type1_mcmurchie_davidson.c
+        type2_integrals.c
+        utils.c
         )
 
 target_link_libraries(libgrpp gsl -lm)

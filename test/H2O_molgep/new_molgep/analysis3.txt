@@ -1,0 +1,61 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 24.08      1.05     1.05                             radial_type2_integrand_fun_contracted
+ 23.63      2.08     1.03                             libgrecp_ecp_value
+ 13.99      2.69     0.61                             gsl_sf_bessel_il_scaled_e
+ 13.30      3.27     0.58                             expand_radial_type2_grid
+  6.08      3.54     0.27                             gsl_sf_bessel_il_scaled
+  4.36      3.73     0.19                             calculate_radial_type2_integral
+  2.98      3.86     0.13                             modified_bessel_scaled
+  2.98      3.99     0.13                             radial_gto_norm
+  1.61      4.06     0.07                             libgrecp_radial_shell_value
+  1.15      4.11     0.05                             integrate_function_log3
+  0.92      4.15     0.04                             double_factorial
+  0.92      4.19     0.04                             libgrecp_type2_integrals
+  0.80      4.22     0.04                             gsl_sf_bessel_i2_scaled
+  0.69      4.25     0.03                             fun_radial_delta_integral
+  0.46      4.27     0.02                             binomial
+  0.46      4.29     0.02                             overlap_1d
+  0.23      4.30     0.01                             __evalints_MOD_calculate_ecp_integrals
+  0.23      4.31     0.01                             create_real_spherical_harmonic_coeffs_tables
+  0.23      4.32     0.01                             get_radial_type2_integral
+  0.23      4.33     0.01                             libgrecp_generate_shell_cartesians
+  0.23      4.34     0.01                             libgrecp_spin_orbit_integrals
+  0.23      4.35     0.01                             spherical_to_cartesian_coef
+  0.23      4.36     0.01                             tabulate_real_spherical_harmonic_coeffs
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2021 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.

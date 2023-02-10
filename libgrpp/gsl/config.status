@@ -430,7 +430,7 @@ Copyright (C) 2021 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl'
+ac_pwd='/home/alexander/Science/libgrpp/libgrpp/gsl'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/usr/bin/mkdir -p'
@@ -672,8 +672,8 @@ postuninstall_cmds=''
 finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
 finish_eval=''
 hardcode_into_libs='yes'
-sys_lib_search_path_spec='/opt/intel/oneapi/compiler/2021.3.0/linux/lib /usr/lib/gcc/x86_64-pc-linux-gnu/12.1.1 /usr/lib /lib /opt/intel/oneapi/mkl/2021.3.0/lib/intel64 /opt/intel/oneapi/tbb/2021.3.0/lib/intel64/gcc4.8 '
-configure_time_dlsearch_path='/lib /usr/lib /opt/cuda/lib64 /opt/cuda/nvvm/lib64 /opt/cuda/extras/CUPTI/lib64 /usr/lib/libfakeroot /usr/lib32 '
+sys_lib_search_path_spec='/opt/intel/oneapi/compiler/2021.3.0/linux/lib /usr/lib/gcc/x86_64-pc-linux-gnu/11.2.0 /usr/lib /lib /opt/intel/oneapi/mkl/2021.3.0/lib/intel64 /opt/intel/oneapi/tbb/2021.3.0/lib/intel64/gcc4.8 '
+configure_time_dlsearch_path='/lib /usr/lib /opt/cuda/lib64 /opt/cuda/nvvm/lib64 /opt/cuda/extras/CUPTI/lib64 /usr/lib/libfakeroot /usr/lib32 /usr/lib/openmpi '
 configure_time_lt_sys_library_path=''
 hardcode_action='immediate'
 enable_dlopen='unknown'
@@ -968,12 +968,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/usr/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/install-sh"
-S["MAKEINFO"]="${SHELL} '/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/missing' makeinfo"
-S["AUTOHEADER"]="${SHELL} '/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/missing' autoheader"
-S["AUTOMAKE"]="${SHELL} '/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/missing' automake-1.16"
-S["AUTOCONF"]="${SHELL} '/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/missing' autoconf"
-S["ACLOCAL"]="${SHELL} '/home/alexander/Science/libgrpp/github/libgrpp/libgrpp/gsl/missing' aclocal-1.16"
+S["install_sh"]="${SHELL} /home/alexander/Science/libgrpp/libgrpp/gsl/install-sh"
+S["MAKEINFO"]="${SHELL} '/home/alexander/Science/libgrpp/libgrpp/gsl/missing' makeinfo"
+S["AUTOHEADER"]="${SHELL} '/home/alexander/Science/libgrpp/libgrpp/gsl/missing' autoheader"
+S["AUTOMAKE"]="${SHELL} '/home/alexander/Science/libgrpp/libgrpp/gsl/missing' automake-1.16"
+S["AUTOCONF"]="${SHELL} '/home/alexander/Science/libgrpp/libgrpp/gsl/missing' autoconf"
+S["ACLOCAL"]="${SHELL} '/home/alexander/Science/libgrpp/libgrpp/gsl/missing' aclocal-1.16"
 S["VERSION"]="2.7"
 S["PACKAGE"]="gsl"
 S["CYGPATH_W"]="echo"
