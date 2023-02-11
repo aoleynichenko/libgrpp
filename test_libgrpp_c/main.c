@@ -23,6 +23,17 @@
 #include "abs_time.h"
 
 
+void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps);
+
+void calculate_write_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list);
+
+void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule);
+
+void calculate_write_overlap_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule);
+
+void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps);
+
+
 int main(int argc, char **argv)
 {
     basis_set_t *basis_sets[N_CHEM_ELEMENTS];
@@ -39,6 +50,44 @@ int main(int argc, char **argv)
     printf("    -----------------------------------------------------\n");
     printf("    a. oleynichenko                            9 feb 2023\n");
     printf("    -----------------------------------------------------\n");
+    printf("\n");
+
+    /*
+     * parse command-line arguments
+     */
+    int calc_grpp_integrals = 1;
+    int calc_ovlp_integrals = 1;
+    int calc_coul_integrals = 1;
+    int calc_ovlp_gradients = 1;
+    int calc_grpp_gradients = 1;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--no-grpp") == 0) {
+            calc_grpp_integrals = 0;
+        }
+        else if (strcmp(argv[i], "--no-overlap") == 0) {
+            calc_ovlp_integrals = 0;
+        }
+        else if (strcmp(argv[i], "--no-coulomb") == 0) {
+            calc_coul_integrals = 0;
+        }
+        else if (strcmp(argv[i], "--no-grpp-grad") == 0) {
+            calc_grpp_gradients = 0;
+        }
+        else if (strcmp(argv[i], "--no-overlap-grad") == 0) {
+            calc_ovlp_gradients = 0;
+        }
+        else {
+            // unknown arguments will be ignored
+        }
+    }
+
+    printf("\n");
+    printf(" grpp integrals     %s\n", calc_grpp_integrals ? "+" : "-");
+    printf(" coulomb integrals  %s\n", calc_coul_integrals ? "+" : "-");
+    printf(" overlap integrals  %s\n", calc_ovlp_integrals ? "+" : "-");
+    printf(" grpp gradients     %s\n", calc_grpp_gradients ? "+" : "-");
+    printf(" overlap gradients  %s\n", calc_ovlp_gradients ? "+" : "-");
     printf("\n");
 
     /*
@@ -108,64 +157,132 @@ int main(int argc, char **argv)
     /*
      * pseudopotential integrals
      */
-    double time_start = abs_time();
+    if (calc_grpp_integrals) {
+        calculate_write_grpp_integrals(num_shells, shell_list, molecule, grpps);
+    }
 
+    /*
+     * overlap integrals
+     */
+    if (calc_ovlp_integrals) {
+        calculate_write_overlap_integrals(num_shells, shell_list);
+    }
+
+    /*
+     * nuclear attraction integrals
+     */
+    if (calc_coul_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule);
+    }
+
+    /*
+     * gradients with respect to nuclear coordinates: overlap integrals
+     */
+    if (calc_ovlp_gradients) {
+        calculate_write_overlap_gradient(num_shells, shell_list, molecule);
+    }
+
+    /*
+     * gradients with respect to nuclear coordinates: GRPP integrals
+     */
+    if (calc_grpp_gradients) {
+        calculate_write_grpp_gradient(num_shells, shell_list, molecule, grpps);
+    }
+
+    /*
+     * cleanup
+     */
+    delete_molecule(molecule);
+    delete_shell_list(shell_list, num_shells);
+    for (int i = 0; i < N_CHEM_ELEMENTS; i++) {
+        if (basis_sets[i] != NULL) {
+            delete_basis_set(basis_sets[i]);
+        }
+        if (grpps[i] != NULL) {
+            libgrpp_delete_grpp(grpps[i]);
+        }
+    }
+}
+
+
+void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps)
+{
     int basis_dim = calculate_basis_dim(shell_list, num_shells);
+
     double *arep_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
     double *so_x_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
     double *so_y_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
     double *so_z_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+
+    double time_start = abs_time();
 
     libgrpp_set_radial_tolerance(1e-16);
     evaluate_grpp_integrals(num_shells, shell_list, molecule, grpps,
                             arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix);
 
     double time_finish = abs_time();
-    printf("\ntime for pseudopotential integrals: %.3f sec\n\n", time_finish - time_start);
 
-    /*
-     * overlap integrals
-     */
-    time_start = abs_time();
-    double *overlap_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
-
-    evaluate_overlap_integrals(num_shells, shell_list, overlap_matrix);
-
-    time_finish = abs_time();
-    printf("\ntime for overlap integrals: %.3f sec\n\n", time_finish - time_start);
-
-    /*
-     * nuclear attraction integrals
-     */
-    time_start = abs_time();
-    double *nucattr_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
-
-    evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
-
-    time_finish = abs_time();
-    printf("\ntime for nuclear attraction integrals: %.3f sec\n\n", time_finish - time_start);
-
-    /*
-     * print matrices to files
-     */
     print_matrix_lower_triangle("libgrpp_c_arep.txt", basis_dim, arep_matrix);
     print_matrix_lower_triangle("libgrpp_c_so_x.txt", basis_dim, so_x_matrix);
     print_matrix_lower_triangle("libgrpp_c_so_y.txt", basis_dim, so_y_matrix);
     print_matrix_lower_triangle("libgrpp_c_so_z.txt", basis_dim, so_z_matrix);
+
+    free(arep_matrix);
+    free(so_x_matrix);
+    free(so_y_matrix);
+    free(so_z_matrix);
+
+    printf("\ntime for pseudopotential integrals: %.3f sec\n\n", time_finish - time_start);
+}
+
+
+void calculate_write_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+    double *overlap_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+
+    double time_start = abs_time();
+    evaluate_overlap_integrals(num_shells, shell_list, overlap_matrix);
+    double time_finish = abs_time();
+
     print_matrix_lower_triangle("libgrpp_c_overlap.txt", basis_dim, overlap_matrix);
+
+    free(overlap_matrix);
+
+    printf("\ntime for overlap integrals: %.3f sec\n\n", time_finish - time_start);
+}
+
+
+void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+    double *nucattr_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+
+    double time_start = abs_time();
+    evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
+    double time_finish = abs_time();
+
     print_matrix_lower_triangle("libgrpp_c_nucattr.txt", basis_dim, nucattr_matrix);
 
-    /*
-     * gradients with respect to nuclear coordinates: overlap integrals
-     */
-    time_start = abs_time();
+    free(nucattr_matrix);
+
+    printf("\ntime for nuclear attraction integrals: %.3f sec\n\n", time_finish - time_start);
+}
+
+
+void calculate_write_overlap_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
 
     double **grad = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
     for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
         grad[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
     }
 
+    double time_start = abs_time();
     evaluate_overlap_integrals_gradient(num_shells, shell_list, molecule, grad);
+    double time_finish = abs_time();
+
     for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
         char file_name_buf_x[100];
         char file_name_buf_y[100];
@@ -180,14 +297,18 @@ int main(int argc, char **argv)
         print_matrix_lower_triangle(file_name_buf_z, basis_dim, grad[3 * iatom + 2]);
     }
 
-    time_finish = abs_time();
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad[icoord]);
+    }
+    free(grad);
+
     printf("\ntime for overlap integrals gradients: %.3f sec\n\n", time_finish - time_start);
+}
 
 
-    /*
-     * gradients with respect to nuclear coordinates: GRPP integrals
-     */
-    time_start = abs_time();
+void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
 
     double **grad_arep = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
     double **grad_so_x = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
@@ -201,7 +322,10 @@ int main(int argc, char **argv)
         grad_so_z[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
     }
 
+    double time_start = abs_time();
     evaluate_grpp_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep, grad_so_x, grad_so_y, grad_so_z);
+    double time_finish = abs_time();
+    printf("\ntime for grpp integrals gradients: %.3f sec\n\n", time_finish - time_start);
 
     for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
 
@@ -266,25 +390,9 @@ int main(int argc, char **argv)
         print_matrix_lower_triangle(file_name_buf_so_z_z, basis_dim, grad_so_z[3 * iatom + 2]);
     }
 
-    time_finish = abs_time();
-    printf("\ntime for grpp integrals gradients: %.3f sec\n\n", time_finish - time_start);
-
-
     /*
      * cleanup
      */
-    free(arep_matrix);
-    free(so_x_matrix);
-    free(so_y_matrix);
-    free(so_z_matrix);
-    free(nucattr_matrix);
-    free(overlap_matrix);
-
-    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
-        free(grad[icoord]);
-    }
-    free(grad);
-
     for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
         free(grad_arep[icoord]);
         free(grad_so_x[icoord]);
@@ -295,15 +403,4 @@ int main(int argc, char **argv)
     free(grad_so_x);
     free(grad_so_y);
     free(grad_so_z);
-
-    delete_molecule(molecule);
-    delete_shell_list(shell_list, num_shells);
-    for (int i = 0; i < N_CHEM_ELEMENTS; i++) {
-        if (basis_sets[i] != NULL) {
-            delete_basis_set(basis_sets[i]);
-        }
-        if (grpps[i] != NULL) {
-            libgrpp_delete_grpp(grpps[i]);
-        }
-    }
 }

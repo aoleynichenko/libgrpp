@@ -1,4 +1,5 @@
 build/
 libgrpp_c_*
 libgrpp_f90_*
+test.out
 

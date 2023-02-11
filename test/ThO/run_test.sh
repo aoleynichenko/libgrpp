@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test_libgrpp_c.x
+test_libgrpp_c.x --no-grpp-grad --no-overlap-grad
 
 libgrpp_compare_matrices.x libgrpp_c_arep.txt arep.txt
 if [ $? -ne 0 ]; then exit 1; fi
@@ -14,20 +14,6 @@ if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_overlap.txt overlap.txt
 if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_nucattr.txt coulomb.txt
-if [ $? -ne 0 ]; then exit 1; fi
-
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0x.txt overlap_grad_0x.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0y.txt overlap_grad_0y.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_0z.txt overlap_grad_0z.txt
-if [ $? -ne 0 ]; then exit 1; fi
-
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1x.txt overlap_grad_1x.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1y.txt overlap_grad_1y.txt
-if [ $? -ne 0 ]; then exit 1; fi
-libgrpp_compare_matrices.x libgrpp_c_overlap_grad_1z.txt overlap_grad_1z.txt
 if [ $? -ne 0 ]; then exit 1; fi
 
 

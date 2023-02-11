@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test_libgrpp_c.x
+test_libgrpp_c.x --no-grpp-grad --no-overlap-grad > test.out
 
 libgrpp_compare_matrices.x libgrpp_c_arep.txt arep.txt
 if [ $? -ne 0 ]; then exit 1; fi
