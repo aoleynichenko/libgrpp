@@ -153,6 +153,29 @@ void libgrpp_outercore_potential_integrals(
         double *esop_z
 );
 
+void libgrpp_full_grpp_integrals(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        libgrpp_grpp_t *grpp_operator,
+        double *grpp_origin,
+        double *arep_matrix,
+        double *so_x_matrix,
+        double *so_y_matrix,
+        double *so_z_matrix
+);
+
+void libgrpp_full_grpp_integrals_gradient(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        libgrpp_grpp_t *grpp_operator,
+        double *grpp_origin,
+        double *point_3d,
+        double **grad_arep,
+        double **grad_so_x,
+        double **grad_so_y,
+        double **grad_so_z
+);
+
 
 /*
  * other integrals

@@ -11,6 +11,17 @@
 #include "../libgrpp/libgrpp.h"
 #include "molecule.h"
 
+void evaluate_grpp_integrals_gradient(
+        int num_shells,
+        libgrpp_shell_t **shell_list,
+        molecule_t *molecule,
+        libgrpp_grpp_t **grpp_list,
+        double **gradient_arep,
+        double **gradient_so_x,
+        double **gradient_so_y,
+        double **gradient_so_z
+);
+
 void evaluate_overlap_integrals_gradient(
         int num_shells,
         libgrpp_shell_t **shell_list,

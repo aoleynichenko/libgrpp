@@ -21,8 +21,10 @@ add_library(libgrpp
         diff_gaussian.c
         factorial.c
         fortran.c
+        full_grpp_integrals.c
         gfun.c
         grpp.c
+        grpp_integrals_gradient.c
         gslbessel.c
         lmatrix.c
         norm_gaussian.c

@@ -35,8 +35,8 @@ int nlm_to_linear(int *nlm);
 
 
 /**
- * Analytic calculation of gradients of the overlap integrals for a given shell pair
- * with respect to the point_3d 'point_3d'.
+ * Analytic calculation of gradients of overlap integrals for a given shell pair
+ * with respect to the point 'point_3d'.
  */
 void libgrpp_overlap_integrals_gradient(
         libgrpp_shell_t *shell_A,
