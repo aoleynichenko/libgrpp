@@ -13,6 +13,7 @@ A library for the evaluation of molecular integrals of the generalized relativis
   * scalar-relativistic part: integrals with angular projectors (type 2 integrals)
   * integrals over the effective spin-orbit (SO) interaction operator
   * integrals over GRPP-specific non-local terms (with projectors onto subvalence shells)
+  * analytic gradients of GRPP integrals
 
 * other one-electron integrals:
   * overlap integrals
