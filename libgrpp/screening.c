@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #include "libgrpp.h"
-#include "gslbessel.h"
+#include "scaled_mod_sph_bessel.h"
 #include "factorial.h"
 
 

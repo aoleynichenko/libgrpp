@@ -24,9 +24,10 @@
 
 #include "gfun.h"
 
-#include "gsl/gsl_sf_dawson.h"
+#include "mymathlib.h"
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "factorial.h"
 
@@ -57,7 +58,9 @@ void gfun_values(double x, int nmax, double *g)
          * upward recursion
          */
         double sqrt_x = sqrt(x);
-        g[0] = gsl_sf_dawson(sqrt_x) / sqrt_x;
+        //g[0] = gsl_sf_dawson(sqrt_x) / sqrt_x;
+        g[0] = Dawsons_Integral(sqrt_x) / sqrt_x;
+        //g[0] = 0.0;
 
         for (int n = 0; n < nmax; n++) {
             g[n + 1] = (1.0 - (2 * n + 1) * g[n]) / (2.0 * x);

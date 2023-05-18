@@ -5,7 +5,7 @@
 #  Copyright (C) 2021-2023 Alexander Oleynichenko
 #
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 project(test_libgrpp_c.x C)
 project(test_libgrpp_f90.x Fortran)
 

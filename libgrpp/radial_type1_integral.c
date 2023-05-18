@@ -29,7 +29,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "gslbessel.h"
+#include "scaled_mod_sph_bessel.h"
 #include "screening.h"
 #include "utils.h"
 

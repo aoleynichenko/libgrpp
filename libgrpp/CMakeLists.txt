@@ -5,18 +5,17 @@
 #  Copyright (C) 2021-2023 Alexander Oleynichenko
 #
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 project(libgrpp C)
 
 set(CMAKE_C_STANDARD 11)
-
-add_subdirectory(gsl)
 
 add_compile_options(-O3)
 #add_compile_options(-pg)
 add_library(libgrpp
         angular_integrals.c
         binomial.c
+        bessel_table.c
         boys.c
         diff_gaussian.c
         factorial.c
@@ -25,8 +24,10 @@ add_library(libgrpp
         gfun.c
         grpp.c
         grpp_integrals_gradient.c
-        gslbessel.c
         lmatrix.c
+        mymathlib_dawson.c
+        mymathlib.c
+        mymathlib_incomplete_gamma.c
         norm_gaussian.c
         nuclear_attraction.c
         nuclear_models.c
@@ -37,6 +38,7 @@ add_library(libgrpp
         potential.c
         radial_type1_integral.c
         radial_type2_integral.c
+        scaled_mod_sph_bessel.c
         screening.c
         shell.c
         spherical_harmonics.c
@@ -47,4 +49,7 @@ add_library(libgrpp
         utils.c
         )
 
-target_link_libraries(libgrpp gsl -lm)
+target_link_libraries(libgrpp -lm)
+
+
+
