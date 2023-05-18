@@ -22,7 +22,6 @@ A library for the evaluation of molecular integrals of the generalized relativis
 * C and Fortran 90 interfaces
 
 * no dependence on external libraries
-  * GNU Scientific Library (GSL) comes with LIBGRPP and haven't to be build separately
 
 # What is a generalized pseudopotential?
 
