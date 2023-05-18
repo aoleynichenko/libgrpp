@@ -74,3 +74,7 @@ add_test(
 #)
 
 
+foreach (t Cs H2O ThO)
+    set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
+endforeach ()
+
