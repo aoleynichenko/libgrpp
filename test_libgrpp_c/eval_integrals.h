@@ -20,6 +20,11 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
 
 void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, double *overlap_matrix);
 
+void evaluate_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_list, double *kinetic_matrix);
+
+void evaluate_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list,
+                                 double *px_matrix, double *py_matrix, double *pz_matrix);
+
 void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
                                            double *nucattr_matrix, int nuclear_model);
 

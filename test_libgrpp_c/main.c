@@ -31,7 +31,11 @@ void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_
 
 void calculate_write_overlap_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule);
 
+void calculate_write_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_list);
+
 void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps);
+
+void calculate_write_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list);
 
 
 int main(int argc, char **argv)
@@ -55,27 +59,35 @@ int main(int argc, char **argv)
     /*
      * parse command-line arguments
      */
-    int calc_grpp_integrals = 1;
-    int calc_ovlp_integrals = 1;
-    int calc_coul_integrals = 1;
-    int calc_ovlp_gradients = 1;
-    int calc_grpp_gradients = 1;
+    int calc_grpp_integrals = 0;
+    int calc_ovlp_integrals = 0;
+    int calc_coul_integrals = 0;
+    int calc_kine_integrals = 0;
+    int calc_mome_integrals = 0;
+    int calc_ovlp_gradients = 0;
+    int calc_grpp_gradients = 0;
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--no-grpp") == 0) {
-            calc_grpp_integrals = 0;
+        if (strcmp(argv[i], "--grpp") == 0) {
+            calc_grpp_integrals = 1;
         }
-        else if (strcmp(argv[i], "--no-overlap") == 0) {
-            calc_ovlp_integrals = 0;
+        else if (strcmp(argv[i], "--overlap") == 0) {
+            calc_ovlp_integrals = 1;
         }
-        else if (strcmp(argv[i], "--no-coulomb") == 0) {
-            calc_coul_integrals = 0;
+        else if (strcmp(argv[i], "--coulomb") == 0) {
+            calc_coul_integrals = 1;
         }
-        else if (strcmp(argv[i], "--no-grpp-grad") == 0) {
-            calc_grpp_gradients = 0;
+        else if (strcmp(argv[i], "--kinetic") == 0) {
+            calc_kine_integrals = 1;
         }
-        else if (strcmp(argv[i], "--no-overlap-grad") == 0) {
-            calc_ovlp_gradients = 0;
+        else if (strcmp(argv[i], "--momentum") == 0) {
+            calc_mome_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--grpp-grad") == 0) {
+            calc_grpp_gradients = 1;
+        }
+        else if (strcmp(argv[i], "--overlap-grad") == 0) {
+            calc_ovlp_gradients = 1;
         }
         else {
             // unknown arguments will be ignored
@@ -83,11 +95,13 @@ int main(int argc, char **argv)
     }
 
     printf("\n");
-    printf(" grpp integrals     %s\n", calc_grpp_integrals ? "+" : "-");
-    printf(" coulomb integrals  %s\n", calc_coul_integrals ? "+" : "-");
-    printf(" overlap integrals  %s\n", calc_ovlp_integrals ? "+" : "-");
-    printf(" grpp gradients     %s\n", calc_grpp_gradients ? "+" : "-");
-    printf(" overlap gradients  %s\n", calc_ovlp_gradients ? "+" : "-");
+    printf(" grpp integrals     %s\n", calc_grpp_integrals ? "yes" : "no");
+    printf(" coulomb integrals  %s\n", calc_coul_integrals ? "yes" : "no");
+    printf(" overlap integrals  %s\n", calc_ovlp_integrals ? "yes" : "no");
+    printf(" kin ener integrals %s\n", calc_kine_integrals ? "yes" : "no");
+    printf(" momentum integrals %s\n", calc_mome_integrals ? "yes" : "no");
+    printf(" grpp gradients     %s\n", calc_grpp_gradients ? "yes" : "no");
+    printf(" overlap gradients  %s\n", calc_ovlp_gradients ? "yes" : "no");
     printf("\n");
 
     /*
@@ -167,6 +181,22 @@ int main(int argc, char **argv)
     if (calc_ovlp_integrals) {
         calculate_write_overlap_integrals(num_shells, shell_list);
     }
+
+    /*
+     * kinetic energy integrals
+     */
+    if (calc_kine_integrals) {
+        calculate_write_kinetic_energy_integrals(num_shells, shell_list);
+    }
+
+
+    /*
+     * momentum integrals (imaginary part)
+     */
+    if (calc_mome_integrals) {
+        calculate_write_momentum_integrals(num_shells, shell_list);
+    }
+
 
     /*
      * nuclear attraction integrals
@@ -250,6 +280,46 @@ void calculate_write_overlap_integrals(int num_shells, libgrpp_shell_t **shell_l
     free(overlap_matrix);
 
     printf("\ntime for overlap integrals: %.3f sec\n\n", time_finish - time_start);
+}
+
+
+void calculate_write_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_list)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+    double *kinetic_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+
+    double time_start = abs_time();
+    evaluate_kinetic_energy_integrals(num_shells, shell_list, kinetic_matrix);
+    double time_finish = abs_time();
+
+    print_matrix_lower_triangle("libgrpp_c_kinetic_energy.txt", basis_dim, kinetic_matrix);
+
+    free(kinetic_matrix);
+
+    printf("\ntime for kinetic energy integrals: %.3f sec\n\n", time_finish - time_start);
+}
+
+
+void calculate_write_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+    double *px_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    double *py_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    double *pz_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+
+    double time_start = abs_time();
+    evaluate_momentum_integrals(num_shells, shell_list, px_matrix, py_matrix, pz_matrix);
+    double time_finish = abs_time();
+
+    print_matrix_lower_triangle("libgrpp_c_momentum_x.txt", basis_dim, px_matrix);
+    print_matrix_lower_triangle("libgrpp_c_momentum_y.txt", basis_dim, py_matrix);
+    print_matrix_lower_triangle("libgrpp_c_momentum_z.txt", basis_dim, pz_matrix);
+
+    free(px_matrix);
+    free(py_matrix);
+    free(pz_matrix);
+
+    printf("\ntime for momentum integrals: %.3f sec\n\n", time_finish - time_start);
 }
 
 

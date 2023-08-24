@@ -219,6 +219,93 @@ void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, do
 
 
 /**
+ * evaluates kinetic energy matrix
+ */
+void evaluate_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_list, double *kinetic_matrix)
+{
+    double buf[MAX_BUF];
+
+    int dim = calculate_basis_dim(shell_list, num_shells);
+
+    memset(kinetic_matrix, 0, sizeof(double) * dim * dim);
+
+    int ioffset = 0;
+    for (int ishell = 0; ishell < num_shells; ishell++) {
+
+        libgrpp_shell_t *bra_shell = shell_list[ishell];
+        int bra_dim = libgrpp_get_shell_size(bra_shell);
+
+        int joffset = 0;
+        for (int jshell = 0; jshell < num_shells; jshell++) {
+
+            libgrpp_shell_t *ket_shell = shell_list[jshell];
+            int ket_dim = libgrpp_get_shell_size(ket_shell);
+
+            double t1 = abs_time();
+            printf("kinetic: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+
+            libgrpp_kinetic_energy_integrals(bra_shell, ket_shell, buf);
+            add_block_to_matrix(dim, dim, kinetic_matrix, bra_dim, ket_dim, buf, ioffset, joffset, 1.0);
+
+            double t2 = abs_time();
+            printf("%10.3f sec\n", t2 - t1);
+
+            joffset += ket_dim;
+        }
+
+        ioffset += bra_dim;
+    }
+}
+
+
+/**
+ * evaluates imag parts of momentum components (px,py,pz)
+ */
+void evaluate_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list,
+                                 double *px_matrix, double *py_matrix, double *pz_matrix)
+{
+    double buf_x[MAX_BUF];
+    double buf_y[MAX_BUF];
+    double buf_z[MAX_BUF];
+
+    int dim = calculate_basis_dim(shell_list, num_shells);
+
+    memset(px_matrix, 0, sizeof(double) * dim * dim);
+    memset(py_matrix, 0, sizeof(double) * dim * dim);
+    memset(pz_matrix, 0, sizeof(double) * dim * dim);
+
+    int ioffset = 0;
+    for (int ishell = 0; ishell < num_shells; ishell++) {
+
+        libgrpp_shell_t *bra_shell = shell_list[ishell];
+        int bra_dim = libgrpp_get_shell_size(bra_shell);
+
+        int joffset = 0;
+        for (int jshell = 0; jshell < num_shells; jshell++) {
+
+            libgrpp_shell_t *ket_shell = shell_list[jshell];
+            int ket_dim = libgrpp_get_shell_size(ket_shell);
+
+            double t1 = abs_time();
+            printf("momentum: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+
+            libgrpp_momentum_integrals(bra_shell, ket_shell, buf_x, buf_y, buf_z);
+            add_block_to_matrix(dim, dim, px_matrix, bra_dim, ket_dim, buf_x, ioffset, joffset, 1.0);
+            add_block_to_matrix(dim, dim, py_matrix, bra_dim, ket_dim, buf_y, ioffset, joffset, 1.0);
+            add_block_to_matrix(dim, dim, pz_matrix, bra_dim, ket_dim, buf_z, ioffset, joffset, 1.0);
+
+            double t2 = abs_time();
+            printf("%10.3f sec\n", t2 - t1);
+
+            joffset += ket_dim;
+        }
+
+        ioffset += bra_dim;
+    }
+}
+
+
+/**
  * evaluates nuclear attraction integrals
  */
 void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,

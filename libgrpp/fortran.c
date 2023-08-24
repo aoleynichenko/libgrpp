@@ -519,6 +519,70 @@ void libgrpp_overlap_integrals_(
 
 
 /*
+ * kinetic-energy integrals (for the shell pair)
+ */
+
+void libgrpp_kinetic_energy_integrals_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_kinetic_energy_integrals(shell_A, shell_B, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+/*
+ * momentum operator integrals (for the shell pair)
+ */
+
+void libgrpp_momentum_integrals_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // answer
+        double *matrix_x,
+        double *matrix_y,
+        double *matrix_z
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_momentum_integrals(shell_A, shell_B, matrix_x, matrix_y, matrix_z);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+/*
  * nuclear attraction integrals
  */
 

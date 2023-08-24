@@ -1,6 +1,10 @@
 #!/bin/bash
 
-test_libgrpp_c.x > test.out
+test_libgrpp_c.x --grpp --overlap --coulomb --kinetic --momentum --overlap-grad --grpp-grad > test.out
+
+#
+# pseudopotential
+#
 
 libgrpp_compare_matrices.x libgrpp_c_arep.txt arep.txt
 if [ $? -ne 0 ]; then exit 1; fi
@@ -11,9 +15,22 @@ if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_so_z.txt so_z.txt
 if [ $? -ne 0 ]; then exit 1; fi
 
+#
+# other one-electron operators
+#
+
 libgrpp_compare_matrices.x libgrpp_c_overlap.txt overlap.txt
 if [ $? -ne 0 ]; then exit 1; fi
 libgrpp_compare_matrices.x libgrpp_c_nucattr.txt coulomb.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_kinetic_energy.txt kinetic_energy.txt
+if [ $? -ne 0 ]; then exit 1; fi
+
+libgrpp_compare_matrices.x libgrpp_c_momentum_x.txt momentum_x.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_momentum_y.txt momentum_y.txt
+if [ $? -ne 0 ]; then exit 1; fi
+libgrpp_compare_matrices.x libgrpp_c_momentum_z.txt momentum_z.txt
 if [ $? -ne 0 ]; then exit 1; fi
 
 #

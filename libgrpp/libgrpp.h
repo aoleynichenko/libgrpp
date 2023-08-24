@@ -183,6 +183,8 @@ void libgrpp_full_grpp_integrals_gradient(
 
 #include "overlap.h"
 #include "overlap_gradient.h"
+#include "kinetic.h"
+#include "momentum.h"
 
 /*
  * integrator for nuclear attraction integrals

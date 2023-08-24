@@ -5,7 +5,7 @@
 #  Copyright (C) 2021-2023 Alexander Oleynichenko
 #
 
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.19)
 project(libgrpp C)
 
 set(CMAKE_C_STANDARD 11)
@@ -24,7 +24,9 @@ add_library(libgrpp
         gfun.c
         grpp.c
         grpp_integrals_gradient.c
+        kinetic.c
         lmatrix.c
+        momentum.c
         mymathlib_dawson.c
         mymathlib.c
         mymathlib_incomplete_gamma.c
@@ -50,6 +52,3 @@ add_library(libgrpp
         )
 
 target_link_libraries(libgrpp -lm)
-
-
-
