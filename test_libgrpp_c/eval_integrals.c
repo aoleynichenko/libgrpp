@@ -343,7 +343,8 @@ void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **she
                 int mass_number = get_element_mass_number_abundant(z);
                 double R_rms = libgrpp_estimate_nuclear_rms_radius_johnson_1985(mass_number);
 
-                if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE) {
+                if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE ||
+                    nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
                     // do nothing
                 }
                 else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||

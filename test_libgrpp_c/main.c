@@ -23,17 +23,20 @@
 #include "abs_time.h"
 
 
-void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps);
+void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                    libgrpp_grpp_t **grpps);
 
 void calculate_write_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list);
 
-void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule);
+void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                                  int nuclear_model);
 
 void calculate_write_overlap_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule);
 
 void calculate_write_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_list);
 
-void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps);
+void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                   libgrpp_grpp_t **grpps);
 
 void calculate_write_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list);
 
@@ -52,7 +55,7 @@ int main(int argc, char **argv)
     printf("    -----------------------------------------------------\n");
     printf("           the C front-end to the libgrpp library        \n");
     printf("    -----------------------------------------------------\n");
-    printf("    a. oleynichenko                            9 feb 2023\n");
+    printf("    a. oleynichenko                           25 aug 2023\n");
     printf("    -----------------------------------------------------\n");
     printf("\n");
 
@@ -61,7 +64,12 @@ int main(int argc, char **argv)
      */
     int calc_grpp_integrals = 0;
     int calc_ovlp_integrals = 0;
-    int calc_coul_integrals = 0;
+    int calc_coul_point_integrals = 0;
+    int calc_coul_point_num_integrals = 0;
+    int calc_coul_ball_integrals = 0;
+    int calc_coul_gauss_integrals = 0;
+    int calc_coul_fermi_integrals = 0;
+    int calc_coul_fermi_bubble_integrals = 0;
     int calc_kine_integrals = 0;
     int calc_mome_integrals = 0;
     int calc_ovlp_gradients = 0;
@@ -74,8 +82,23 @@ int main(int argc, char **argv)
         else if (strcmp(argv[i], "--overlap") == 0) {
             calc_ovlp_integrals = 1;
         }
-        else if (strcmp(argv[i], "--coulomb") == 0) {
-            calc_coul_integrals = 1;
+        else if (strcmp(argv[i], "--coulomb-point") == 0) {
+            calc_coul_point_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--coulomb-point-num") == 0) {
+            calc_coul_point_num_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--coulomb-ball") == 0) {
+            calc_coul_ball_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--coulomb-gauss") == 0) {
+            calc_coul_gauss_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--coulomb-fermi") == 0) {
+            calc_coul_fermi_integrals = 1;
+        }
+        else if (strcmp(argv[i], "--coulomb-fermi-bubble") == 0) {
+            calc_coul_fermi_bubble_integrals = 1;
         }
         else if (strcmp(argv[i], "--kinetic") == 0) {
             calc_kine_integrals = 1;
@@ -90,18 +113,40 @@ int main(int argc, char **argv)
             calc_ovlp_gradients = 1;
         }
         else {
-            // unknown arguments will be ignored
+            printf("unknown argument: %s\n", argv[1]);
+            printf("\n");
+            printf("list of possible arguments (types of integrals to be calculated):\n");
+            printf("--grpp                   generalized pseudopotential\n");
+            printf("--overlap                overlap\n");
+            printf("--coulomb-point          nuclear attraction, point nucleus\n");
+            printf("--coulomb-point-num      nuclear attraction, point nucleus (numerical radial integrals)\n");
+            printf("--coulomb-ball           nuclear attraction, charged ball distribution\n");
+            printf("--coulomb-gauss          nuclear attraction, gaussian distribution\n");
+            printf("--coulomb-fermi          nuclear attraction, fermi distribution\n");
+            printf("--coulomb-fermi-bubble   nuclear attraction, fermi distribution with bubble\n");
+            printf("--kinetic                kinetic energy operator\n");
+            printf("--momentum               momentum operator\n");
+            printf("--grpp-grad              gradients of generalized pseudopotential integrals\n");
+            printf("--overlap-grad           gradients of overlap integrals\n");
+            return 1;
         }
     }
 
     printf("\n");
-    printf(" grpp integrals     %s\n", calc_grpp_integrals ? "yes" : "no");
-    printf(" coulomb integrals  %s\n", calc_coul_integrals ? "yes" : "no");
-    printf(" overlap integrals  %s\n", calc_ovlp_integrals ? "yes" : "no");
-    printf(" kin ener integrals %s\n", calc_kine_integrals ? "yes" : "no");
-    printf(" momentum integrals %s\n", calc_mome_integrals ? "yes" : "no");
-    printf(" grpp gradients     %s\n", calc_grpp_gradients ? "yes" : "no");
-    printf(" overlap gradients  %s\n", calc_ovlp_gradients ? "yes" : "no");
+    printf(" types of integrals to be calculated:\n");
+    printf("\n");
+    printf(" pseudopotential (grpp)      %s\n", calc_grpp_integrals ? "yes" : "no");
+    printf(" coulomb (point nuc)         %s\n", calc_coul_point_integrals ? "yes" : "no");
+    printf(" coulomb (point nuc, num)    %s\n", calc_coul_point_num_integrals ? "yes" : "no");
+    printf(" coulomb (charged ball nuc)  %s\n", calc_coul_ball_integrals ? "yes" : "no");
+    printf(" coulomb (gauss nuc)         %s\n", calc_coul_gauss_integrals ? "yes" : "no");
+    printf(" coulomb (fermi nuc)         %s\n", calc_coul_fermi_integrals ? "yes" : "no");
+    printf(" coulomb (fermi bubble nuc)  %s\n", calc_coul_fermi_bubble_integrals ? "yes" : "no");
+    printf(" overlap                     %s\n", calc_ovlp_integrals ? "yes" : "no");
+    printf(" kinetic-energy              %s\n", calc_kine_integrals ? "yes" : "no");
+    printf(" momentum                    %s\n", calc_mome_integrals ? "yes" : "no");
+    printf(" grpp gradients              %s\n", calc_grpp_gradients ? "yes" : "no");
+    printf(" overlap gradients           %s\n", calc_ovlp_gradients ? "yes" : "no");
     printf("\n");
 
     /*
@@ -200,9 +245,34 @@ int main(int argc, char **argv)
 
     /*
      * nuclear attraction integrals
+     * (for different models of nuclear charge distribution)
      */
-    if (calc_coul_integrals) {
-        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule);
+    if (calc_coul_point_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule,
+                                                     LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
+    }
+
+    if (calc_coul_point_num_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule,
+                                                     LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL);
+    }
+
+    if (calc_coul_ball_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule,
+                                                     LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL);
+    }
+
+    if (calc_coul_gauss_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule, LIBGRPP_NUCLEAR_MODEL_GAUSSIAN);
+    }
+
+    if (calc_coul_fermi_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule, LIBGRPP_NUCLEAR_MODEL_FERMI);
+    }
+
+    if (calc_coul_fermi_bubble_integrals) {
+        calculate_write_nuclear_attraction_integrals(num_shells, shell_list, molecule,
+                                                     LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE);
     }
 
     /*
@@ -235,7 +305,8 @@ int main(int argc, char **argv)
 }
 
 
-void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps)
+void calculate_write_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                    libgrpp_grpp_t **grpps)
 {
     int basis_dim = calculate_basis_dim(shell_list, num_shells);
 
@@ -323,16 +394,38 @@ void calculate_write_momentum_integrals(int num_shells, libgrpp_shell_t **shell_
 }
 
 
-void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule)
+void calculate_write_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                                  int nuclear_model)
 {
     int basis_dim = calculate_basis_dim(shell_list, num_shells);
     double *nucattr_matrix = (double *) calloc(basis_dim * basis_dim, sizeof(double));
 
     double time_start = abs_time();
-    evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE);
+    evaluate_nuclear_attraction_integrals(num_shells, shell_list, molecule, nucattr_matrix, nuclear_model);
     double time_finish = abs_time();
 
-    print_matrix_lower_triangle("libgrpp_c_nucattr.txt", basis_dim, nucattr_matrix);
+    switch (nuclear_model) {
+        case LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_point.txt", basis_dim, nucattr_matrix);
+            break;
+        case LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_point_numerical.txt", basis_dim, nucattr_matrix);
+            break;
+        case LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_charged_ball.txt", basis_dim, nucattr_matrix);
+            break;
+        case LIBGRPP_NUCLEAR_MODEL_GAUSSIAN:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_gaussian.txt", basis_dim, nucattr_matrix);
+            break;
+        case LIBGRPP_NUCLEAR_MODEL_FERMI:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_fermi.txt", basis_dim, nucattr_matrix);
+            break;
+        case LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE:
+            print_matrix_lower_triangle("libgrpp_c_nucattr_fermi_bubble.txt", basis_dim, nucattr_matrix);
+            break;
+        default:
+            break;
+    }
 
     free(nucattr_matrix);
 
@@ -376,7 +469,8 @@ void calculate_write_overlap_gradient(int num_shells, libgrpp_shell_t **shell_li
 }
 
 
-void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule, libgrpp_grpp_t **grpps)
+void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                   libgrpp_grpp_t **grpps)
 {
     int basis_dim = calculate_basis_dim(shell_list, num_shells);
 
@@ -393,7 +487,8 @@ void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list,
     }
 
     double time_start = abs_time();
-    evaluate_grpp_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep, grad_so_x, grad_so_y, grad_so_z);
+    evaluate_grpp_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep, grad_so_x, grad_so_y,
+                                     grad_so_z);
     double time_finish = abs_time();
     printf("\ntime for grpp integrals gradients: %.3f sec\n\n", time_finish - time_start);
 

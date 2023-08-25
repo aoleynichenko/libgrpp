@@ -147,7 +147,8 @@ void libgrpp_nuclear_attraction_integrals(
             else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL ||
                      nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
                      nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI ||
-                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE) {
+                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE ||
+                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
 
                 double params[10];
                 params[0] = charge;
@@ -156,7 +157,12 @@ void libgrpp_nuclear_attraction_integrals(
                  * choose nuclear model
                  */
                 double (*charge_distrib_function)(double, void *) = NULL;
-                if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
+
+                if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
+                    //printf("charge distribution: point\n");
+                    charge_distrib_function = wrapper_coulomb_potential_point;
+                }
+                else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
                     params[1] = model_params[0]; // R_rms
                     charge_distrib_function = wrapper_coulomb_potential_ball;
                 }
@@ -340,6 +346,14 @@ double nucattr_theta(struct rpp_type1_data *data, int N, int *ijklmn)
  * are used to provide a unified interface to radially-local potentials.
  * the 'params' argument is unpacked, then the specific routines are invoked.
  */
+
+double wrapper_coulomb_potential_point(double r, void *params)
+{
+    double Z = ((double *) params)[0];
+
+    return libgrpp_coulomb_potential_point(r, Z);
+}
+
 
 double wrapper_coulomb_potential_ball(double r, void *params)
 {

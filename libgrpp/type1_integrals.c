@@ -177,11 +177,15 @@ void evaluate_radially_local_potential_integral_primitive_gaussians(
     /*
      * pre-compute type 1 radial integrals
      */
+    //printf("begin radial integrals\n");
+
     radial_type1_table_t *radial_table = tabulate_radial_type1_integrals(
             lambda_max, n_max,
             CA_2, CB_2, alpha_A, alpha_B, k, D_ABC,
             potential, potential_params
     );
+
+    //printf("end radial integrals\n");
 
     /*
      * main loop

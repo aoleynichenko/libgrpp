@@ -105,6 +105,9 @@ radial_type1_table_t *tabulate_radial_type1_integrals(
 
     for (int lambda = 0; lambda <= lambda_max; lambda++) {
         for (int n = 0; n <= n_max; n++) {
+
+            //printf("lambda=%d n=%d\n", lambda, n);
+
             int converged;
             double Q = calculate_radial_type1_integral(grid, n, lambda, tolerance, &converged);
 
@@ -265,7 +268,7 @@ double calculate_radial_type1_integral(radial_type1_grid_t *grid, int n, int lam
     /*
      * first step: screening of an integral
      */
-    double screened = 0.0;
+    /*double screened = 0.0;
     int screened_success = screening_radial_type1(
             lambda,
             n,
@@ -282,7 +285,7 @@ double calculate_radial_type1_integral(radial_type1_grid_t *grid, int n, int lam
     if (screened_success == EXIT_SUCCESS && fabs(screened) < tolerance) {
         *converged = 1;
         return screened;
-    }
+    }*/
 
     /*
      * second step: calculation on the smallest possible grid
@@ -311,10 +314,10 @@ double calculate_radial_type1_integral(radial_type1_grid_t *grid, int n, int lam
             sum += w[i] * pot_values[i] * gto_values[i] * r_N[i] * mod_bessel[i];
         }
 
-        if (screened_success == EXIT_SUCCESS && (fabs(sum) / fabs(screened) < 0.001)) {
+        /*if (screened_success == EXIT_SUCCESS && (fabs(sum) / fabs(screened) < 0.001)) {
             *converged = 0;
             continue;
-        }
+        }*/
 
         *converged = fabs(sum - prev_sum) <= tolerance;
 
