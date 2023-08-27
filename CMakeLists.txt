@@ -37,7 +37,7 @@ add_executable(test_libgrpp_f90.x
         test_libgrpp_f90/libgrpp.f90
         )
 
-target_link_libraries(test_libgrpp_c.x libgrpp -lm) # -pg)
+target_link_libraries(test_libgrpp_c.x libgrpp -lm)# -pg)
 target_link_libraries(test_libgrpp_f90.x libgrpp -lm)
 
 
@@ -49,12 +49,13 @@ enable_testing()
 
 # define tests
 
-add_test(NAME Cs  WORKING_DIRECTORY ../test/Cs  COMMAND bash run_test.sh)
-add_test(NAME K   WORKING_DIRECTORY ../test/K   COMMAND bash run_test.sh)
-add_test(NAME H2O WORKING_DIRECTORY ../test/H2O COMMAND bash run_test.sh)
-add_test(NAME ThO WORKING_DIRECTORY ../test/ThO COMMAND bash run_test.sh)
-#add_test(NAME UO2 WORKING_DIRECTORY ../test/UO2 COMMAND bash run_test.sh)
+add_test(NAME Cs     WORKING_DIRECTORY ../test/Cs     COMMAND bash run_test.sh)
+add_test(NAME K      WORKING_DIRECTORY ../test/K      COMMAND bash run_test.sh)
+add_test(NAME Tl_qz  WORKING_DIRECTORY ../test/Tl_qz  COMMAND bash run_test.sh)
+add_test(NAME H2O    WORKING_DIRECTORY ../test/H2O    COMMAND bash run_test.sh)
+add_test(NAME ThO    WORKING_DIRECTORY ../test/ThO    COMMAND bash run_test.sh)
+#add_test(NAME UO2    WORKING_DIRECTORY ../test/UO2    COMMAND bash run_test.sh)
 
-foreach (t Cs K H2O ThO)
+foreach (t Cs Tl_qz K H2O ThO)
     set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 endforeach ()

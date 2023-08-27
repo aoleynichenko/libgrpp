@@ -12,6 +12,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "specfunc_fermi_sk.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -184,7 +186,7 @@ double libgrpp_rms_radius_fermi(int Z, double c, double a)
             1.0
             + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
             + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
-            - 120.0 * pow(a, 5) / pow(c, 5) * fermi_model_Sk(5, -c / a)
+            - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
     );
 
     return sqrt(r2);
@@ -207,18 +209,32 @@ double libgrpp_coulomb_potential_fermi(double r, double Z, double c, double a)
     double c2 = c * c;
     double c3 = c * c * c;
 
+    /*double x = -20.0;
+    double dx = 0.001;
+    double xmax = 1e-5;
+    while (x < xmax) {
+
+        double Sk_exact = fermi_model_Sk(7, x);
+        double Sk_approx = specfunc_fermi_sk(7, x);
+
+        printf("%10.6f%24.16e%24.16e    %24.16e\n", x, Sk_exact, Sk_approx, Sk_approx - Sk_exact);
+
+        x += dx;
+    }
+    exit(0);*/
+
     double N = fermi_model_norm_factor(c, a);
 
     if (r > c) {
-        double S2 = fermi_model_Sk(2, (c - r) / a);
-        double S3 = fermi_model_Sk(3, (c - r) / a);
+        double S2 = specfunc_fermi_sk(2, (c - r) / a);
+        double S3 = specfunc_fermi_sk(3, (c - r) / a);
 
         return -Z / (N * r) * (N + 3 * a2 * r / c3 * S2 + 6 * a3 / c3 * S3);
     }
     else {
-        double P2 = fermi_model_Sk(2, (r - c) / a);
-        double P3 = fermi_model_Sk(3, (r - c) / a);
-        double S3 = fermi_model_Sk(3, -c / a);
+        double P2 = specfunc_fermi_sk(2, (r - c) / a);
+        double P3 = specfunc_fermi_sk(3, (r - c) / a);
+        double S3 = specfunc_fermi_sk(3, -c / a);
         double r3 = r * r * r;
 
         return -Z / (N * r) * (1.5 * r / c - r3 / (2 * c3) + M_PI * M_PI * a2 * r / (2 * c3) - 3 * a2 * r / c3 * P2 +
@@ -237,7 +253,7 @@ double fermi_model_norm_factor(double c, double a)
     double c2 = c * c;
     double c3 = c * c * c;
 
-    return 1.0 + M_PI * M_PI * a2 / c2 - 6.0 * a3 / c3 * fermi_model_Sk(3, -c / a);
+    return 1.0 + M_PI * M_PI * a2 / c2 - 6.0 * a3 / c3 * specfunc_fermi_sk(3, -c / a);
 }
 
 
@@ -267,7 +283,7 @@ double libgrpp_rms_radius_fermi_bubble(int Z, double c, double a, double k)
             1.0
             + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
             + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
-            - 120.0 * pow(a, 5) / pow(c, 5) * fermi_model_Sk(5, -c / a)
+            - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
     );
 
     double part_r6 = pow(c, 7) / 7.0 * (
@@ -275,7 +291,7 @@ double libgrpp_rms_radius_fermi_bubble(int Z, double c, double a, double k)
             + 7.0 * a * a * M_PI * M_PI / (c * c)
             + 49.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
             + 31.0 / 3.0 * pow(M_PI, 6) * pow(a, 6) / pow(c, 6)
-            - 5040.0 * pow(a, 7) / pow(c, 7) * fermi_model_Sk(7, -c / a)
+            - 5040.0 * pow(a, 7) / pow(c, 7) * specfunc_fermi_sk(7, -c / a)
     );
 
     double r2 = 4 * M_PI * rho0 / Z * (part_r4 + k / (c * c) * part_r6);
@@ -309,10 +325,10 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
     double F2 = 0.0;
 
     if (r < c) {
-        double S2 = fermi_model_Sk(2, (r - c) / a);
-        double S3 = fermi_model_Sk(3, (r - c) / a);
-        double S4 = fermi_model_Sk(4, (r - c) / a);
-        double S5 = fermi_model_Sk(5, (r - c) / a);
+        double S2 = specfunc_fermi_sk(2, (r - c) / a);
+        double S3 = specfunc_fermi_sk(3, (r - c) / a);
+        double S4 = specfunc_fermi_sk(4, (r - c) / a);
+        double S5 = specfunc_fermi_sk(5, (r - c) / a);
 
         // contribution from the "classical" Fermi term
         F0 = - pow(r, 3) / 6.0
@@ -320,7 +336,7 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
              + 2.0 * pow(a, 3) * S3
              + r * c * c / 2.0
              + M_PI * M_PI / 6.0 * r * a * a
-             - 2.0 * pow(a, 3) * fermi_model_Sk(3, -c / a);
+             - 2.0 * pow(a, 3) * specfunc_fermi_sk(3, -c / a);
 
         // contribution from the quadratic, "hole" term
         F2 = - pow(r, 5) / 20.0
@@ -331,18 +347,18 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
              + r * pow(c, 4) / 4.0
              + r * M_PI * M_PI * c * c * a * a / 2.0
              + r * pow(a, 4) * pow(M_PI, 4) * 7.0 / 60.0
-             - 24.0 * pow(a, 5) * fermi_model_Sk(5, - c / a);
+             - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, - c / a);
     }
     else {
-        double S2 = fermi_model_Sk(2, (c - r) / a);
-        double S3 = fermi_model_Sk(3, (c - r) / a);
-        double S4 = fermi_model_Sk(4, (c - r) / a);
-        double S5 = fermi_model_Sk(5, (c - r) / a);
+        double S2 = specfunc_fermi_sk(2, (c - r) / a);
+        double S3 = specfunc_fermi_sk(3, (c - r) / a);
+        double S4 = specfunc_fermi_sk(4, (c - r) / a);
+        double S5 = specfunc_fermi_sk(5, (c - r) / a);
 
         // contribution from the "classical" Fermi term
         F0 = pow(c, 3) / 3.0
              + M_PI * M_PI / 3.0 * c * a * a
-             - 2.0 * pow(a, 3) * fermi_model_Sk(3, -c / a)
+             - 2.0 * pow(a, 3) * specfunc_fermi_sk(3, -c / a)
              + r * a * a * S2
              + 2.0 * pow(a, 3) * S3;
 
@@ -350,7 +366,7 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
         F2 = pow(c, 5) / 5.0
                 + 2.0 * pow(c, 3) * a * a * M_PI * M_PI / 3.0
                 + 7.0 * pow(a, 4) * c * pow(M_PI, 4) / 15.0
-                - 24.0 * pow(a, 5) * fermi_model_Sk(5, - c / a)
+                - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, - c / a)
                 + pow(a, 2) * pow(r, 3) * S2
                 + 6.0 * pow(a, 3) * pow(r, 2) * S3
                 + 18.0 * r * pow(a, 4) * S4
@@ -379,43 +395,9 @@ double fermi_bubble_model_norm_factor(double c, double a, double k)
            + 3.0 / 5.0 * k
            + 2.0 * M_PI * M_PI * a2 * k / c2
            + 7.0 * M_PI * M_PI * M_PI * M_PI * a4 * k / (5.0 * c4)
-           - 72.0 * a5 * k / c5 * fermi_model_Sk(5, -c / a);
+           - 72.0 * a5 * k / c5 * specfunc_fermi_sk(5, -c / a);
 }
 
-
-/**
- * auxiliary special function Sk(x)
- * used in the formula for the electrostatic potential induced by the Fermi charge distribution.
- */
-double fermi_model_Sk(int k, double x)
-{
-    const double tol = 1e-12;
-    const int max_iter = 10000000; // to achieve such tolerance at x=0
-    double prev_sum = 0.0;
-    double sum = 0.0;
-    int converged = 0;
-
-    for (int i = 1; i < max_iter; i++) {
-        double d = pow(-1, i) * exp(i * x) / pow(i, k);
-        sum += d;
-
-        if (fabs(sum - prev_sum) < tol) {
-            converged = 1;
-            break;
-        }
-
-        prev_sum = sum;
-    }
-
-    if (!converged) {
-        printf("prev_sum = %e\n", prev_sum);
-        printf("sum   = %e\n", sum);
-        printf("delta = %e\n", sum - prev_sum);
-        printf("S(%d,%f) not converged!\n", k, x);
-    }
-
-    return sum;
-}
 
 
 

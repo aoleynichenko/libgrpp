@@ -43,6 +43,7 @@ add_library(libgrpp
         scaled_mod_sph_bessel.c
         screening.c
         shell.c
+        specfunc_fermi_sk.c
         spherical_harmonics.c
         spin_orbit_integrals.c
         type1_integrals.c

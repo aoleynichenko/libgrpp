@@ -38,27 +38,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-struct rpp_type1_data {
-    double a;
-    double b;
-    double p;
-    double mu;
-    double A[3];
-    double B[3];
-    double C[3];
-    double P[3];
-    double R_QC_2;
-    double K_abc;
-};
-
-double boys(int n, double x);
-
-double evaluate_nuclear_attraction_integral_point_charge_primitive(
-        double *charge_origin, int Z,
-        double *origin_A, int n_A, int l_A, int m_A, double alpha_A,
-        double *origin_B, int n_B, int l_B, int m_B, double alpha_B);
-
-double nucattr_theta(struct rpp_type1_data *data, int N, int *ijklmn);
 
 void evaluate_radially_local_potential_integral_primitive_gaussians(
         double *A, int n_cart_A, int *cart_list_A, double alpha_A,
@@ -109,6 +88,10 @@ void libgrpp_nuclear_attraction_integrals(
         for (int j = 0; j < shell_B->num_primitives; j++) {
             double coef_B_j = shell_B->coeffs[j];
 
+            if (fabs(coef_A_i * coef_B_j) < 1e-13) {
+                continue;
+            }
+
             if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE) {
 
                 // use code for RPP type-1 integrals with RPP exponent = 0.0
@@ -122,27 +105,6 @@ void libgrpp_nuclear_attraction_integrals(
                 for (int k = 0; k < size_A * size_B; k++) {
                     buf[k] *= (-1) * charge;
                 }
-
-
-                // loop over cartesian functions inside the shells
-                /*for (int m = 0; m < size_A; m++) {
-                    for (int n = 0; n < size_B; n++) {
-                        int n_A = shell_A->cart_list[3 * m + 0];
-                        int l_A = shell_A->cart_list[3 * m + 1];
-                        int m_A = shell_A->cart_list[3 * m + 2];
-                        int n_B = shell_B->cart_list[3 * n + 0];
-                        int l_B = shell_B->cart_list[3 * n + 1];
-                        int m_B = shell_B->cart_list[3 * n + 2];
-
-                        double s = evaluate_nuclear_attraction_integral_point_charge_primitive(
-                                charge_origin, charge,
-                                shell_A->origin, n_A, l_A, m_A, shell_A->alpha[i],
-                                shell_B->origin, n_B, l_B, m_B, shell_B->alpha[j]
-                        );
-
-                        buf[m * size_B + n] = s;
-                    }
-                }*/
             }
             else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL ||
                      nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
@@ -156,30 +118,30 @@ void libgrpp_nuclear_attraction_integrals(
                 /*
                  * choose nuclear model
                  */
-                double (*charge_distrib_function)(double, void *) = NULL;
+                double (*electrostatic_potential_fun)(double, void *) = NULL;
 
                 if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
                     //printf("charge distribution: point\n");
-                    charge_distrib_function = wrapper_coulomb_potential_point;
+                    electrostatic_potential_fun = wrapper_coulomb_potential_point;
                 }
                 else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
                     params[1] = model_params[0]; // R_rms
-                    charge_distrib_function = wrapper_coulomb_potential_ball;
+                    electrostatic_potential_fun = wrapper_coulomb_potential_ball;
                 }
                 else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN) {
                     params[1] = model_params[0]; // R_rms
-                    charge_distrib_function = wrapper_coulomb_potential_gaussian;
+                    electrostatic_potential_fun = wrapper_coulomb_potential_gaussian;
                 }
                 else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI) {
                     params[1] = model_params[0]; // c
                     params[2] = model_params[1]; // a
-                    charge_distrib_function = wrapper_coulomb_potential_fermi;
+                    electrostatic_potential_fun = wrapper_coulomb_potential_fermi;
                 }
                 else {
                     params[1] = model_params[0]; // c
                     params[2] = model_params[1]; // a
                     params[3] = model_params[2]; // k
-                    charge_distrib_function = wrapper_coulomb_potential_fermi_bubble;
+                    electrostatic_potential_fun = wrapper_coulomb_potential_fermi_bubble;
                 }
 
                 /*
@@ -188,7 +150,7 @@ void libgrpp_nuclear_attraction_integrals(
                 evaluate_radially_local_potential_integral_primitive_gaussians(
                         shell_A->origin, size_A, shell_A->cart_list, shell_A->alpha[i],
                         shell_B->origin, size_B, shell_B->cart_list, shell_B->alpha[j],
-                        charge_origin, charge_distrib_function, params, buf
+                        charge_origin, electrostatic_potential_fun, params, buf
                 );
             }
             else {
@@ -201,143 +163,6 @@ void libgrpp_nuclear_attraction_integrals(
     }
 
     free(buf);
-}
-
-
-/**
- * Three-dimensional overlap integral between two primitive Gaussian functions
- * g(r) = x^n y^l z^m exp(-alpha * r^2)
- */
-double evaluate_nuclear_attraction_integral_point_charge_primitive(
-        double *charge_origin, int Z,
-        double *origin_A, int n_A, int l_A, int m_A, double alpha_A,
-        double *origin_B, int n_B, int l_B, int m_B, double alpha_B)
-{
-    double N_A = gaussian_norm_factor(n_A, l_A, m_A, alpha_A);
-    double N_B = gaussian_norm_factor(n_B, l_B, m_B, alpha_B);
-
-    /*
-     * auxiliary constants
-     */
-    struct rpp_type1_data data;
-    data.a = alpha_A;
-    data.b = alpha_B;
-    data.p = alpha_A + alpha_B;
-    data.mu = alpha_A * alpha_B / (alpha_A + alpha_B);
-    for (int i = 0; i < 3; i++) {
-        data.A[i] = origin_A[i];
-        data.B[i] = origin_B[i];
-        data.C[i] = charge_origin[i];
-        data.P[i] = (alpha_A * origin_A[i] + alpha_B * origin_B[i]) / (alpha_A + alpha_B);
-    }
-    data.R_QC_2 = distance_squared(data.P, data.C);
-    data.K_abc = exp(-data.mu * distance_squared(data.A, data.B));
-
-    /*
-     * start recursion
-     */
-    int ijklmn[6];
-    ijklmn[0] = n_A;
-    ijklmn[1] = n_B;
-    ijklmn[2] = l_A;
-    ijklmn[3] = l_B;
-    ijklmn[4] = m_A;
-    ijklmn[5] = m_B;
-
-    return (-1) * Z * N_A * N_B * nucattr_theta(&data, 0, ijklmn);
-}
-
-
-/*
- * Obara-Saika recurrence relation for the Theta(N,i,j,k,l,m,n) function
- * (see Helgaker et al, Chapter 9.10.1)
- */
-double nucattr_theta(struct rpp_type1_data *data, int N, int *ijklmn)
-{
-    /*
-     * the base case of recursion
-     */
-    if (ijklmn[0] == 0 && ijklmn[1] == 0 &&
-        ijklmn[2] == 0 && ijklmn[3] == 0 &&
-        ijklmn[4] == 0 && ijklmn[5] == 0) {
-        return 2 * M_PI / data->p * data->K_abc * boys(N, data->p * data->R_QC_2);
-    }
-
-    /*
-     * recursion is performed first for the (i,j) indices (X),
-     * then for (k,l) (Y), then for (l,m) (Z)
-     */
-    int coord;
-    int i, j;
-    if (ijklmn[0] != 0 || ijklmn[1] != 0) {
-        coord = 0;
-        i = ijklmn[0];
-        j = ijklmn[1];
-    }
-    else if (ijklmn[2] != 0 || ijklmn[3] != 0) {
-        coord = 1;
-        i = ijklmn[2];
-        j = ijklmn[3];
-    }
-    else {
-        coord = 2;
-        i = ijklmn[4];
-        j = ijklmn[5];
-    }
-
-    /*
-     * X_PA, X_PB, X_PC distances
-     */
-    double X_PA = data->P[coord] - data->A[coord];
-    double X_PB = data->P[coord] - data->B[coord];
-    double X_PC = data->P[coord] - data->C[coord];
-
-    /*
-     * downward recursion
-     */
-    double result = 0.0;
-    double p = data->p;
-
-    if (i >= j) { // downward step by i
-        i -= 1;
-        ijklmn[2 * coord] -= 1;
-        result += X_PA * nucattr_theta(data, N, ijklmn);
-        result -= X_PC * nucattr_theta(data, N + 1, ijklmn);
-        if (i != 0) {
-            ijklmn[2 * coord] -= 1;
-            result += 0.5 / p * i * nucattr_theta(data, N, ijklmn);
-            result -= 0.5 / p * i * nucattr_theta(data, N + 1, ijklmn);
-            ijklmn[2 * coord] += 1;
-        }
-        if (j != 0) {
-            ijklmn[2 * coord + 1] -= 1;
-            result += 0.5 / p * j * nucattr_theta(data, N, ijklmn);
-            result -= 0.5 / p * j * nucattr_theta(data, N + 1, ijklmn);
-            ijklmn[2 * coord + 1] += 1;
-        }
-        ijklmn[2 * coord] += 1;
-    }
-    else { // downward step by j
-        j -= 1;
-        ijklmn[2 * coord + 1] -= 1;
-        result += X_PB * nucattr_theta(data, N, ijklmn);
-        result -= X_PC * nucattr_theta(data, N + 1, ijklmn);
-        if (i != 0) {
-            ijklmn[2 * coord] -= 1;
-            result += 0.5 / p * i * nucattr_theta(data, N, ijklmn);
-            result -= 0.5 / p * i * nucattr_theta(data, N + 1, ijklmn);
-            ijklmn[2 * coord] += 1;
-        }
-        if (j != 0) {
-            ijklmn[2 * coord + 1] -= 1;
-            result += 0.5 / p * j * nucattr_theta(data, N, ijklmn);
-            result -= 0.5 / p * j * nucattr_theta(data, N + 1, ijklmn);
-            ijklmn[2 * coord + 1] += 1;
-        }
-        ijklmn[2 * coord + 1] += 1;
-    }
-
-    return result;
 }
 
 
