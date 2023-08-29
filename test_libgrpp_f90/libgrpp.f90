@@ -15,6 +15,7 @@ module libgrpp
     integer(4), parameter :: LIBGRPP_NUCLEAR_MODEL_GAUSSIAN = 2
     integer(4), parameter :: LIBGRPP_NUCLEAR_MODEL_FERMI = 3
     integer(4), parameter :: LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE = 4
+    integer(4), parameter :: LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL = 5
 
     interface
 

@@ -210,6 +210,58 @@ void libgrpp_nuclear_attraction_integrals(
 );
 
 
+void libgrpp_nuclear_attraction_integrals_point_charge(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *charge_origin,
+        int charge,
+        double *coulomb_matrix
+);
+
+
+void libgrpp_nuclear_attraction_integrals_charged_ball(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *charge_origin,
+        int charge,
+        double r_rms,
+        double *coulomb_matrix
+);
+
+
+void libgrpp_nuclear_attraction_integrals_gaussian_model(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *charge_origin,
+        int charge,
+        double r_rms,
+        double *coulomb_matrix
+);
+
+
+void libgrpp_nuclear_attraction_integrals_fermi_model(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *charge_origin,
+        int charge,
+        double fermi_param_c,
+        double fermi_param_a,
+        double *coulomb_matrix
+);
+
+
+void libgrpp_nuclear_attraction_integrals_fermi_bubble_model(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *charge_origin,
+        int charge,
+        double param_c,
+        double param_a,
+        double param_k,
+        double *coulomb_matrix
+);
+
+
 /*
  * models of nuclear charge density distribution
  */

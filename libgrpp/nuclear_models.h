@@ -8,7 +8,7 @@
 #ifndef TEST_LIBGRPP_F90_X_NUCLEAR_MODELS_H
 #define TEST_LIBGRPP_F90_X_NUCLEAR_MODELS_H
 
-#define FERMI_UNITS_TO_ATOMIC (1.0 / 52917.7249)
+#define FERMI_UNITS_TO_ATOMIC (1.0 / 52917.7210903)
 
 double libgrpp_estimate_nuclear_rms_radius_johnson_1985(int A);
 

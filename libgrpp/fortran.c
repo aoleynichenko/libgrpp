@@ -618,6 +618,165 @@ void libgrpp_nuclear_attraction_integrals_(
 }
 
 
+void libgrpp_nuclear_attraction_integrals_point_charge_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // potential definition
+        double *charge_origin,
+        int32_t *charge,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_nuclear_attraction_integrals_point_charge(shell_A, shell_B, charge_origin, *charge, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+void libgrpp_nuclear_attraction_integrals_charged_ball_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // potential definition
+        double *charge_origin,
+        int32_t *charge,
+        double *r_rms,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_nuclear_attraction_integrals_charged_ball(shell_A, shell_B, charge_origin, *charge, *r_rms, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+void libgrpp_nuclear_attraction_integrals_gaussian_model_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // potential definition
+        double *charge_origin,
+        int32_t *charge,
+        double *r_rms,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_nuclear_attraction_integrals_gaussian_model(shell_A, shell_B, charge_origin, *charge, *r_rms, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+void libgrpp_nuclear_attraction_integrals_fermi_model_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // potential definition
+        double *charge_origin,
+        int32_t *charge,
+        double *fermi_param_c,
+        double *fermi_param_a,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_nuclear_attraction_integrals_fermi_model(shell_A, shell_B, charge_origin, *charge,
+                                                     *fermi_param_c, *fermi_param_a, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
+void libgrpp_nuclear_attraction_integrals_fermi_bubble_model_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // potential definition
+        double *charge_origin,
+        int32_t *charge,
+        double *fermi_param_c,
+        double *fermi_param_a,
+        double *param_k,
+        // answer
+        double *matrix
+)
+{
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_nuclear_attraction_integrals_fermi_bubble_model(shell_A, shell_B, charge_origin, *charge,
+                                                     *fermi_param_c, *fermi_param_a, *param_k, matrix);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+}
+
+
 /*
  * Fortran interface to the nuclear models
  */
