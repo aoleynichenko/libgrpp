@@ -1,6 +1,15 @@
 build/
+.DS_Store
 libgrpp_c_*
 libgrpp_f90_*
 test.out
 gmon.out
+*.odg
+*.aux 
+*.bbl 
+*.blg 
+*.out 
+*.log 
+*synctex.gz
+*.toc
 

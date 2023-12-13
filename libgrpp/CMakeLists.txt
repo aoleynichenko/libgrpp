@@ -29,7 +29,6 @@ add_library(libgrpp
         momentum.c
         mymathlib_dawson.c
         mymathlib.c
-        mymathlib_incomplete_gamma.c
         norm_gaussian.c
         nuclear_attraction.c
         nuclear_models.c

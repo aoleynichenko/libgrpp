@@ -50,7 +50,6 @@ void libgrpp_full_grpp_integrals(
     libgrpp_type1_integrals(shell_A, shell_B, grpp_origin, grpp_operator->U_L, buf_arep);
     libgrpp_daxpy(size, 1.0, buf_arep, arep_matrix);
 
-
     /*
      * semilocal AREP ("type-2") integrals
      */

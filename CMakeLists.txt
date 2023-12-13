@@ -56,6 +56,6 @@ add_test(NAME H2O    WORKING_DIRECTORY ../test/H2O    COMMAND bash run_test.sh)
 add_test(NAME ThO    WORKING_DIRECTORY ../test/ThO    COMMAND bash run_test.sh)
 #add_test(NAME UO2    WORKING_DIRECTORY ../test/UO2    COMMAND bash run_test.sh)
 
-foreach (t Cs Tl_qz K H2O ThO)
+foreach (t Cs  K H2O ThO)
     set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 endforeach ()

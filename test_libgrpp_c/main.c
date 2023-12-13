@@ -38,6 +38,18 @@ void calculate_write_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **
 void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
                                    libgrpp_grpp_t **grpps);
 
+void calculate_write_type1_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                   libgrpp_grpp_t **grpps);
+
+void calculate_write_type2_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                    libgrpp_grpp_t **grpps);
+
+void calculate_write_spin_orbit_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                         libgrpp_grpp_t **grpps);
+
+void calculate_write_outercore_potential_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                                  libgrpp_grpp_t **grpps);
+
 void calculate_write_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list);
 
 
@@ -74,6 +86,10 @@ int main(int argc, char **argv)
     int calc_mome_integrals = 0;
     int calc_ovlp_gradients = 0;
     int calc_grpp_gradients = 0;
+    int calc_type1_gradients = 0;
+    int calc_type2_gradients = 0;
+    int calc_spin_orbit_gradients = 0;
+    int calc_outercore_gradients = 0;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--grpp") == 0) {
@@ -109,6 +125,18 @@ int main(int argc, char **argv)
         else if (strcmp(argv[i], "--grpp-grad") == 0) {
             calc_grpp_gradients = 1;
         }
+        else if (strcmp(argv[i], "--grad-type1") == 0) {
+            calc_type1_gradients = 1;
+        }
+        else if (strcmp(argv[i], "--grad-type2") == 0) {
+            calc_type2_gradients = 1;
+        }
+        else if (strcmp(argv[i], "--grad-spin-orbit") == 0) {
+            calc_spin_orbit_gradients = 1;
+        }
+        else if (strcmp(argv[i], "--grad-outercore") == 0) {
+            calc_outercore_gradients = 1;
+        }
         else if (strcmp(argv[i], "--overlap-grad") == 0) {
             calc_ovlp_gradients = 1;
         }
@@ -127,6 +155,10 @@ int main(int argc, char **argv)
             printf("--kinetic                kinetic energy operator\n");
             printf("--momentum               momentum operator\n");
             printf("--grpp-grad              gradients of generalized pseudopotential integrals\n");
+            printf("--grad-type1             gradients of the type1 pseudopotential integrals\n");
+            printf("--grad-type2             gradients of the type2 pseudopotential integrals\n");
+            printf("--grad-spin-orbit        gradients of spin-orbit (pseudopotential) integrals\n");
+            printf("--grad-outercore         gradients of outercore potential (pseudopotential) integrals\n");
             printf("--overlap-grad           gradients of overlap integrals\n");
             return 1;
         }
@@ -146,6 +178,10 @@ int main(int argc, char **argv)
     printf(" kinetic-energy              %s\n", calc_kine_integrals ? "yes" : "no");
     printf(" momentum                    %s\n", calc_mome_integrals ? "yes" : "no");
     printf(" grpp gradients              %s\n", calc_grpp_gradients ? "yes" : "no");
+    printf(" pp type1 gradients          %s\n", calc_type1_gradients ? "yes" : "no");
+    printf(" pp type1 gradients          %s\n", calc_type2_gradients ? "yes" : "no");
+    printf(" pp spin-orbit gradients     %s\n", calc_spin_orbit_gradients ? "yes" : "no");
+    printf(" pp outercore pot gradients  %s\n", calc_outercore_gradients ? "yes" : "no");
     printf(" overlap gradients           %s\n", calc_ovlp_gradients ? "yes" : "no");
     printf("\n");
 
@@ -287,6 +323,22 @@ int main(int argc, char **argv)
      */
     if (calc_grpp_gradients) {
         calculate_write_grpp_gradient(num_shells, shell_list, molecule, grpps);
+    }
+
+    if (calc_type1_gradients) {
+        calculate_write_type1_gradient(num_shells, shell_list, molecule, grpps);
+    }
+
+    if (calc_type2_gradients) {
+        calculate_write_type2_gradient(num_shells, shell_list, molecule, grpps);
+    }
+
+    if (calc_spin_orbit_gradients) {
+        calculate_write_spin_orbit_gradient(num_shells, shell_list, molecule, grpps);
+    }
+
+    if (calc_outercore_gradients) {
+        calculate_write_outercore_potential_gradient(num_shells, shell_list, molecule, grpps);
     }
 
     /*
@@ -549,6 +601,275 @@ void calculate_write_grpp_gradient(int num_shells, libgrpp_shell_t **shell_list,
         sprintf(file_name_buf_so_z_x, "libgrpp_c_so_z_grad_%dx.txt", iatom);
         sprintf(file_name_buf_so_z_y, "libgrpp_c_so_z_grad_%dy.txt", iatom);
         sprintf(file_name_buf_so_z_z, "libgrpp_c_so_z_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_z_x, basis_dim, grad_so_z[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_z_y, basis_dim, grad_so_z[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_z_z, basis_dim, grad_so_z[3 * iatom + 2]);
+    }
+
+    /*
+     * cleanup
+     */
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad_arep[icoord]);
+        free(grad_so_x[icoord]);
+        free(grad_so_y[icoord]);
+        free(grad_so_z[icoord]);
+    }
+    free(grad_arep);
+    free(grad_so_x);
+    free(grad_so_y);
+    free(grad_so_z);
+}
+
+
+void calculate_write_type1_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                    libgrpp_grpp_t **grpps)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+
+    double **grad_arep = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        grad_arep[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    }
+
+    double time_start = abs_time();
+    evaluate_type1_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep);
+    double time_finish = abs_time();
+    printf("\ntime for type1 pp integrals gradients: %.3f sec\n\n", time_finish - time_start);
+
+    for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+        /*
+         * AREP gradients
+         */
+        char file_name_buf_arep_x[100];
+        char file_name_buf_arep_y[100];
+        char file_name_buf_arep_z[100];
+
+        sprintf(file_name_buf_arep_x, "libgrpp_c_arep_type1_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_arep_y, "libgrpp_c_arep_type1_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_arep_z, "libgrpp_c_arep_type1_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_arep_x, basis_dim, grad_arep[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_arep_y, basis_dim, grad_arep[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_arep_z, basis_dim, grad_arep[3 * iatom + 2]);
+    }
+
+    /*
+     * cleanup
+     */
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad_arep[icoord]);
+    }
+    free(grad_arep);
+}
+
+
+void calculate_write_type2_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                    libgrpp_grpp_t **grpps)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+
+    double **grad_arep = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        grad_arep[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    }
+
+    double time_start = abs_time();
+    evaluate_type2_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep);
+    double time_finish = abs_time();
+    printf("\ntime for type2 pp integrals gradients: %.3f sec\n\n", time_finish - time_start);
+
+    for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+        /*
+         * AREP gradients
+         */
+        char file_name_buf_arep_x[100];
+        char file_name_buf_arep_y[100];
+        char file_name_buf_arep_z[100];
+
+        sprintf(file_name_buf_arep_x, "libgrpp_c_arep_type2_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_arep_y, "libgrpp_c_arep_type2_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_arep_z, "libgrpp_c_arep_type2_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_arep_x, basis_dim, grad_arep[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_arep_y, basis_dim, grad_arep[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_arep_z, basis_dim, grad_arep[3 * iatom + 2]);
+    }
+
+    /*
+     * cleanup
+     */
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad_arep[icoord]);
+    }
+    free(grad_arep);
+}
+
+
+void calculate_write_spin_orbit_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                   libgrpp_grpp_t **grpps)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+
+    double **grad_so_x = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    double **grad_so_y = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    double **grad_so_z = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        grad_so_x[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+        grad_so_y[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+        grad_so_z[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    }
+
+    double time_start = abs_time();
+    evaluate_spin_orbit_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_so_x, grad_so_y,
+                                     grad_so_z);
+    double time_finish = abs_time();
+    printf("\ntime for spin-orbit integrals gradients: %.3f sec\n\n", time_finish - time_start);
+
+    for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+
+        /*
+         * SO-X gradients
+         */
+        char file_name_buf_so_x_x[100];
+        char file_name_buf_so_x_y[100];
+        char file_name_buf_so_x_z[100];
+
+        sprintf(file_name_buf_so_x_x, "libgrpp_c_so_x_so_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_x_y, "libgrpp_c_so_x_so_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_x_z, "libgrpp_c_so_x_so_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_x_x, basis_dim, grad_so_x[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_x_y, basis_dim, grad_so_x[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_x_z, basis_dim, grad_so_x[3 * iatom + 2]);
+
+        /*
+         * SO-Y gradients
+         */
+        char file_name_buf_so_y_x[100];
+        char file_name_buf_so_y_y[100];
+        char file_name_buf_so_y_z[100];
+
+        sprintf(file_name_buf_so_y_x, "libgrpp_c_so_y_so_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_y_y, "libgrpp_c_so_y_so_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_y_z, "libgrpp_c_so_y_so_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_y_x, basis_dim, grad_so_y[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_y_y, basis_dim, grad_so_y[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_y_z, basis_dim, grad_so_y[3 * iatom + 2]);
+
+        /*
+         * SO-Z gradients
+         */
+        char file_name_buf_so_z_x[100];
+        char file_name_buf_so_z_y[100];
+        char file_name_buf_so_z_z[100];
+
+        sprintf(file_name_buf_so_z_x, "libgrpp_c_so_z_so_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_z_y, "libgrpp_c_so_z_so_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_z_z, "libgrpp_c_so_z_so_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_z_x, basis_dim, grad_so_z[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_z_y, basis_dim, grad_so_z[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_z_z, basis_dim, grad_so_z[3 * iatom + 2]);
+    }
+
+    /*
+     * cleanup
+     */
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        free(grad_so_x[icoord]);
+        free(grad_so_y[icoord]);
+        free(grad_so_z[icoord]);
+    }
+    free(grad_so_x);
+    free(grad_so_y);
+    free(grad_so_z);
+}
+
+
+void calculate_write_outercore_potential_gradient(int num_shells, libgrpp_shell_t **shell_list, molecule_t *molecule,
+                                   libgrpp_grpp_t **grpps)
+{
+    int basis_dim = calculate_basis_dim(shell_list, num_shells);
+
+    double **grad_arep = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    double **grad_so_x = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    double **grad_so_y = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+    double **grad_so_z = (double **) calloc(3 * molecule->n_atoms, sizeof(double *));
+
+    for (int icoord = 0; icoord < 3 * molecule->n_atoms; icoord++) {
+        grad_arep[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+        grad_so_x[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+        grad_so_y[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+        grad_so_z[icoord] = (double *) calloc(basis_dim * basis_dim, sizeof(double));
+    }
+
+    double time_start = abs_time();
+    evaluate_grpp_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep, grad_so_x, grad_so_y,
+                                     grad_so_z);
+    double time_finish = abs_time();
+    printf("\ntime for outercore potential integrals gradients: %.3f sec\n\n", time_finish - time_start);
+
+    for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+
+        /*
+         * AREP gradients
+         */
+        char file_name_buf_arep_x[100];
+        char file_name_buf_arep_y[100];
+        char file_name_buf_arep_z[100];
+
+        sprintf(file_name_buf_arep_x, "libgrpp_c_arep_ocpot_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_arep_y, "libgrpp_c_arep_ocpot_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_arep_z, "libgrpp_c_arep_ocpot_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_arep_x, basis_dim, grad_arep[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_arep_y, basis_dim, grad_arep[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_arep_z, basis_dim, grad_arep[3 * iatom + 2]);
+
+        /*
+         * SO-X gradients
+         */
+        char file_name_buf_so_x_x[100];
+        char file_name_buf_so_x_y[100];
+        char file_name_buf_so_x_z[100];
+
+        sprintf(file_name_buf_so_x_x, "libgrpp_c_so_x_ocpot_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_x_y, "libgrpp_c_so_x_ocpot_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_x_z, "libgrpp_c_so_x_ocpot_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_x_x, basis_dim, grad_so_x[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_x_y, basis_dim, grad_so_x[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_x_z, basis_dim, grad_so_x[3 * iatom + 2]);
+
+        /*
+         * SO-Y gradients
+         */
+        char file_name_buf_so_y_x[100];
+        char file_name_buf_so_y_y[100];
+        char file_name_buf_so_y_z[100];
+
+        sprintf(file_name_buf_so_y_x, "libgrpp_c_so_y_ocpot_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_y_y, "libgrpp_c_so_y_ocpot_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_y_z, "libgrpp_c_so_y_ocpot_grad_%dz.txt", iatom);
+
+        print_matrix_lower_triangle(file_name_buf_so_y_x, basis_dim, grad_so_y[3 * iatom + 0]);
+        print_matrix_lower_triangle(file_name_buf_so_y_y, basis_dim, grad_so_y[3 * iatom + 1]);
+        print_matrix_lower_triangle(file_name_buf_so_y_z, basis_dim, grad_so_y[3 * iatom + 2]);
+
+        /*
+         * SO-Z gradients
+         */
+        char file_name_buf_so_z_x[100];
+        char file_name_buf_so_z_y[100];
+        char file_name_buf_so_z_z[100];
+
+        sprintf(file_name_buf_so_z_x, "libgrpp_c_so_z_ocpot_grad_%dx.txt", iatom);
+        sprintf(file_name_buf_so_z_y, "libgrpp_c_so_z_ocpot_grad_%dy.txt", iatom);
+        sprintf(file_name_buf_so_z_z, "libgrpp_c_so_z_ocpot_grad_%dz.txt", iatom);
 
         print_matrix_lower_triangle(file_name_buf_so_z_x, basis_dim, grad_so_z[3 * iatom + 0]);
         print_matrix_lower_triangle(file_name_buf_so_z_y, basis_dim, grad_so_z[3 * iatom + 1]);

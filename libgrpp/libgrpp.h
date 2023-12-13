@@ -114,6 +114,7 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *);
 /*
  * integrators: pseudopotential
  */
+
 void libgrpp_type1_integrals(
         libgrpp_shell_t *shell_A,
         libgrpp_shell_t *shell_B,
@@ -162,6 +163,54 @@ void libgrpp_full_grpp_integrals(
         double *so_x_matrix,
         double *so_y_matrix,
         double *so_z_matrix
+);
+
+/*
+ * gradients of pseudopotential matrix elements
+ * with respect to nuclear coordinates
+ */
+
+void libgrpp_type1_integrals_gradient(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *grpp_origin,
+        libgrpp_potential_t *potential,
+        double *point_3d,
+        double **grad_arep
+);
+
+void libgrpp_type2_integrals_gradient(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *grpp_origin,
+        libgrpp_potential_t *potential,
+        double *point_3d,
+        double **grad_arep
+);
+
+void libgrpp_spin_orbit_integrals_gradient(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *grpp_origin,
+        libgrpp_potential_t *potential,
+        double *point_3d,
+        double **grad_so_x,
+        double **grad_so_y,
+        double **grad_so_z
+);
+
+void libgrpp_outercore_potential_integrals_gradient(
+        libgrpp_shell_t *shell_A,
+        libgrpp_shell_t *shell_B,
+        double *rpp_origin,
+        int num_oc_shells,
+        libgrpp_potential_t **oc_potentials,
+        libgrpp_shell_t **oc_shells,
+        double *point_3d,
+        double **grad_arep,
+        double **grad_so_x,
+        double **grad_so_y,
+        double **grad_so_z
 );
 
 void libgrpp_full_grpp_integrals_gradient(

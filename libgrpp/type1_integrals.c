@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "angular_integrals.h"
@@ -47,14 +48,18 @@ void libgrpp_type1_integrals(
 {
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
-    double *buf = calloc(size_A * size_B, sizeof(double));
-
     memset(matrix, 0, size_A * size_B * sizeof(double));
+
+    if (potential == NULL) {
+        return;
+    }
 
     /*
      * RPP terms with n = 1, 2 are evaluated in a completely analytic manner
      * using the Obara-Saika-like recurrence relations
      */
+
+    double *buf = calloc(size_A * size_B, sizeof(double));
 
     for (int k = 0; k < potential->num_primitives; k++) {
         double pot_coef = potential->coeffs[k];
@@ -65,6 +70,8 @@ void libgrpp_type1_integrals(
 
         libgrpp_daxpy(size_A * size_B, pot_coef, buf, matrix);
     }
+
+    free(buf);
 
     /*
      * old (numerical) version
@@ -88,8 +95,6 @@ void libgrpp_type1_integrals(
             libgrpp_daxpy(size_A * size_B, coef_A_i * coef_B_j, buf, matrix);
         }
     }*/
-
-    free(buf);
 }
 
 

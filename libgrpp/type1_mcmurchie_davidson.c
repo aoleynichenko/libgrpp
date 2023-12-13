@@ -40,6 +40,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "boys.h"
@@ -314,6 +315,7 @@ double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
     int L_A = shell_A->L;
     int L_B = shell_B->L;
     int Nmax = L_A + L_B;
+
     boys_values(q * data.R_QC_2, Nmax, data.boys);
 
     /*

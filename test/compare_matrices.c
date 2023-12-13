@@ -17,9 +17,24 @@ int main(int argc, char **argv)
     /*
      * parse command line arguments
      */
-    if (argc != 3) {
+    if (argc < 3 || argc > 4) {
         print_usage(argv[0]);
         return 1;
+    }
+
+    double threshold = 1e-10;
+    char *path_matrix_1 = argv[1];
+    char *path_matrix_2 = argv[2];
+
+    if (argc == 4) {
+        int n_read = sscanf(argv[1], "%lf", &threshold);
+        if (n_read != 1) {
+            printf("error while parsing the threshold value\n");
+            return 1;
+        }
+
+        path_matrix_1 = argv[2];
+        path_matrix_2 = argv[3];
     }
 
     /*
@@ -27,14 +42,14 @@ int main(int argc, char **argv)
      */
     int dim1;
     double *matrix1 = NULL;
-    if (read_matrix(argv[1], &dim1, &matrix1) == -1) {
+    if (read_matrix(path_matrix_1, &dim1, &matrix1) == -1) {
         printf("error while reading the first matrix\n");
         return 1;
     }
 
     int dim2;
     double *matrix2 = NULL;
-    if (read_matrix(argv[2], &dim2, &matrix2) == -1) {
+    if (read_matrix(path_matrix_2, &dim2, &matrix2) == -1) {
         printf("error while reading the second matrix\n");
         return 1;
     }
@@ -48,7 +63,6 @@ int main(int argc, char **argv)
      * compare matrices
      */
     int diff_i, diff_j;
-    const double threshold = 1e-10;
 
     if (compare_matrices(dim1, matrix1, matrix2, threshold, &diff_i, &diff_j) == 1) {
         printf("matrices are equal\n");
@@ -67,7 +81,7 @@ int main(int argc, char **argv)
 
 void print_usage(char *path_to_binary)
 {
-    printf("Usage: %s <matrix_file_1> <matrix_file_2>\n", path_to_binary);
+    printf("Usage: %s [<double thresh>] <matrix_file_1> <matrix_file_2>\n", path_to_binary);
 }
 
 

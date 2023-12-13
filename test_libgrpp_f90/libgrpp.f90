@@ -47,7 +47,7 @@ module libgrpp
         subroutine libgrpp_type1_integrals(&
                 origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
                 origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-                ecp_origin, ecp_num_primitives, ecp_powers, ecp_coeffs, ecp_alpha, &
+                rpp_origin, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
                 matrix &
                 )
             ! shell centered on atom A
@@ -62,13 +62,13 @@ module libgrpp
             integer(4), intent(in) :: num_primitives_B
             real(8), intent(in) :: coeffs_B(*)
             real(8), intent(in) :: alpha_B(*)
-            ! effective core potential expansion
-            real(8), dimension(*), intent(in) :: ecp_origin
-            integer(4), dimension(*), intent(in) :: ecp_num_primitives
-            integer(4), dimension(*), intent(in) :: ecp_powers
-            real(8), dimension(*), intent(in) :: ecp_coeffs
-            real(8), dimension(*), intent(in) :: ecp_alpha
-            ! output: matrix with ECP integrals
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! output: matrix with PP integrals
             real(8), dimension(*), intent(out) :: matrix
         end subroutine libgrpp_type1_integrals
 
@@ -76,7 +76,7 @@ module libgrpp
         subroutine libgrpp_type2_integrals(&
                 origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
                 origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-                ecp_origin, ecp_ang_momentum, ecp_num_primitives, ecp_powers, ecp_coeffs, ecp_alpha, &
+                rpp_origin, rpp_ang_momentum, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
                 matrix &
                 )
             ! shell centered on atom A
@@ -91,14 +91,14 @@ module libgrpp
             integer(4), intent(in) :: num_primitives_B
             real(8), intent(in) :: coeffs_B(*)
             real(8), intent(in) :: alpha_B(*)
-            ! effective core potential expansion
-            real(8), dimension(*), intent(in) :: ecp_origin
-            integer(4), intent(in) :: ecp_ang_momentum
-            integer(4), dimension(*), intent(in) :: ecp_num_primitives
-            integer(4), dimension(*), intent(in) :: ecp_powers
-            real(8), dimension(*), intent(in) :: ecp_coeffs
-            real(8), dimension(*), intent(in) :: ecp_alpha
-            ! output: matrix with ECP integrals
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), intent(in) :: rpp_ang_momentum
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! output: matrix with PP integrals
             real(8), dimension(*), intent(out) :: matrix
         end subroutine libgrpp_type2_integrals
 
@@ -106,7 +106,7 @@ module libgrpp
         subroutine libgrpp_spin_orbit_integrals(&
                 origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
                 origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-                ecp_origin, ecp_ang_momentum, ecp_num_primitives, ecp_powers, ecp_coeffs, ecp_alpha, &
+                rpp_origin, rpp_ang_momentum, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
                 so_x_matrix, so_y_matrix, so_z_matrix &
                 )
             ! shell centered on atom A
@@ -121,18 +121,129 @@ module libgrpp
             integer(4), intent(in) :: num_primitives_B
             real(8), intent(in) :: coeffs_B(*)
             real(8), intent(in) :: alpha_B(*)
-            ! effective core potential expansion
-            real(8), dimension(*), intent(in) :: ecp_origin
-            integer(4), intent(in) :: ecp_ang_momentum
-            integer(4), dimension(*), intent(in) :: ecp_num_primitives
-            integer(4), dimension(*), intent(in) :: ecp_powers
-            real(8), dimension(*), intent(in) :: ecp_coeffs
-            real(8), dimension(*), intent(in) :: ecp_alpha
-            ! output: matrices with ECP integrals
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), intent(in) :: rpp_ang_momentum
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! output: matrices with PP integrals
             real(8), dimension(*), intent(out) :: so_x_matrix
             real(8), dimension(*), intent(out) :: so_y_matrix
             real(8), dimension(*), intent(out) :: so_z_matrix
         end subroutine libgrpp_spin_orbit_integrals
+
+
+        subroutine libgrpp_type1_integrals_gradient(&
+                origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
+                origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
+                rpp_origin, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
+                point_3d, grad_arep_x, grad_arep_y, grad_arep_z &
+                )
+            ! shell centered on atom A
+            real(8), dimension(*), intent(in) :: origin_A
+            integer(4), intent(in) :: L_A
+            integer(4), intent(in) :: num_primitives_A
+            real(8), intent(in) :: coeffs_A(*)
+            real(8), intent(in) :: alpha_A(*)
+            ! shell centered on atom B
+            real(8), dimension(*), intent(in) :: origin_B
+            integer(4), intent(in) :: L_B
+            integer(4), intent(in) :: num_primitives_B
+            real(8), intent(in) :: coeffs_B(*)
+            real(8), intent(in) :: alpha_B(*)
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! differentiation wrt the 3d point (x,y,z)
+            real(8), dimension(*), intent(in) :: point_3d
+            ! output: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+            real(8), dimension(*), intent(out) :: grad_arep_x
+            real(8), dimension(*), intent(out) :: grad_arep_y
+            real(8), dimension(*), intent(out) :: grad_arep_z
+        end subroutine libgrpp_type1_integrals_gradient
+
+
+        subroutine libgrpp_type2_integrals_gradient(&
+                origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
+                origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
+                rpp_origin, rpp_ang_momentum, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
+                point_3d, grad_arep_x, grad_arep_y, grad_arep_z &
+                )
+            ! shell centered on atom A
+            real(8), dimension(*), intent(in) :: origin_A
+            integer(4), intent(in) :: L_A
+            integer(4), intent(in) :: num_primitives_A
+            real(8), intent(in) :: coeffs_A(*)
+            real(8), intent(in) :: alpha_A(*)
+            ! shell centered on atom B
+            real(8), dimension(*), intent(in) :: origin_B
+            integer(4), intent(in) :: L_B
+            integer(4), intent(in) :: num_primitives_B
+            real(8), intent(in) :: coeffs_B(*)
+            real(8), intent(in) :: alpha_B(*)
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), intent(in) :: rpp_ang_momentum
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! differentiation wrt the 3d point (x,y,z)
+            real(8), dimension(*), intent(in) :: point_3d
+            ! output: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+            real(8), dimension(*), intent(out) :: grad_arep_x
+            real(8), dimension(*), intent(out) :: grad_arep_y
+            real(8), dimension(*), intent(out) :: grad_arep_z
+        end subroutine libgrpp_type2_integrals_gradient
+
+
+        subroutine libgrpp_spin_orbit_integrals_gradient( &
+                origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
+                origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
+                rpp_origin, rpp_ang_momentum, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
+                point_3d, grad_sox_x, grad_sox_y, grad_sox_z, &
+                grad_soy_x, grad_soy_y, grad_soy_z, &
+                grad_soz_x, grad_soz_y, grad_soz_z &
+                )
+            ! shell centered on atom A
+            real(8), dimension(*), intent(in) :: origin_A
+            integer(4), intent(in) :: L_A
+            integer(4), intent(in) :: num_primitives_A
+            real(8), intent(in) :: coeffs_A(*)
+            real(8), intent(in) :: alpha_A(*)
+            ! shell centered on atom B
+            real(8), dimension(*), intent(in) :: origin_B
+            integer(4), intent(in) :: L_B
+            integer(4), intent(in) :: num_primitives_B
+            real(8), intent(in) :: coeffs_B(*)
+            real(8), intent(in) :: alpha_B(*)
+            ! pseudopotential expansion
+            real(8), dimension(*), intent(in) :: rpp_origin
+            integer(4), intent(in) :: rpp_ang_momentum
+            integer(4), dimension(*), intent(in) :: rpp_num_primitives
+            integer(4), dimension(*), intent(in) :: rpp_powers
+            real(8), dimension(*), intent(in) :: rpp_coeffs
+            real(8), dimension(*), intent(in) :: rpp_alpha
+            ! differentiation wrt the 3d point (x,y,z)
+            real(8), dimension(*), intent(in) :: point_3d
+            ! output: matrices d<SO_x>/dx, d<SO_x>/dy, d<SO_x>/dZ
+            real(8), dimension(*), intent(out) :: grad_sox_x
+            real(8), dimension(*), intent(out) :: grad_sox_y
+            real(8), dimension(*), intent(out) :: grad_sox_z
+            ! output: matrices d<SO_y>/dx, d<SO_y>/dy, d<SO_y>/dZ
+            real(8), dimension(*), intent(out) :: grad_soy_x
+            real(8), dimension(*), intent(out) :: grad_soy_y
+            real(8), dimension(*), intent(out) :: grad_soy_z
+            ! output: matrices d<SO_z>/dx, d<SO_z>/dy, d<SO_z>/dZ
+            real(8), dimension(*), intent(out) :: grad_soz_x
+            real(8), dimension(*), intent(out) :: grad_soz_y
+            real(8), dimension(*), intent(out) :: grad_soz_z
+        end subroutine libgrpp_spin_orbit_integrals_gradient
 
     end interface
 
@@ -141,8 +252,8 @@ contains
     subroutine libgrpp_outercore_potential_integrals(&
             origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
             origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-            ecp_origin, num_oc_shells, &
-            oc_shells_L, oc_shells_J, ecp_num_primitives, ecp_powers, ecp_coeffs, ecp_alpha, &
+            rpp_origin, num_oc_shells, &
+            oc_shells_L, oc_shells_J, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
             oc_shells_num_primitives, oc_shells_coeffs, oc_shells_alpha, &
             arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix &
             )
@@ -161,20 +272,20 @@ contains
         integer(4), intent(in) :: num_primitives_B
         real(8), intent(in) :: coeffs_B(*)
         real(8), intent(in) :: alpha_B(*)
-        ! effective core potential expansion
-        real(8), intent(in) :: ecp_origin(*)
+        ! pseudopotential expansion
+        real(8), intent(in) :: rpp_origin(*)
         integer(4) :: num_oc_shells
         integer(4), intent(in) :: oc_shells_L(:)
         integer(4), intent(in) :: oc_shells_J(:)
-        integer(4), intent(in) :: ecp_num_primitives(:)
-        integer(4), intent(in) :: ecp_powers(:, :)
-        real(8), intent(in) :: ecp_coeffs(:, :)
-        real(8), intent(in) :: ecp_alpha(:, :)
+        integer(4), intent(in) :: rpp_num_primitives(:)
+        integer(4), intent(in) :: rpp_powers(:, :)
+        real(8), intent(in) :: rpp_coeffs(:, :)
+        real(8), intent(in) :: rpp_alpha(:, :)
         ! outercore shells
         integer(4) :: oc_shells_num_primitives(:)
         real(8) :: oc_shells_coeffs(:, :)
         real(8) :: oc_shells_alpha(:, :)
-        ! output: matrices with ECP integrals
+        ! output: matrices with PP integrals
         real(8), intent(out) :: arep_matrix(*)
         real(8), intent(out) :: so_x_matrix(*)
         real(8), intent(out) :: so_y_matrix(*)
@@ -199,8 +310,8 @@ contains
             call libgrpp_outercore_potential_integrals_part_1(&
                     origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
                     origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-                    ecp_origin, oc_shells_L(i), oc_shells_J(i), &
-                    ecp_num_primitives(i), ecp_powers(i, :), ecp_coeffs(i, :), ecp_alpha(i, :), &
+                    rpp_origin, oc_shells_L(i), oc_shells_J(i), &
+                    rpp_num_primitives(i), rpp_powers(i, :), rpp_coeffs(i, :), rpp_alpha(i, :), &
                     oc_shells_num_primitives(i), oc_shells_coeffs(i, :), oc_shells_alpha(i, :), &
                     arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix &
                     )
@@ -214,12 +325,12 @@ contains
                 call libgrpp_outercore_potential_integrals_part_2(&
                         origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
                         origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
-                        ecp_origin, &
+                        rpp_origin, &
                         oc_shells_L(i), oc_shells_J(i), &
-                        ecp_num_primitives(i), ecp_powers(i, :), ecp_coeffs(i, :), ecp_alpha(i, :), &
+                        rpp_num_primitives(i), rpp_powers(i, :), rpp_coeffs(i, :), rpp_alpha(i, :), &
                         oc_shells_num_primitives(i), oc_shells_coeffs(i, :), oc_shells_alpha(i, :), &
                         oc_shells_L(j), oc_shells_J(j), &
-                        ecp_num_primitives(j), ecp_powers(j, :), ecp_coeffs(j, :), ecp_alpha(j, :), &
+                        rpp_num_primitives(j), rpp_powers(j, :), rpp_coeffs(j, :), rpp_alpha(j, :), &
                         oc_shells_num_primitives(j), oc_shells_coeffs(j, :), oc_shells_alpha(j, :), &
                         arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix &
                         )

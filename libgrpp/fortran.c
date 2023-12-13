@@ -421,6 +421,203 @@ void libgrpp_outercore_potential_integrals_part_2_(
 
 
 /**
+ * Analytic calculation of gradients of LOCAL potential integrals for a given shell pair
+ * with respect to the point 'point_3d'.
+ */
+void libgrpp_type1_integrals_gradient_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // pseudopotential
+        double *rpp_origin,
+        int32_t *rpp_num_primitives,
+        int32_t *rpp_powers,
+        double *rpp_coeffs,
+        double *rpp_alpha,
+        // differentiation wrt the 3d point (x,y,z)
+        double *point_3d,
+        // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+        double *grad_arep_x,
+        double *grad_arep_y,
+        double *grad_arep_z
+)
+{
+    int *pot_powers_int = (int *) calloc(*rpp_num_primitives, sizeof(int));
+    double *grad_array[3];
+    grad_array[0] = grad_arep_x;
+    grad_array[1] = grad_arep_y;
+    grad_array[2] = grad_arep_z;
+
+    for (int i = 0; i < *rpp_num_primitives; i++) {
+        pot_powers_int[i] = rpp_powers[i];
+    }
+
+    libgrpp_potential_t *pot = libgrpp_new_potential(0, 0, *rpp_num_primitives, pot_powers_int, rpp_coeffs, rpp_alpha);
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_type1_integrals_gradient(shell_A, shell_B, rpp_origin, pot, point_3d, grad_array);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+    libgrpp_delete_potential(pot);
+    free(pot_powers_int);
+}
+
+
+/**
+ * Analytic calculation of gradients of SEMI-LOCAL potential integrals for a given shell pair
+ * with respect to the point 'point_3d'.
+ */
+void libgrpp_type2_integrals_gradient_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        double *origin_B,
+        // contracted Gaussian B
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // pseudopotential
+        double *pot_origin,
+        int32_t *pot_L,
+        int32_t *pot_num_primitives,
+        int32_t *pot_powers,
+        double *pot_coeffs,
+        double *pot_alpha,
+        // differentiation wrt the 3d point (x,y,z)
+        double *point_3d,
+        // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+        double *grad_arep_x,
+        double *grad_arep_y,
+        double *grad_arep_z
+)
+{
+    int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
+    for (int i = 0; i < *pot_num_primitives; i++) {
+        pot_powers_int[i] = pot_powers[i];
+    }
+
+    double *grad_array[3];
+    grad_array[0] = grad_arep_x;
+    grad_array[1] = grad_arep_y;
+    grad_array[2] = grad_arep_z;
+
+    libgrpp_potential_t *pot = libgrpp_new_potential(*pot_L, 0, *pot_num_primitives, pot_powers_int, pot_coeffs,
+                                                     pot_alpha);
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_type2_integrals_gradient(shell_A, shell_B, pot_origin, pot, point_3d, grad_array);
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+    libgrpp_delete_potential(pot);
+    free(pot_powers_int);
+}
+
+
+/**
+ * Analytic calculation of gradients of integrals over the effective spin-orbit
+ * operator (potential) for a given shell pair (with respect to the point 'point_3d').
+ */
+void libgrpp_spin_orbit_integrals_gradient_(
+        // contracted Gaussian A
+        double *origin_A,
+        int32_t *L_A,
+        int32_t *num_primitives_A,
+        double *coeffs_A,
+        double *alpha_A,
+        // contracted Gaussian B
+        double *origin_B,
+        int32_t *L_B,
+        int32_t *num_primitives_B,
+        double *coeffs_B,
+        double *alpha_B,
+        // pseudopotential
+        double *pot_origin,
+        int32_t *pot_L,
+        int32_t *pot_num_primitives,
+        int32_t *pot_powers,
+        double *pot_coeffs,
+        double *pot_alpha,
+        // differentiation wrt the 3d point (x,y,z)
+        double *point_3d,
+        // answer: 9 matrices
+        // d<SO-x>/dx, d<SO-x>/dy, d<SO-x>/dZ
+        double *grad_sox_x,
+        double *grad_sox_y,
+        double *grad_sox_z,
+        // d<SO-y>/dx, d<SO-y>/dy, d<SO-y>/dZ
+        double *grad_soy_x,
+        double *grad_soy_y,
+        double *grad_soy_z,
+        // d<SO-z>/dx, d<SO-z>/dy, d<SO-z>/dZ
+        double *grad_soz_x,
+        double *grad_soz_y,
+        double *grad_soz_z
+)
+{
+    int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
+
+    double *grad_array_SO_x[3];
+    grad_array_SO_x[0] = grad_sox_x;
+    grad_array_SO_x[1] = grad_sox_y;
+    grad_array_SO_x[2] = grad_sox_z;
+
+    double *grad_array_SO_y[3];
+    grad_array_SO_y[0] = grad_soy_x;
+    grad_array_SO_y[1] = grad_soy_y;
+    grad_array_SO_y[2] = grad_soy_z;
+
+    double *grad_array_SO_z[3];
+    grad_array_SO_z[0] = grad_soz_x;
+    grad_array_SO_z[1] = grad_soz_y;
+    grad_array_SO_z[2] = grad_soz_z;
+
+    for (int i = 0; i < *pot_num_primitives; i++) {
+        pot_powers_int[i] = pot_powers[i];
+    }
+
+    /*
+     * construct RPP structure
+     */
+    libgrpp_potential_t *pot = libgrpp_new_potential(
+            *pot_L, 0, *pot_num_primitives, pot_powers_int, pot_coeffs, pot_alpha
+    );
+
+    /*
+     * construct shells
+     */
+    libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
+    libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
+
+    libgrpp_spin_orbit_integrals_gradient(
+            shell_A, shell_B, pot_origin, pot, point_3d,
+            grad_array_SO_x, grad_array_SO_y, grad_array_SO_z
+    );
+
+    libgrpp_delete_shell(shell_A);
+    libgrpp_delete_shell(shell_B);
+    libgrpp_delete_potential(pot);
+    free(pot_powers_int);
+}
+
+
+/**
  * Overlap integrals between two contracted Gaussians with given cartesian parts x^n y^l z^m
  */
 
@@ -611,7 +808,8 @@ void libgrpp_nuclear_attraction_integrals_(
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
     libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
 
-    libgrpp_nuclear_attraction_integrals(shell_A, shell_B, charge_origin, *charge, *nuclear_model, model_params, matrix);
+    libgrpp_nuclear_attraction_integrals(shell_A, shell_B, charge_origin, *charge, *nuclear_model, model_params,
+                                         matrix);
 
     libgrpp_delete_shell(shell_A);
     libgrpp_delete_shell(shell_B);
@@ -770,7 +968,7 @@ void libgrpp_nuclear_attraction_integrals_fermi_bubble_model_(
     libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
 
     libgrpp_nuclear_attraction_integrals_fermi_bubble_model(shell_A, shell_B, charge_origin, *charge,
-                                                     *fermi_param_c, *fermi_param_a, *param_k, matrix);
+                                                            *fermi_param_c, *fermi_param_a, *param_k, matrix);
 
     libgrpp_delete_shell(shell_A);
     libgrpp_delete_shell(shell_B);
