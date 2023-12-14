@@ -5,14 +5,7 @@
 #  Copyright (C) 2021-2023 Alexander Oleynichenko
 #
 
-cmake_minimum_required(VERSION 3.19)
-project(libgrpp C)
-
-set(CMAKE_C_STANDARD 11)
-
-add_compile_options(-O3)
-#add_compile_options(-pg)
-add_library(libgrpp
+add_library(grpp
         angular_integrals.c
         binomial.c
         bessel_table.c
@@ -51,4 +44,19 @@ add_library(libgrpp
         utils.c
         )
 
-target_link_libraries(libgrpp -lm)
+target_link_libraries(grpp INTERFACE -lm)
+
+set_target_properties(grpp PROPERTIES IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+                                        POSITION_INDEPENDENT_CODE ON
+                                        VERSION ${libgrpp_VERSION}
+                                        SOVERSION ${libgrpp_APIVERSION})
+include(GNUInstallDirs)
+install(
+  TARGETS grpp
+  EXPORT libgrpp_targets
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+install(EXPORT libgrpp_targets
+        FILE grppTargets.cmake
+        NAMESPACE grpp::
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")

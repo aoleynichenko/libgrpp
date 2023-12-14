@@ -6,15 +6,34 @@
 #
 
 cmake_minimum_required(VERSION 3.19)
-project(test_libgrpp_c.x C)
-project(test_libgrpp_f90.x Fortran)
+
+include(CMakeDependentOption)
+include(CMakePackageConfigHelpers)
+ 
+set(VERSION_MAJOR 2023)
+set(VERSION_MINOR 12)
+set(VERSION_PATCH 14)
+
+project(libgrpp
+        DESCRIPTION "A library for the evaluation of molecular integrals of the generalized relativistic pseudopotential operator (GRPP) over Gaussian functions."
+        HOMEPAGE_URL https://github.com/aoleynichenko/libgrpp
+        VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+        LANGUAGES Fortran C)
 
 set(CMAKE_C_STANDARD 11)
 
+# imply -O3 -DNDEBUG, can be changed with cmake -DCMAKE_BUILD_TYPE=DEBUG,etc....
+
+set(CMAKE_BUILD_TYPE Release)
+
+set(libgrpp_APIVERSION ${libgrpp_VERSION_MAJOR}.${libgrpp_VERSION_MINOR})
+
 add_subdirectory(libgrpp)
 
-add_compile_options(-O3)
+#add_compile_options(-O3)
 #add_compile_options(-pg)
+
+
 add_executable(test_libgrpp_c.x
         test_libgrpp_c/main.c
         test_libgrpp_c/molecule.c
@@ -37,8 +56,8 @@ add_executable(test_libgrpp_f90.x
         test_libgrpp_f90/libgrpp.f90
         )
 
-target_link_libraries(test_libgrpp_c.x libgrpp -lm)# -pg)
-target_link_libraries(test_libgrpp_f90.x libgrpp -lm)
+target_link_libraries(test_libgrpp_c.x grpp -lm)# -pg)
+target_link_libraries(test_libgrpp_f90.x grpp -lm)
 
 
 # testing binary
@@ -59,3 +78,26 @@ add_test(NAME ThO    WORKING_DIRECTORY ../test/ThO    COMMAND bash run_test.sh)
 foreach (t Cs  K H2O ThO)
     set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 endforeach ()
+
+include(GNUInstallDirs)
+
+write_basic_package_version_file(
+  "${PROJECT_BINARY_DIR}/grppConfigVersion.cmake"
+  VERSION "${libgrpp_VERSION}"
+  COMPATIBILITY SameMajorVersion)
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/grppConfig.cmake.in"
+               "${PROJECT_BINARY_DIR}/grppConfig.cmake" @ONLY)
+configure_file(cmake/libgrpp.pc.in libgrpp.pc @ONLY)
+
+install(FILES "${PROJECT_BINARY_DIR}/grppConfig.cmake"
+              "${PROJECT_BINARY_DIR}/grppConfigVersion.cmake"
+	      DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+
+install(FILES "${PROJECT_BINARY_DIR}/libgrpp.pc"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
+install(DIRECTORY libgrpp
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        PATTERN "*.h")
+
