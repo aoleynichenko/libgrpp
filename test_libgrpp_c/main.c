@@ -808,8 +808,11 @@ void calculate_write_outercore_potential_gradient(int num_shells, libgrpp_shell_
     }
 
     double time_start = abs_time();
-    evaluate_grpp_integrals_gradient(num_shells, shell_list, molecule, grpps, grad_arep, grad_so_x, grad_so_y,
-                                     grad_so_z);
+    evaluate_outercore_potential_integrals_gradient(
+            num_shells, shell_list, molecule, grpps,
+            grad_arep, grad_so_x, grad_so_y, grad_so_z
+    );
+
     double time_finish = abs_time();
     printf("\ntime for outercore potential integrals gradients: %.3f sec\n\n", time_finish - time_start);
 

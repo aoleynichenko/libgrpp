@@ -17,6 +17,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "factorial.h"
 #include "libgrpp.h"
@@ -591,6 +592,8 @@ void libgrpp_spin_orbit_integrals_gradient_(
     for (int i = 0; i < *pot_num_primitives; i++) {
         pot_powers_int[i] = pot_powers[i];
     }
+
+    //printf("pot_L = %d\n", *pot_L);
 
     /*
      * construct RPP structure

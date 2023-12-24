@@ -208,7 +208,6 @@ void libgrpp_spin_orbit_integrals_gradient(
 )
 {
     libgrpp_grpp_t *grpp_operator = libgrpp_new_grpp();
-    libgrpp_grpp_add_spin_orbit_potential(grpp_operator, potential); // kostyl'
     libgrpp_grpp_add_spin_orbit_potential(grpp_operator, potential);
 
     /*
@@ -221,6 +220,21 @@ void libgrpp_spin_orbit_integrals_gradient(
             shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
             stub_grad_arep, grad_so_x, grad_so_y, grad_so_z
     );
+
+    /*
+     * inside the libgrpp_full_grpp_integrals_gradient() function
+     * the SO potential was scaled by 2/(2L+1). Thus the result has to be
+     * re-scaled by (2L+1)/2 to get rid of any problems with pre-factor
+     */
+    int L = potential->L;
+    int buf_size = shell_A->cart_size * shell_B->cart_size;
+    for (int icoord = 0; icoord < 3; icoord++) {
+        for (int i = 0; i < buf_size; i++) {
+            grad_so_x[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+            grad_so_y[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+            grad_so_z[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+        }
+    }
 
     libgrpp_dealloc_gradients(stub_grad_arep);
 

@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "utils.h"
 
@@ -61,10 +62,14 @@ void libgrpp_full_grpp_integrals(
     /*
      * semilocal SO ("type-3") integrals
      */
-    for (int L = 1; L < grpp_operator->n_esop; L++) {
-        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, grpp_operator->U_esop[L],
+    for (int i_so = 0; i_so < grpp_operator->n_esop; i_so++) {
+        //printf("n_esop = %d\n", grpp_operator->n_esop);
+        //printf("iso = %d, L = %d\n", i_so, grpp_operator->U_esop[i_so]->L);
+        libgrpp_potential_t *so_potential = grpp_operator->U_esop[i_so];
+        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, so_potential,
                                      buf_so_x, buf_so_y, buf_so_z);
 
+        int L = so_potential->L;
         libgrpp_daxpy(size, 2.0 / (2 * L + 1), buf_so_x, so_x_matrix);
         libgrpp_daxpy(size, 2.0 / (2 * L + 1), buf_so_y, so_y_matrix);
         libgrpp_daxpy(size, 2.0 / (2 * L + 1), buf_so_z, so_z_matrix);

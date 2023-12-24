@@ -340,5 +340,72 @@ contains
 
     end subroutine libgrpp_outercore_potential_integrals
 
+    subroutine libgrpp_outercore_potential_integrals_gradient(&
+            origin_A, L_A, num_primitives_A, coeffs_A, alpha_A, &
+            origin_B, L_B, num_primitives_B, coeffs_B, alpha_B, &
+            rpp_origin, num_oc_shells, &
+            oc_shells_L, oc_shells_J, rpp_num_primitives, rpp_powers, rpp_coeffs, rpp_alpha, &
+            oc_shells_num_primitives, oc_shells_coeffs, oc_shells_alpha, point_3d, &
+            grad_arep_x, grad_arep_y, grad_arep_z, &
+            grad_sox_x, grad_sox_y, grad_sox_z, &
+            grad_soy_x, grad_soy_y, grad_soy_z, &
+            grad_soz_x, grad_soz_y, grad_soz_z  &
+    )
+
+        implicit none
+
+        ! shell centered on atom A
+        real(8), intent(in) :: origin_A(*)
+        integer(4), intent(in) :: L_A
+        integer(4), intent(in) :: num_primitives_A
+        real(8), intent(in) :: coeffs_A(*)
+        real(8), intent(in) :: alpha_A(*)
+        ! shell centered on atom B
+        real(8), intent(in) :: origin_B(*)
+        integer(4), intent(in) :: L_B
+        integer(4), intent(in) :: num_primitives_B
+        real(8), intent(in) :: coeffs_B(*)
+        real(8), intent(in) :: alpha_B(*)
+        ! pseudopotential expansion
+        real(8), intent(in) :: rpp_origin(*)
+        integer(4) :: num_oc_shells
+        integer(4), intent(in) :: oc_shells_L(:)
+        integer(4), intent(in) :: oc_shells_J(:)
+        integer(4), intent(in) :: rpp_num_primitives(:)
+        integer(4), intent(in) :: rpp_powers(:, :)
+        real(8), intent(in) :: rpp_coeffs(:, :)
+        real(8), intent(in) :: rpp_alpha(:, :)
+        ! outercore shells
+        integer(4) :: oc_shells_num_primitives(:)
+        real(8) :: oc_shells_coeffs(:, :)
+        real(8) :: oc_shells_alpha(:, :)
+        ! differentiation wrt the 3d point (x,y,z)
+        real(8), dimension(*), intent(in) :: point_3d
+        ! output: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+        real(8), dimension(*), intent(out) :: grad_arep_x
+        real(8), dimension(*), intent(out) :: grad_arep_y
+        real(8), dimension(*), intent(out) :: grad_arep_z
+        ! output: matrices d<SO_x>/dx, d<SO_x>/dy, d<SO_x>/dZ
+        real(8), dimension(*), intent(out) :: grad_sox_x
+        real(8), dimension(*), intent(out) :: grad_sox_y
+        real(8), dimension(*), intent(out) :: grad_sox_z
+        ! output: matrices d<SO_y>/dx, d<SO_y>/dy, d<SO_y>/dZ
+        real(8), dimension(*), intent(out) :: grad_soy_x
+        real(8), dimension(*), intent(out) :: grad_soy_y
+        real(8), dimension(*), intent(out) :: grad_soy_z
+        ! output: matrices d<SO_z>/dx, d<SO_z>/dy, d<SO_z>/dZ
+        real(8), dimension(*), intent(out) :: grad_soz_x
+        real(8), dimension(*), intent(out) :: grad_soz_y
+        real(8), dimension(*), intent(out) :: grad_soz_z
+
+        ! local variables
+        integer :: ncart1
+        integer :: ncart2
+        integer :: i, j
+
+        ! TODO
+
+    end subroutine libgrpp_outercore_potential_integrals_gradient
+
 end module libgrpp
 

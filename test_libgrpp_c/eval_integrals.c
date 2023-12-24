@@ -141,10 +141,12 @@ void evaluate_grpp_integrals_shell_pair(
     /*
      * semilocal SO ("type-3") integrals
      */
-    for (int L = 1; L < grpp_operator->n_esop; L++) {
-        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, grpp_operator->U_esop[L],
+    for (int ipot = 0; ipot < grpp_operator->n_esop; ipot++) {
+        libgrpp_potential_t *so_potential = grpp_operator->U_esop[ipot];
+        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, so_potential,
                                      buf_so_x, buf_so_y, buf_so_z);
 
+        int L = so_potential->L;
         update_vector(size, so_x_matrix, 2.0 / (2 * L + 1), buf_so_x);
         update_vector(size, so_y_matrix, 2.0 / (2 * L + 1), buf_so_y);
         update_vector(size, so_z_matrix, 2.0 / (2 * L + 1), buf_so_z);

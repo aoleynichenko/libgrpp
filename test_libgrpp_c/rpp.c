@@ -83,6 +83,9 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
         }
     }
 
+    printf("n_blocks = %d\n", n_blocks);
+    printf("n_arep   = %d\n", n_arep);
+
     // read ECP expansions
     //grpp->n_oc_shells = 0;
     n_oc_shells = 0;
@@ -93,6 +96,9 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
 
         fscanf(inp_file, "%d%d", &n_prim, &n_oc);
         skip_line(inp_file);
+
+        printf("n_prim = %d\n", n_prim);
+        printf("n_oc   = %d\n", n_oc);
 
 
         for (int row = 0; row < n_prim; row++) {
@@ -123,7 +129,7 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
 
         if (L == 0) {
             // no SO term for angular momentum S => put NULL
-            libgrpp_grpp_add_spin_orbit_potential(grpp, NULL);
+            //libgrpp_grpp_add_spin_orbit_potential(grpp, NULL);
         }
         else {
             libgrpp_potential_t *esop = libgrpp_new_potential(L, 0, n_prim, pow_buf, coef_buf[1], exp_buf);
@@ -139,6 +145,7 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
     }
 
     // add pairs (OC potential, OC shell) to the GRPP
+    printf("n_oc_shells = %d\n", n_oc_shells);
     for (int ioc = 0; ioc < n_oc_shells; ioc++) {
         libgrpp_grpp_add_outercore_potential(grpp, buf_oc_potentials[ioc], buf_oc_shells[ioc]);
     }
@@ -177,8 +184,8 @@ void print_grpp(FILE *out, libgrpp_grpp_t *grpp)
     }
 
     printf("\t\tsemi-local spin-orbit potentials:\n\n");
-    for (int L = 1; L < grpp->n_esop; L++) {
-        print_rpp_expansion(stdout, grpp->U_esop[L]);
+    for (int i_so = 0; i_so < grpp->n_esop; i_so++) {
+        print_rpp_expansion(stdout, grpp->U_esop[i_so]);
         printf("\n");
     }
 
