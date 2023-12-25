@@ -23,6 +23,8 @@ A library for the evaluation of molecular integrals of the generalized relativis
 
 * no dependence on external libraries
 
+* thread safety
+
 # What is a generalized pseudopotential?
 
 [Generalized relativistic pseudopotentials (GRPPs)](https://onlinelibrary.wiley.com/doi/10.1002/%28SICI%291097-461X%281999%2971%3A5%3C359%3A%3AAID-QUA1%3E3.0.CO%3B2-U) of atomic cores imply the use of different potentials for atomic electronic shells with different principal quantum numbers. GRPPs give rise to accurate and reliable relativistic electronic structure models of [atoms](https://onlinelibrary.wiley.com/doi/abs/10.1002/qua.26076), [molecules](https://www.mdpi.com/2073-8994/15/1/197), [clusters](https://pubs.rsc.org/en/content/articlelanding/2022/CP/D2CP01738E) and [solids](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.103.205105). GRPPs readily incorporate the effects of [Breit electron–electron interactions](https://iopscience.iop.org/article/10.1088/0953-4075/37/23/004) and [one-loop quantum electrodynamics effects](https://onlinelibrary.wiley.com/doi/abs/10.1002/qua.27077). GRPPs are one of the most precise relativistic Hamiltonians at the moment, allowing one to completely bypass any complicated four-component calculations.
