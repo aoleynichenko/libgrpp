@@ -49,11 +49,11 @@ libgrpp_shell_t *libgrpp_new_shell(double *origin, int L, int num_primitives, do
 libgrpp_shell_t *libgrpp_shell_deep_copy(libgrpp_shell_t *src_shell)
 {
     libgrpp_shell_t *new_shell = libgrpp_new_shell(
-            src_shell->origin,
-            src_shell->L,
-            src_shell->num_primitives,
-            src_shell->coeffs,
-            src_shell->alpha
+        src_shell->origin,
+        src_shell->L,
+        src_shell->num_primitives,
+        src_shell->coeffs,
+        src_shell->alpha
     );
 
     return new_shell;
@@ -66,11 +66,10 @@ libgrpp_shell_t *libgrpp_shell_deep_copy(libgrpp_shell_t *src_shell)
  */
 void libgrpp_shell_shrink(libgrpp_shell_t *shell)
 {
-    double const ZERO_THRESH = 1e-10;
     int nprim = 0;
 
     for (int i = 0; i < shell->num_primitives; i++) {
-        if (fabs(shell->coeffs[i]) > ZERO_THRESH) {
+        if (fabs(shell->coeffs[i]) > LIBGRPP_ZERO_THRESH) {
             shell->coeffs[nprim] = shell->coeffs[i];
             shell->alpha[nprim] = shell->alpha[i];
             nprim++;
@@ -119,7 +118,6 @@ int *libgrpp_generate_shell_cartesians(int L)
     int ncart = (L + 1) * (L + 2) / 2;
 
     int *cart_list = (int *) calloc(3 * ncart, sizeof(int));
-
     libgrpp_params.cartesian_generator(L, cart_list);
 
     return cart_list;

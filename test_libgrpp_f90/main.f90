@@ -33,9 +33,12 @@ program test_libgrpp_f90
     print *, '    -----------------------------------------------------'
     print *, '        the fortran front-end to the libgrpp library     '
     print *, '    -----------------------------------------------------'
-    print *, '    a. oleynichenko                            9 feb 2023'
+    print *, '    a. oleynichenko                           25 dec 2023'
     print *, '    -----------------------------------------------------'
     print *
+
+    ! initialization of libgrpp
+    call libgrpp_init
 
     call read_molecule
     call print_molecule

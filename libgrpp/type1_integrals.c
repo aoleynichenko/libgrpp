@@ -20,16 +20,18 @@
 #include "type1_mcmurchie_davidson.h"
 
 
+/* for the old (numerical) version:
 void evaluate_type1_integral_primitive_gaussians(double *A, int n_cart_A, int *cart_list_A, double alpha_A,
                                                  double *B, int n_cart_B, int *cart_list_B, double alpha_B,
                                                  double *C, libgrpp_potential_t *potential, double *matrix);
+*/
 
 void evaluate_radially_local_potential_integral_primitive_gaussians(
-        double *A, int n_cart_A, int *cart_list_A, double alpha_A,
-        double *B, int n_cart_B, int *cart_list_B, double alpha_B,
-        double *C, double (*potential)(double r, void *params),
-        void *potential_params,
-        double *matrix
+    double *A, int n_cart_A, int *cart_list_A, double alpha_A,
+    double *B, int n_cart_B, int *cart_list_B, double alpha_B,
+    double *C, double (*potential)(double r, void *params),
+    void *potential_params,
+    double *matrix
 );
 
 double evaluate_pseudopotential(double r, void *params);
@@ -39,13 +41,15 @@ double evaluate_pseudopotential(double r, void *params);
  * Evaluation of type 1 RPP integrals (scalar-relativistic radially local RPP).
  */
 void libgrpp_type1_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        libgrpp_potential_t *potential,
-        double *matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    libgrpp_potential_t *potential,
+    double *matrix
 )
 {
+    assert(libgrpp_is_initialized());
+
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
     memset(matrix, 0, size_A * size_B * sizeof(double));
@@ -103,20 +107,20 @@ void libgrpp_type1_integrals(
  * for the pair of shells constructed from primitive Gaussians.
  */
 void evaluate_type1_integral_primitive_gaussians(
-        double *A, int n_cart_A, int *cart_list_A, double alpha_A,
-        double *B, int n_cart_B, int *cart_list_B, double alpha_B,
-        double *C, libgrpp_potential_t *potential,
-        double *matrix
+    double *A, int n_cart_A, int *cart_list_A, double alpha_A,
+    double *B, int n_cart_B, int *cart_list_B, double alpha_B,
+    double *C, libgrpp_potential_t *potential,
+    double *matrix
 )
 {
     libgrpp_potential_t *potential_shrinked = libgrpp_shrink_potential(potential);
 
     evaluate_radially_local_potential_integral_primitive_gaussians(
-            A, n_cart_A, cart_list_A, alpha_A,
-            B, n_cart_B, cart_list_B, alpha_B,
-            C, evaluate_pseudopotential,
-            potential_shrinked,
-            matrix
+        A, n_cart_A, cart_list_A, alpha_A,
+        B, n_cart_B, cart_list_B, alpha_B,
+        C, evaluate_pseudopotential,
+        potential_shrinked,
+        matrix
     );
 
     libgrpp_delete_potential(potential_shrinked);
@@ -138,11 +142,11 @@ double evaluate_pseudopotential(double r, void *params)
  * for the pair of shells constructed from primitive Gaussians.
  */
 void evaluate_radially_local_potential_integral_primitive_gaussians(
-        double *A, int n_cart_A, int *cart_list_A, double alpha_A,
-        double *B, int n_cart_B, int *cart_list_B, double alpha_B,
-        double *C, double (*potential)(double r, void *params),
-        void *potential_params,
-        double *matrix
+    double *A, int n_cart_A, int *cart_list_A, double alpha_A,
+    double *B, int n_cart_B, int *cart_list_B, double alpha_B,
+    double *C, double (*potential)(double r, void *params),
+    void *potential_params,
+    double *matrix
 )
 {
     assert(n_cart_A > 0);
@@ -177,20 +181,16 @@ void evaluate_radially_local_potential_integral_primitive_gaussians(
 
     int lambda_max = L_A + L_B;
     int n_max = lambda_max;
-    create_real_spherical_harmonic_coeffs_tables(lambda_max);
+    //create_real_spherical_harmonic_coeffs_tables(lambda_max);
 
     /*
      * pre-compute type 1 radial integrals
      */
-    //printf("begin radial integrals\n");
-
     radial_type1_table_t *radial_table = tabulate_radial_type1_integrals(
-            lambda_max, n_max,
-            CA_2, CB_2, alpha_A, alpha_B, k, D_ABC,
-            potential, potential_params
+        lambda_max, n_max,
+        CA_2, CB_2, alpha_A, alpha_B, k, D_ABC,
+        potential, potential_params
     );
-
-    //printf("end radial integrals\n");
 
     /*
      * main loop

@@ -57,30 +57,45 @@ void libgrpp_set_cartesian_order_(const int32_t *order)
 
 
 /*
+ * initialization and finalization
+ */
+void libgrpp_init_()
+{
+    libgrpp_init();
+}
+
+
+void libgrpp_finalize_()
+{
+    libgrpp_finalize();
+}
+
+
+/*
  * Type 1 RPP integrals (local term)
  */
 
 void libgrpp_type1_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *rpp_origin,
-        int32_t *rpp_num_primitives,
-        int32_t *rpp_powers,
-        double *rpp_coeffs,
-        double *rpp_alpha,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *rpp_origin,
+    int32_t *rpp_num_primitives,
+    int32_t *rpp_powers,
+    double *rpp_coeffs,
+    double *rpp_alpha,
+    // answer
+    double *matrix
 )
 {
     int *pot_powers_int = (int *) calloc(*rpp_num_primitives, sizeof(int));
@@ -107,27 +122,27 @@ void libgrpp_type1_integrals_(
  */
 
 void libgrpp_type2_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        double *origin_B,
-        // contracted Gaussian B
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *pot_origin,
-        int32_t *pot_L,
-        int32_t *pot_num_primitives,
-        int32_t *pot_powers,
-        double *pot_coeffs,
-        double *pot_alpha,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    double *origin_B,
+    // contracted Gaussian B
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *pot_origin,
+    int32_t *pot_L,
+    int32_t *pot_num_primitives,
+    int32_t *pot_powers,
+    double *pot_coeffs,
+    double *pot_alpha,
+    // answer
+    double *matrix
 )
 {
     int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
@@ -155,29 +170,29 @@ void libgrpp_type2_integrals_(
  */
 
 void libgrpp_spin_orbit_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *pot_origin,
-        int32_t *pot_L,
-        int32_t *pot_num_primitives,
-        int32_t *pot_powers,
-        double *pot_coeffs,
-        double *pot_alpha,
-        // answer
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *pot_origin,
+    int32_t *pot_L,
+    int32_t *pot_num_primitives,
+    int32_t *pot_powers,
+    double *pot_coeffs,
+    double *pot_alpha,
+    // answer
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 )
 {
     int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
@@ -214,41 +229,41 @@ void libgrpp_spin_orbit_integrals_(
  * U*|nlj><nlj| + |nlj><nlj|*U
  */
 void libgrpp_outercore_potential_integrals_part_1_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        double *origin_B,
-        // contracted Gaussian B
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential for the outercore shell LJ
-        double *pot_origin,
-        int32_t *pot_L,
-        int32_t *pot_J,
-        int32_t *pot_num_primitives,
-        int32_t *pot_powers,
-        double *pot_coeffs,
-        double *pot_alpha,
-        // expansion of the outercore shell LJ
-        int32_t *oc_shell_num_primitives,
-        double *oc_shell_coeffs,
-        double *oc_shell_alpha,
-        // answer
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    double *origin_B,
+    // contracted Gaussian B
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential for the outercore shell LJ
+    double *pot_origin,
+    int32_t *pot_L,
+    int32_t *pot_J,
+    int32_t *pot_num_primitives,
+    int32_t *pot_powers,
+    double *pot_coeffs,
+    double *pot_alpha,
+    // expansion of the outercore shell LJ
+    int32_t *oc_shell_num_primitives,
+    double *oc_shell_coeffs,
+    double *oc_shell_alpha,
+    // answer
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 )
 {
     void libgrpp_outercore_potential_integrals_part_1(
-            libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-            double *C, libgrpp_potential_t *oc_potential, libgrpp_shell_t *oc_shell,
-            double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
+        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+        double *C, libgrpp_potential_t *oc_potential, libgrpp_shell_t *oc_shell,
+        double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
     );
 
     /*
@@ -269,25 +284,25 @@ void libgrpp_outercore_potential_integrals_part_1_(
      * construct pseudopotential for the given L,J numbers
      */
     libgrpp_potential_t *oc_potential = libgrpp_new_potential(
-            *pot_L, *pot_J, *pot_num_primitives,
-            pot_powers_int, pot_coeffs, pot_alpha
+        *pot_L, *pot_J, *pot_num_primitives,
+        pot_powers_int, pot_coeffs, pot_alpha
     );
 
     /*
      * construct outercore shell associated with the pseudopotential
      */
     libgrpp_shell_t *oc_shell = libgrpp_new_shell(
-            pot_origin, *pot_L, *oc_shell_num_primitives,
-            oc_shell_coeffs, oc_shell_alpha
+        pot_origin, *pot_L, *oc_shell_num_primitives,
+        oc_shell_coeffs, oc_shell_alpha
     );
 
     /*
      * evaluate RPP integrals
      */
     libgrpp_outercore_potential_integrals_part_1(
-            shell_A, shell_B,
-            pot_origin, oc_potential, oc_shell,
-            arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix
+        shell_A, shell_B,
+        pot_origin, oc_potential, oc_shell,
+        arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix
     );
 
     /*
@@ -308,52 +323,52 @@ void libgrpp_outercore_potential_integrals_part_1_(
  * |nlj><nlj| U |n'lj><n'lj|
  */
 void libgrpp_outercore_potential_integrals_part_2_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // origin of the RPP
-        double *pot_origin,
-        // outercore shell 1:
-        int32_t *oc_shell_1_L,
-        int32_t *oc_shell_1_J,
-        int32_t *pot1_num_primitives,
-        int32_t *pot1_powers,
-        double *pot1_coeffs,
-        double *pot1_alpha,
-        int32_t *oc_shell_1_num_primitives,
-        double *oc_shell_1_coeffs,
-        double *oc_shell_1_alpha,
-        // outercore shell 2:
-        int32_t *oc_shell_2_L,
-        int32_t *oc_shell_2_J,
-        int32_t *pot2_num_primitives,
-        int32_t *pot2_powers,
-        double *pot2_coeffs,
-        double *pot2_alpha,
-        int32_t *oc_shell_2_num_primitives,
-        double *oc_shell_2_coeffs,
-        double *oc_shell_2_alpha,
-        // answer:
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // origin of the RPP
+    double *pot_origin,
+    // outercore shell 1:
+    int32_t *oc_shell_1_L,
+    int32_t *oc_shell_1_J,
+    int32_t *pot1_num_primitives,
+    int32_t *pot1_powers,
+    double *pot1_coeffs,
+    double *pot1_alpha,
+    int32_t *oc_shell_1_num_primitives,
+    double *oc_shell_1_coeffs,
+    double *oc_shell_1_alpha,
+    // outercore shell 2:
+    int32_t *oc_shell_2_L,
+    int32_t *oc_shell_2_J,
+    int32_t *pot2_num_primitives,
+    int32_t *pot2_powers,
+    double *pot2_coeffs,
+    double *pot2_alpha,
+    int32_t *oc_shell_2_num_primitives,
+    double *oc_shell_2_coeffs,
+    double *oc_shell_2_alpha,
+    // answer:
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 )
 {
     void libgrpp_outercore_potential_integrals_part_2(
-            libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-            double *C, libgrpp_potential_t *oc_potential_1, libgrpp_shell_t *oc_shell_1,
-            libgrpp_potential_t *oc_potential_2, libgrpp_shell_t *oc_shell_2,
-            double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
+        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+        double *C, libgrpp_potential_t *oc_potential_1, libgrpp_shell_t *oc_shell_1,
+        libgrpp_potential_t *oc_potential_2, libgrpp_shell_t *oc_shell_2,
+        double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
     );
 
     /*
@@ -379,32 +394,32 @@ void libgrpp_outercore_potential_integrals_part_2_(
      * the first outercore pseudopotential U_{n,L,J} and the corresponding outercore shell
      */
     libgrpp_potential_t *oc_potential_1 = libgrpp_new_potential(
-            *oc_shell_1_L, *oc_shell_1_J, *pot1_num_primitives,
-            pot1_powers_int, pot1_coeffs, pot1_alpha
+        *oc_shell_1_L, *oc_shell_1_J, *pot1_num_primitives,
+        pot1_powers_int, pot1_coeffs, pot1_alpha
     );
     libgrpp_shell_t *oc_shell_1 = libgrpp_new_shell(
-            pot_origin, *oc_shell_1_L, *oc_shell_1_num_primitives,
-            oc_shell_1_coeffs, oc_shell_1_alpha
+        pot_origin, *oc_shell_1_L, *oc_shell_1_num_primitives,
+        oc_shell_1_coeffs, oc_shell_1_alpha
     );
 
     /*
      * the second outercore pseudopotential U_{n',L',J'} and the corresponding outercore shell
      */
     libgrpp_potential_t *oc_potential_2 = libgrpp_new_potential(
-            *oc_shell_2_L, *oc_shell_2_J, *pot2_num_primitives,
-            pot2_powers_int, pot2_coeffs, pot2_alpha
+        *oc_shell_2_L, *oc_shell_2_J, *pot2_num_primitives,
+        pot2_powers_int, pot2_coeffs, pot2_alpha
     );
     libgrpp_shell_t *oc_shell_2 = libgrpp_new_shell(
-            pot_origin, *oc_shell_2_L, *oc_shell_2_num_primitives,
-            oc_shell_2_coeffs, oc_shell_2_alpha
+        pot_origin, *oc_shell_2_L, *oc_shell_2_num_primitives,
+        oc_shell_2_coeffs, oc_shell_2_alpha
     );
 
     /*
      * evaluate integrals
      */
     libgrpp_outercore_potential_integrals_part_2(
-            shell_A, shell_B, pot_origin, oc_potential_1, oc_shell_1, oc_potential_2, oc_shell_2,
-            arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix
+        shell_A, shell_B, pot_origin, oc_potential_1, oc_shell_1, oc_potential_2, oc_shell_2,
+        arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix
     );
 
     /*
@@ -426,30 +441,30 @@ void libgrpp_outercore_potential_integrals_part_2_(
  * with respect to the point 'point_3d'.
  */
 void libgrpp_type1_integrals_gradient_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *rpp_origin,
-        int32_t *rpp_num_primitives,
-        int32_t *rpp_powers,
-        double *rpp_coeffs,
-        double *rpp_alpha,
-        // differentiation wrt the 3d point (x,y,z)
-        double *point_3d,
-        // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
-        double *grad_arep_x,
-        double *grad_arep_y,
-        double *grad_arep_z
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *rpp_origin,
+    int32_t *rpp_num_primitives,
+    int32_t *rpp_powers,
+    double *rpp_coeffs,
+    double *rpp_alpha,
+    // differentiation wrt the 3d point (x,y,z)
+    double *point_3d,
+    // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+    double *grad_arep_x,
+    double *grad_arep_y,
+    double *grad_arep_z
 )
 {
     int *pot_powers_int = (int *) calloc(*rpp_num_primitives, sizeof(int));
@@ -480,31 +495,31 @@ void libgrpp_type1_integrals_gradient_(
  * with respect to the point 'point_3d'.
  */
 void libgrpp_type2_integrals_gradient_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        double *origin_B,
-        // contracted Gaussian B
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *pot_origin,
-        int32_t *pot_L,
-        int32_t *pot_num_primitives,
-        int32_t *pot_powers,
-        double *pot_coeffs,
-        double *pot_alpha,
-        // differentiation wrt the 3d point (x,y,z)
-        double *point_3d,
-        // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
-        double *grad_arep_x,
-        double *grad_arep_y,
-        double *grad_arep_z
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    double *origin_B,
+    // contracted Gaussian B
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *pot_origin,
+    int32_t *pot_L,
+    int32_t *pot_num_primitives,
+    int32_t *pot_powers,
+    double *pot_coeffs,
+    double *pot_alpha,
+    // differentiation wrt the 3d point (x,y,z)
+    double *point_3d,
+    // answer: matrices d<Int>/dx, d<Int>/dy, d<Int>/dZ
+    double *grad_arep_x,
+    double *grad_arep_y,
+    double *grad_arep_z
 )
 {
     int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
@@ -536,40 +551,40 @@ void libgrpp_type2_integrals_gradient_(
  * operator (potential) for a given shell pair (with respect to the point 'point_3d').
  */
 void libgrpp_spin_orbit_integrals_gradient_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // pseudopotential
-        double *pot_origin,
-        int32_t *pot_L,
-        int32_t *pot_num_primitives,
-        int32_t *pot_powers,
-        double *pot_coeffs,
-        double *pot_alpha,
-        // differentiation wrt the 3d point (x,y,z)
-        double *point_3d,
-        // answer: 9 matrices
-        // d<SO-x>/dx, d<SO-x>/dy, d<SO-x>/dZ
-        double *grad_sox_x,
-        double *grad_sox_y,
-        double *grad_sox_z,
-        // d<SO-y>/dx, d<SO-y>/dy, d<SO-y>/dZ
-        double *grad_soy_x,
-        double *grad_soy_y,
-        double *grad_soy_z,
-        // d<SO-z>/dx, d<SO-z>/dy, d<SO-z>/dZ
-        double *grad_soz_x,
-        double *grad_soz_y,
-        double *grad_soz_z
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // pseudopotential
+    double *pot_origin,
+    int32_t *pot_L,
+    int32_t *pot_num_primitives,
+    int32_t *pot_powers,
+    double *pot_coeffs,
+    double *pot_alpha,
+    // differentiation wrt the 3d point (x,y,z)
+    double *point_3d,
+    // answer: 9 matrices
+    // d<SO-x>/dx, d<SO-x>/dy, d<SO-x>/dZ
+    double *grad_sox_x,
+    double *grad_sox_y,
+    double *grad_sox_z,
+    // d<SO-y>/dx, d<SO-y>/dy, d<SO-y>/dZ
+    double *grad_soy_x,
+    double *grad_soy_y,
+    double *grad_soy_z,
+    // d<SO-z>/dx, d<SO-z>/dy, d<SO-z>/dZ
+    double *grad_soz_x,
+    double *grad_soz_y,
+    double *grad_soz_z
 )
 {
     int *pot_powers_int = (int *) calloc(*pot_num_primitives, sizeof(int));
@@ -593,13 +608,11 @@ void libgrpp_spin_orbit_integrals_gradient_(
         pot_powers_int[i] = pot_powers[i];
     }
 
-    //printf("pot_L = %d\n", *pot_L);
-
     /*
      * construct RPP structure
      */
     libgrpp_potential_t *pot = libgrpp_new_potential(
-            *pot_L, 0, *pot_num_primitives, pot_powers_int, pot_coeffs, pot_alpha
+        *pot_L, 0, *pot_num_primitives, pot_powers_int, pot_coeffs, pot_alpha
     );
 
     /*
@@ -609,8 +622,8 @@ void libgrpp_spin_orbit_integrals_gradient_(
     libgrpp_shell_t *shell_B = libgrpp_new_shell(origin_B, *L_B, *num_primitives_B, coeffs_B, alpha_B);
 
     libgrpp_spin_orbit_integrals_gradient(
-            shell_A, shell_B, pot_origin, pot, point_3d,
-            grad_array_SO_x, grad_array_SO_y, grad_array_SO_z
+        shell_A, shell_B, pot_origin, pot, point_3d,
+        grad_array_SO_x, grad_array_SO_y, grad_array_SO_z
     );
 
     libgrpp_delete_shell(shell_A);
@@ -622,27 +635,28 @@ void libgrpp_spin_orbit_integrals_gradient_(
 
 /**
  * Overlap integrals between two contracted Gaussians with given cartesian parts x^n y^l z^m
+ * (auxiliary function)
  */
 
 void evaluate_overlap_integral_contracted_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *n_A,
-        int32_t *l_A,
-        int32_t *m_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *n_B,
-        int32_t *l_B,
-        int32_t *m_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // answer
-        double *overlap_integral
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *n_A,
+    int32_t *l_A,
+    int32_t *m_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *n_B,
+    int32_t *l_B,
+    int32_t *m_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // answer
+    double *overlap_integral
 )
 {
     void
@@ -670,6 +684,7 @@ void evaluate_overlap_integral_contracted_(
 
 /*
  * calculates normalization factor for the given contracted Gaussians
+ * (auxiliary function)
  */
 void radial_gto_norm_factor_(int32_t *L, int32_t *num_primitives, double *coeffs, double *alpha, double *norm)
 {
@@ -679,9 +694,9 @@ void radial_gto_norm_factor_(int32_t *L, int32_t *num_primitives, double *coeffs
     int zero = 0;
 
     evaluate_overlap_integral_contracted_(
-            origin, L, &zero, &zero, num_primitives, coeffs, alpha,
-            origin, L, &zero, &zero, num_primitives, coeffs, alpha,
-            &S);
+        origin, L, &zero, &zero, num_primitives, coeffs, alpha,
+        origin, L, &zero, &zero, num_primitives, coeffs, alpha,
+        &S);
 
     *norm = sqrt(double_factorial(2 * (*L) - 1)) / sqrt(S);
 }
@@ -692,20 +707,20 @@ void radial_gto_norm_factor_(int32_t *L, int32_t *num_primitives, double *coeffs
  */
 
 void libgrpp_overlap_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -723,20 +738,20 @@ void libgrpp_overlap_integrals_(
  */
 
 void libgrpp_kinetic_energy_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -754,22 +769,22 @@ void libgrpp_kinetic_energy_integrals_(
  */
 
 void libgrpp_momentum_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // answer
-        double *matrix_x,
-        double *matrix_y,
-        double *matrix_z
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // answer
+    double *matrix_x,
+    double *matrix_y,
+    double *matrix_z
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -787,25 +802,25 @@ void libgrpp_momentum_integrals_(
  */
 
 void libgrpp_nuclear_attraction_integrals_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        int32_t *nuclear_model,
-        double *model_params,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    int32_t *nuclear_model,
+    double *model_params,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -820,23 +835,23 @@ void libgrpp_nuclear_attraction_integrals_(
 
 
 void libgrpp_nuclear_attraction_integrals_point_charge_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -850,24 +865,24 @@ void libgrpp_nuclear_attraction_integrals_point_charge_(
 
 
 void libgrpp_nuclear_attraction_integrals_charged_ball_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        double *r_rms,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    double *r_rms,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -881,24 +896,24 @@ void libgrpp_nuclear_attraction_integrals_charged_ball_(
 
 
 void libgrpp_nuclear_attraction_integrals_gaussian_model_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        double *r_rms,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    double *r_rms,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -912,25 +927,25 @@ void libgrpp_nuclear_attraction_integrals_gaussian_model_(
 
 
 void libgrpp_nuclear_attraction_integrals_fermi_model_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        double *fermi_param_c,
-        double *fermi_param_a,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    double *fermi_param_c,
+    double *fermi_param_a,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);
@@ -945,26 +960,26 @@ void libgrpp_nuclear_attraction_integrals_fermi_model_(
 
 
 void libgrpp_nuclear_attraction_integrals_fermi_bubble_model_(
-        // contracted Gaussian A
-        double *origin_A,
-        int32_t *L_A,
-        int32_t *num_primitives_A,
-        double *coeffs_A,
-        double *alpha_A,
-        // contracted Gaussian B
-        double *origin_B,
-        int32_t *L_B,
-        int32_t *num_primitives_B,
-        double *coeffs_B,
-        double *alpha_B,
-        // potential definition
-        double *charge_origin,
-        int32_t *charge,
-        double *fermi_param_c,
-        double *fermi_param_a,
-        double *param_k,
-        // answer
-        double *matrix
+    // contracted Gaussian A
+    double *origin_A,
+    int32_t *L_A,
+    int32_t *num_primitives_A,
+    double *coeffs_A,
+    double *alpha_A,
+    // contracted Gaussian B
+    double *origin_B,
+    int32_t *L_B,
+    int32_t *num_primitives_B,
+    double *coeffs_B,
+    double *alpha_B,
+    // potential definition
+    double *charge_origin,
+    int32_t *charge,
+    double *fermi_param_c,
+    double *fermi_param_a,
+    double *param_k,
+    // answer
+    double *matrix
 )
 {
     libgrpp_shell_t *shell_A = libgrpp_new_shell(origin_A, *L_A, *num_primitives_A, coeffs_A, alpha_A);

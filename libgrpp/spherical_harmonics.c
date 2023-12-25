@@ -24,7 +24,6 @@
 #include "factorial.h"
 #include "libgrpp.h"
 
-
 /*
  * Tables with pretabulated expansion coefficients
  */
@@ -40,8 +39,6 @@ rsh_coef_table_t *tabulate_real_spherical_harmonic_coeffs(int L);
 
 int *generate_cartesian_combinations(int L, int *num);
 
-double vector3_length(double *x);
-
 
 /**
  * Constructs the set of tables with C_{l,m}^{lx,ly,lz} coefficients
@@ -55,7 +52,6 @@ void create_real_spherical_harmonic_coeffs_tables(int Lmax)
     }
     else {
         // expand tables: realloc memory and add tables for the highest L values
-
         rsh_coef_tables = (rsh_coef_table_t **) realloc(rsh_coef_tables, (Lmax + 1) * sizeof(rsh_coef_table_t *));
 
         for (int L = rsh_tables_lmax + 1; L <= Lmax; L++) {
@@ -99,7 +95,7 @@ rsh_coef_table_t *tabulate_real_spherical_harmonic_coeffs(int L)
 rsh_coef_table_t *get_real_spherical_harmonic_table(int L)
 {
     if (L > rsh_tables_lmax) {
-        printf("%d > Lmax\n", L);
+        printf("get_real_spherical_harmonic_table(): %d > Lmax\n", L);
         return NULL;
     }
 
@@ -146,10 +142,10 @@ double spherical_to_cartesian_coef(int l, int m, int lx, int ly, int lz)
         }
 
         double factor_1 =
-                binomial(l, i) *
-                binomial(i, j) *
-                pow(-1, i) *
-                factorial_ratio(2 * l - 2 * i, l - abs(m) - 2 * i);
+            binomial(l, i) *
+            binomial(i, j) *
+            pow(-1, i) *
+            factorial_ratio(2 * l - 2 * i, l - abs(m) - 2 * i);
 
         double sum = 0.0;
         for (int k = 0; k <= j; k++) {

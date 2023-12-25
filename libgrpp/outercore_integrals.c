@@ -10,6 +10,7 @@
  * These integrals are reduced to the type 1 integrals and overlap integrals.
  */
 
+#include <assert.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,36 +28,36 @@
  */
 
 void libgrpp_outercore_potential_integrals_part_1(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *C,
-        libgrpp_potential_t *oc_potential,
-        libgrpp_shell_t *oc_shell,
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *C,
+    libgrpp_potential_t *oc_potential,
+    libgrpp_shell_t *oc_shell,
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 );
 
 void libgrpp_outercore_potential_integrals_part_2(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *C,
-        libgrpp_potential_t *oc_potential_1,
-        libgrpp_shell_t *oc_shell_1,
-        libgrpp_potential_t *oc_potential_2,
-        libgrpp_shell_t *oc_shell_2,
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *C,
+    libgrpp_potential_t *oc_potential_1,
+    libgrpp_shell_t *oc_shell_1,
+    libgrpp_potential_t *oc_potential_2,
+    libgrpp_shell_t *oc_shell_2,
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 );
 
 double calculate_delta_integral(
-        libgrpp_potential_t *oc_pot_1,
-        libgrpp_shell_t *oc_shell_1,
-        libgrpp_potential_t *oc_pot_2,
-        libgrpp_shell_t *oc_shell_2
+    libgrpp_potential_t *oc_pot_1,
+    libgrpp_shell_t *oc_shell_1,
+    libgrpp_potential_t *oc_pot_2,
+    libgrpp_shell_t *oc_shell_2
 );
 
 void transform_to_sph_basis_ket(int dim_bra, int dim_ket_cart, int dim_ket_sph, double *A_in, double *A_out,
@@ -67,7 +68,8 @@ void transform_to_sph_basis_bra(int dim_bra_cart, int dim_bra_sph, int dim_ket, 
 
 double ang_norm_factor(int lx, int ly, int lz);
 
-double analytic_one_center_rpp_integral_contracted(libgrpp_shell_t *bra, libgrpp_shell_t *ket, libgrpp_potential_t *pot);
+double
+analytic_one_center_rpp_integral_contracted(libgrpp_shell_t *bra, libgrpp_shell_t *ket, libgrpp_potential_t *pot);
 
 double analytic_one_center_rpp_integral_primitive(int L, double alpha1, double alpha2, int n, double zeta);
 
@@ -79,18 +81,20 @@ double radial_gto_norm_factor(int L, double alpha);
  * effective spin-orbit interaction matrices from the outercore (OC) potentials.
  */
 void libgrpp_outercore_potential_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        int num_oc_shells,
-        libgrpp_potential_t **oc_potentials,
-        libgrpp_shell_t **oc_shells,
-        double *arep,
-        double *esop_x,
-        double *esop_y,
-        double *esop_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    int num_oc_shells,
+    libgrpp_potential_t **oc_potentials,
+    libgrpp_shell_t **oc_shells,
+    double *arep,
+    double *esop_x,
+    double *esop_y,
+    double *esop_z
 )
 {
+    assert(libgrpp_is_initialized());
+
     // clear output matrices
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
@@ -112,8 +116,8 @@ void libgrpp_outercore_potential_integrals(
         libgrpp_shell_t *nlj = oc_shells[ioc];
 
         libgrpp_outercore_potential_integrals_part_1(
-                shell_A, shell_B, rpp_origin, pot, nlj,
-                arep, esop_x, esop_y, esop_z
+            shell_A, shell_B, rpp_origin, pot, nlj,
+            arep, esop_x, esop_y, esop_z
         );
     }
 
@@ -127,9 +131,9 @@ void libgrpp_outercore_potential_integrals(
             libgrpp_shell_t *nlj_2 = oc_shells[joc];
 
             libgrpp_outercore_potential_integrals_part_2(
-                    shell_A, shell_B,
-                    rpp_origin, pot_1, nlj_1, pot_2, nlj_2,
-                    arep, esop_x, esop_y, esop_z
+                shell_A, shell_B,
+                rpp_origin, pot_1, nlj_1, pot_2, nlj_2,
+                arep, esop_x, esop_y, esop_z
             );
         }
     }
@@ -141,9 +145,9 @@ void libgrpp_outercore_potential_integrals(
  * the U*|nlj><nlj| + |nlj><nlj|*U part
  */
 void libgrpp_outercore_potential_integrals_part_1(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *C, libgrpp_potential_t *oc_potential, libgrpp_shell_t *oc_shell,
-        double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *C, libgrpp_potential_t *oc_potential, libgrpp_shell_t *oc_shell,
+    double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
 )
 {
     int L = oc_shell->L;
@@ -271,10 +275,10 @@ void libgrpp_outercore_potential_integrals_part_1(
  * the |nlj><nlj| U |n'lj><n'lj| part
  */
 void libgrpp_outercore_potential_integrals_part_2(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *C, libgrpp_potential_t *oc_potential_1, libgrpp_shell_t *oc_shell_1,
-        libgrpp_potential_t *oc_potential_2, libgrpp_shell_t *oc_shell_2,
-        double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *C, libgrpp_potential_t *oc_potential_1, libgrpp_shell_t *oc_shell_1,
+    libgrpp_potential_t *oc_potential_2, libgrpp_shell_t *oc_shell_2,
+    double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix
 )
 {
     int size_A = libgrpp_get_shell_size(shell_A);
@@ -391,8 +395,8 @@ void libgrpp_outercore_potential_integrals_part_2(
  * Is performed analytically.
  */
 double calculate_delta_integral(
-        libgrpp_potential_t *oc_pot_1, libgrpp_shell_t *oc_shell_1,
-        libgrpp_potential_t *oc_pot_2, libgrpp_shell_t *oc_shell_2
+    libgrpp_potential_t *oc_pot_1, libgrpp_shell_t *oc_shell_1,
+    libgrpp_potential_t *oc_pot_2, libgrpp_shell_t *oc_shell_2
 )
 {
     // both shells must have equal L,J quantum numbers, otherwise
@@ -454,8 +458,7 @@ double analytic_one_center_rpp_integral_primitive(int L, double alpha1, double a
     if (n % 2 == 0) { // even n
         int k = L + n / 2;
         return double_factorial(2 * k - 1) / (pow(2.0, k + 1) * pow(a, k)) * sqrt(M_PI / a);
-    }
-    else { // odd n
+    } else { // odd n
         int k = L + (n - 1) / 2;
         return factorial(k) / (2.0 * pow(a, k + 1));
     }
@@ -471,26 +474,26 @@ double radial_gto_norm_factor(int L, double alpha)
     // pre-tabulated factors for calculation of normalization constants
     // (for each value of L)
     const static double factors[] = {
-            2.5264751109842587,
-            2.9173221708553032,
-            2.6093322745198853,
-            1.9724697960897537,
-            1.3149798640598356,
-            7.9296269381073192e-1,
-            4.3985656185609934e-1,
-            2.2714095183849672e-1,
-            1.1017954545099481e-1,
-            5.0553842554329785e-2,
-            2.2063505731056757e-2,
-            9.2011179391124215e-3,
-            3.6804471756449694e-3,
-            1.4166047783978804e-3,
-            5.2611380677564405e-4,
-            1.8898565833279173e-4,
-            6.5796360823633550e-5,
-            2.2243229718298637e-5,
-            7.3135288801774484e-6,
-            2.3422037547660024e-6
+        2.5264751109842587,
+        2.9173221708553032,
+        2.6093322745198853,
+        1.9724697960897537,
+        1.3149798640598356,
+        7.9296269381073192e-1,
+        4.3985656185609934e-1,
+        2.2714095183849672e-1,
+        1.1017954545099481e-1,
+        5.0553842554329785e-2,
+        2.2063505731056757e-2,
+        9.2011179391124215e-3,
+        3.6804471756449694e-3,
+        1.4166047783978804e-3,
+        5.2611380677564405e-4,
+        1.8898565833279173e-4,
+        6.5796360823633550e-5,
+        2.2243229718298637e-5,
+        7.3135288801774484e-6,
+        2.3422037547660024e-6
     };
 
     return factors[L] * pow(alpha, 0.75 + L / 2.0);
@@ -544,8 +547,8 @@ double ang_norm_factor(int lx, int ly, int lz)
     int L = lx + ly + lz;
 
     return 1.0 / (2.0 * sqrt(M_PI)) * sqrt(
-            double_factorial(2 * L + 1)
-            /*(double_factorial(2 * lx - 1) * double_factorial(2 * ly - 1) * double_factorial(2 * lz - 1))*/
+        double_factorial(2 * L + 1)
+        /*(double_factorial(2 * lx - 1) * double_factorial(2 * ly - 1) * double_factorial(2 * lz - 1))*/
     );
 }
 

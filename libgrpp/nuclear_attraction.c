@@ -23,12 +23,12 @@
  * is integrated numerically on a radial grid.
  */
 
+#include <assert.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-#include "boys.h"
 #include "norm_gaussian.h"
 #include "nuclear_models.h"
 #include "libgrpp.h"
@@ -40,18 +40,18 @@
 
 
 void evaluate_radially_local_potential_integral_primitive_gaussians(
-        double *A, int n_cart_A, int *cart_list_A, double alpha_A,
-        double *B, int n_cart_B, int *cart_list_B, double alpha_B,
-        double *C, double (*potential)(double r, void *params),
-        void *potential_params,
-        double *matrix
+    double *A, int n_cart_A, int *cart_list_A, double alpha_A,
+    double *B, int n_cart_B, int *cart_list_B, double alpha_B,
+    double *C, double (*potential)(double r, void *params),
+    void *potential_params,
+    double *matrix
 );
 
 double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 );
 
 double wrapper_coulomb_potential_point(double r, void *params);
@@ -78,10 +78,12 @@ double wrapper_coulomb_potential_fermi_bubble(double r, void *params);
  *   LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL
  */
 void libgrpp_nuclear_attraction_integrals(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, int nuclear_model, double *model_params,
-        double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, int nuclear_model, double *model_params,
+    double *coulomb_matrix)
 {
+    assert(libgrpp_is_initialized());
+
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
 
@@ -104,21 +106,20 @@ void libgrpp_nuclear_attraction_integrals(
 
                 // use code for RPP type-1 integrals with RPP exponent = 0.0
                 evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
-                        shell_A, shell_A->alpha[i],
-                        shell_B, shell_B->alpha[j],
-                        charge_origin, 0.0,
-                        buf
+                    shell_A, shell_A->alpha[i],
+                    shell_B, shell_B->alpha[j],
+                    charge_origin, 0.0,
+                    buf
                 );
 
                 for (int k = 0; k < size_A * size_B; k++) {
                     buf[k] *= (-1) * charge;
                 }
-            }
-            else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL ||
-                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
-                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI ||
-                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE ||
-                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
+            } else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL ||
+                       nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
+                       nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI ||
+                       nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI_BUBBLE ||
+                       nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
 
                 double params[10];
                 params[0] = charge;
@@ -131,21 +132,17 @@ void libgrpp_nuclear_attraction_integrals(
                 if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
                     //printf("charge distribution: point\n");
                     electrostatic_potential_fun = wrapper_coulomb_potential_point;
-                }
-                else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
+                } else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
                     params[1] = model_params[0]; // R_rms
                     electrostatic_potential_fun = wrapper_coulomb_potential_ball;
-                }
-                else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN) {
+                } else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN) {
                     params[1] = model_params[0]; // R_rms
                     electrostatic_potential_fun = wrapper_coulomb_potential_gaussian;
-                }
-                else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI) {
+                } else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_FERMI) {
                     params[1] = model_params[0]; // c
                     params[2] = model_params[1]; // a
                     electrostatic_potential_fun = wrapper_coulomb_potential_fermi;
-                }
-                else {
+                } else {
                     params[1] = model_params[0]; // c
                     params[2] = model_params[1]; // a
                     params[3] = model_params[2]; // k
@@ -156,12 +153,11 @@ void libgrpp_nuclear_attraction_integrals(
                  * calculate integrals for the shell pair
                  */
                 evaluate_radially_local_potential_integral_primitive_gaussians(
-                        shell_A->origin, size_A, shell_A->cart_list, shell_A->alpha[i],
-                        shell_B->origin, size_B, shell_B->cart_list, shell_B->alpha[j],
-                        charge_origin, electrostatic_potential_fun, params, buf
+                    shell_A->origin, size_A, shell_A->cart_list, shell_A->alpha[i],
+                    shell_B->origin, size_B, shell_B->cart_list, shell_B->alpha[j],
+                    charge_origin, electrostatic_potential_fun, params, buf
                 );
-            }
-            else {
+            } else {
                 printf("LIBGRPP: unknown finite nuclear charge distribution model!\n");
                 exit(0);
             }
@@ -180,8 +176,8 @@ void libgrpp_nuclear_attraction_integrals(
  * generated by the point charge.
  */
 void libgrpp_nuclear_attraction_integrals_point_charge(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, double *coulomb_matrix)
 {
     libgrpp_nuclear_attraction_integrals(shell_A, shell_B, charge_origin, charge,
                                          LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE, NULL, coulomb_matrix);
@@ -196,8 +192,8 @@ void libgrpp_nuclear_attraction_integrals_point_charge(
  * r_rms stands for the root mean square radius (in bohrs)
  */
 void libgrpp_nuclear_attraction_integrals_charged_ball(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, double r_rms, double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, double r_rms, double *coulomb_matrix)
 {
     double params[10];
     params[0] = charge;
@@ -216,8 +212,8 @@ void libgrpp_nuclear_attraction_integrals_charged_ball(
  * r_rms stands for the root mean square radius (in bohrs)
  */
 void libgrpp_nuclear_attraction_integrals_gaussian_model(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, double r_rms, double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, double r_rms, double *coulomb_matrix)
 {
     double params[10];
     params[0] = charge;
@@ -236,8 +232,8 @@ void libgrpp_nuclear_attraction_integrals_gaussian_model(
  * Model parameters 'c' and 'a' must be given in bohrs.
  */
 void libgrpp_nuclear_attraction_integrals_fermi_model(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, double fermi_param_c, double fermi_param_a, double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, double fermi_param_c, double fermi_param_a, double *coulomb_matrix)
 {
     double params[10];
     params[0] = charge;
@@ -258,8 +254,8 @@ void libgrpp_nuclear_attraction_integrals_fermi_model(
  * The 'k' constant is dimensionless.
  */
 void libgrpp_nuclear_attraction_integrals_fermi_bubble_model(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *charge_origin, int charge, double param_c, double param_a, double param_k, double *coulomb_matrix)
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *charge_origin, int charge, double param_c, double param_a, double param_k, double *coulomb_matrix)
 {
     double params[10];
     params[0] = charge;

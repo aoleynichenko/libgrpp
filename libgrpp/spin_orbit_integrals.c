@@ -5,6 +5,7 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
+#include <assert.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,10 +23,10 @@
 
 
 void type3_angular_sum(
-        int L, double *Lx_matrix, double *Ly_matrix, double *Lz_matrix,
-        int lambda_1, int a, int b, int c, double *rsh_values_kA,
-        int lambda_2, int d, int e, int f, double *rsh_values_kB,
-        double *sum_angular_x, double *sum_angular_y, double *sum_angular_z
+    int L, double *Lx_matrix, double *Ly_matrix, double *Lz_matrix,
+    int lambda_1, int a, int b, int c, double *rsh_values_kA,
+    int lambda_2, int d, int e, int f, double *rsh_values_kB,
+    double *sum_angular_x, double *sum_angular_y, double *sum_angular_z
 );
 
 
@@ -41,6 +42,8 @@ void libgrpp_spin_orbit_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *she
                                   double *rpp_origin, libgrpp_potential_t *potential,
                                   double *so_x_matrix, double *so_y_matrix, double *so_z_matrix)
 {
+    assert(libgrpp_is_initialized());
+
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
 
@@ -98,7 +101,7 @@ void libgrpp_spin_orbit_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *she
      * for further evaluation of angular integrals
      */
     int lmax = int_max3(lambda1_max, lambda2_max, L);
-    create_real_spherical_harmonic_coeffs_tables(lmax);
+    //create_real_spherical_harmonic_coeffs_tables(lmax);
 
     /*
      * pre-calculate values of real spherical harmonics for different L
@@ -115,9 +118,9 @@ void libgrpp_spin_orbit_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *she
      * pre-compute radial integrals
      */
     radial_type2_table_t *radial_table = tabulate_radial_type2_integrals(
-            lambda1_max, lambda2_max, N_max,
-            CA_2, CB_2,
-            potential, shell_A, shell_B
+        lambda1_max, lambda2_max, N_max,
+        CA_2, CB_2,
+        potential, shell_A, shell_B
     );
 
     /*
@@ -245,10 +248,10 @@ void libgrpp_spin_orbit_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *she
  * (Pitzer, Winter, 1991, formula on the top of the page 776)
  */
 void type3_angular_sum(
-        int L, double *Lx_matrix, double *Ly_matrix, double *Lz_matrix,
-        int lambda_1, int a, int b, int c, double *rsh_values_kA,
-        int lambda_2, int d, int e, int f, double *rsh_values_kB,
-        double *sum_angular_x, double *sum_angular_y, double *sum_angular_z
+    int L, double *Lx_matrix, double *Ly_matrix, double *Lz_matrix,
+    int lambda_1, int a, int b, int c, double *rsh_values_kA,
+    int lambda_2, int d, int e, int f, double *rsh_values_kB,
+    double *sum_angular_x, double *sum_angular_y, double *sum_angular_z
 )
 {
     *sum_angular_x = 0.0;

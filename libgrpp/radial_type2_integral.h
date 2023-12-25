@@ -20,14 +20,14 @@ typedef struct {
 
 
 radial_type2_table_t *tabulate_radial_type2_integrals(
-        int lambda1_max,
-        int lambda2_max,
-        int n_max,
-        double CA_2,
-        double CB_2,
-        libgrpp_potential_t *potential,
-        libgrpp_shell_t *bra,
-        libgrpp_shell_t *ket
+    int lambda1_max,
+    int lambda2_max,
+    int n_max,
+    double CA_2,
+    double CB_2,
+    libgrpp_potential_t *potential,
+    libgrpp_shell_t *bra,
+    libgrpp_shell_t *ket
 );
 
 double get_radial_type2_integral(radial_type2_table_t *table, int lambda1, int lambda2, int n);

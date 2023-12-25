@@ -5,6 +5,7 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
+#include <assert.h>
 #include <math.h>
 #include <string.h>
 
@@ -19,23 +20,27 @@
 #define LMAX (2 * LIBGRPP_MAX_BASIS_L + LIBGRPP_MAX_RPP_L)
 
 
-double type2_angular_sum(int L,
-                         int lambda_1, int a, int b, int c, double *kA_vec,
-                         int lambda_2, int d, int e, int f, double *kB_vec,
-                         double *rsh_values_kA, double *rsh_values_kB);
+double type2_angular_sum(
+    int L,
+    int lambda_1, int a, int b, int c, double *kA_vec,
+    int lambda_2, int d, int e, int f, double *kB_vec,
+    double *rsh_values_kA, double *rsh_values_kB
+);
 
 
 /**
  * Evaluation of type 2 RPP integrals (scalar-relativistic semilocal RPP with L-projectors).
  */
 void libgrpp_type2_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        libgrpp_potential_t *potential,
-        double *matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    libgrpp_potential_t *potential,
+    double *matrix
 )
 {
+    assert(libgrpp_is_initialized());
+
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
 
@@ -83,15 +88,15 @@ void libgrpp_type2_integrals(
      * for further evaluation of angular integrals
      */
     int lmax = int_max3(lambda1_max, lambda2_max, L);
-    create_real_spherical_harmonic_coeffs_tables(lmax);
+    //create_real_spherical_harmonic_coeffs_tables(lmax);
 
     /*
      * pre-compute type 2 radial integrals
      */
     radial_type2_table_t *radial_table = tabulate_radial_type2_integrals(
-            lambda1_max, lambda2_max, N_max,
-            CA_2, CB_2,
-            potential, shell_A, shell_B
+        lambda1_max, lambda2_max, N_max,
+        CA_2, CB_2,
+        potential, shell_A, shell_B
     );
 
     /*
@@ -182,8 +187,8 @@ void libgrpp_type2_integrals(
                                             }
 
                                             double sum_angular = type2_angular_sum(
-                                                    L, lambda_1, a, b, c, kA_vec, lambda_2, d, e, f, kB_vec,
-                                                    rsh_values_kA[lambda_1], rsh_values_kB[lambda_2]
+                                                L, lambda_1, a, b, c, kA_vec, lambda_2, d, e, f, kB_vec,
+                                                rsh_values_kA[lambda_1], rsh_values_kB[lambda_2]
                                             );
 
                                             sum_omega_Q += QN * sum_angular;

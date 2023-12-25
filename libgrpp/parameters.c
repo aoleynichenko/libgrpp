@@ -10,64 +10,84 @@
 #include <assert.h>
 
 int cartesian_generator_dirac(int L, int *cart_list);
+
 int cartesian_generator_turbomole(int L, int *cart_list);
 
 
 libgrpp_parameters_t libgrpp_params = {
-        // tolerance of radial integration
-        1e-16,
-        // tolerance of angular integral screening
-        1e-16,
-        // tolerance of modified Bessel functions evaluation
-        1e-16,
-        // subroutine to generate cartesian components with given ang momentum L
-        cartesian_generator_dirac
+    // tolerance of radial integration
+    1e-16,
+    // tolerance of angular integral screening
+    1e-16,
+    // tolerance of modified Bessel functions evaluation
+    // is it really needed?
+    1e-16,
+    // subroutine to generate cartesian components with given ang momentum L
+    cartesian_generator_dirac
 };
 
 
 void libgrpp_set_default_parameters()
 {
-    libgrpp_set_radial_tolerance(1e-16);
-    libgrpp_set_angular_screening_tolerance(1e-16);
-    libgrpp_set_modified_bessel_tolerance(1e-16);
-    libgrpp_set_cartesian_generator(cartesian_generator_dirac);
+//#pragma omp critical
+    {
+        libgrpp_set_radial_tolerance(1e-16);
+        libgrpp_set_angular_screening_tolerance(1e-16);
+        libgrpp_set_modified_bessel_tolerance(1e-16);
+        libgrpp_set_cartesian_generator(cartesian_generator_dirac);
+    }
 }
 
 
 void libgrpp_set_radial_tolerance(double tolerance)
 {
-    libgrpp_params.radial_tolerance = tolerance;
+//#pragma omp critical
+    {
+        libgrpp_params.radial_tolerance = tolerance;
+    }
 }
 
 
 void libgrpp_set_angular_screening_tolerance(double tolerance)
 {
-    libgrpp_params.angular_screening_tolerance = tolerance;
+//#pragma omp critical
+    {
+        libgrpp_params.angular_screening_tolerance = tolerance;
+    }
 }
 
 
 void libgrpp_set_modified_bessel_tolerance(double tolerance)
 {
-    libgrpp_params.modified_bessel_tolerance = tolerance;
+//#pragma omp critical
+    {
+        libgrpp_params.modified_bessel_tolerance = tolerance;
+    }
 }
 
 
 void libgrpp_set_cartesian_order(int order)
 {
-    assert(order == LIBGRPP_CART_ORDER_DIRAC || order == LIBGRPP_CART_ORDER_TURBOMOLE);
+//#pragma omp critical
+    {
+        assert(order == LIBGRPP_CART_ORDER_DIRAC || order == LIBGRPP_CART_ORDER_TURBOMOLE);
 
-    if (order == LIBGRPP_CART_ORDER_DIRAC) {
-        libgrpp_set_cartesian_generator(cartesian_generator_dirac);
-    }
-    else if (order == LIBGRPP_CART_ORDER_TURBOMOLE) {
-        libgrpp_set_cartesian_generator(cartesian_generator_turbomole);
+        if (order == LIBGRPP_CART_ORDER_DIRAC) {
+            libgrpp_set_cartesian_generator(cartesian_generator_dirac);
+        }
+        else if (order == LIBGRPP_CART_ORDER_TURBOMOLE) {
+            libgrpp_set_cartesian_generator(cartesian_generator_turbomole);
+        }
     }
 }
 
 
 void libgrpp_set_cartesian_generator(int (*cartesian_generator)(int L, int *cart_list))
 {
-    libgrpp_params.cartesian_generator = cartesian_generator;
+//#pragma omp critical
+    {
+        libgrpp_params.cartesian_generator = cartesian_generator;
+    }
 }
 
 

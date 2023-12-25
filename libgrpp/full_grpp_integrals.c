@@ -7,6 +7,7 @@
 
 #include "libgrpp.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -24,16 +25,18 @@
  * See libgrpp.h for the definition of the libgrpp_grpp_t structure.
  */
 void libgrpp_full_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 )
 {
+    assert(libgrpp_is_initialized());
+
     size_t size = shell_A->cart_size * shell_B->cart_size;
     double *buf_arep = (double *) calloc(size, sizeof(double));
     double *buf_so_x = (double *) calloc(size, sizeof(double));
@@ -63,8 +66,6 @@ void libgrpp_full_grpp_integrals(
      * semilocal SO ("type-3") integrals
      */
     for (int i_so = 0; i_so < grpp_operator->n_esop; i_so++) {
-        //printf("n_esop = %d\n", grpp_operator->n_esop);
-        //printf("iso = %d, L = %d\n", i_so, grpp_operator->U_esop[i_so]->L);
         libgrpp_potential_t *so_potential = grpp_operator->U_esop[i_so];
         libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, so_potential,
                                      buf_so_x, buf_so_y, buf_so_z);
@@ -83,9 +84,9 @@ void libgrpp_full_grpp_integrals(
      * the libgrpp_outercore_potential_integrals() procedure.
      */
     libgrpp_outercore_potential_integrals(
-            shell_A, shell_B, grpp_origin,
-            grpp_operator->n_oc_shells, grpp_operator->U_oc, grpp_operator->oc_shells,
-            buf_arep, buf_so_x, buf_so_y, buf_so_z
+        shell_A, shell_B, grpp_origin,
+        grpp_operator->n_oc_shells, grpp_operator->U_oc, grpp_operator->oc_shells,
+        buf_arep, buf_so_x, buf_so_y, buf_so_z
     );
 
     libgrpp_daxpy(size, 1.0, buf_arep, arep_matrix);

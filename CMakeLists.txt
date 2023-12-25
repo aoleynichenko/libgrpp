@@ -10,11 +10,17 @@ project(test_libgrpp_c.x C)
 project(test_libgrpp_f90.x Fortran)
 
 set(CMAKE_C_STANDARD 11)
+find_package(OpenMP)
 
 add_subdirectory(libgrpp)
 
-add_compile_options(-O3)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -O3")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS} -O3")
 #add_compile_options(-pg)
+
+# testing binary
+add_executable(libgrpp_compare_matrices.x test/compare_matrices.c)
+
 add_executable(test_libgrpp_c.x
         test_libgrpp_c/main.c
         test_libgrpp_c/molecule.c
@@ -37,29 +43,23 @@ add_executable(test_libgrpp_f90.x
         test_libgrpp_f90/libgrpp.f90
         )
 
-target_link_libraries(test_libgrpp_c.x libgrpp -lm)# -pg)
-target_link_libraries(test_libgrpp_f90.x libgrpp -lm)
+target_link_libraries(test_libgrpp_c.x libgrpp -lm ${OpenMP_C_LIBRARIES}) # -pg)
+target_link_libraries(test_libgrpp_f90.x libgrpp -lm ${OpenMP_C_LIBRARIES})
 
-
-# testing binary
-add_executable(libgrpp_compare_matrices.x test/compare_matrices.c)
 
 # enable testing functionality
 enable_testing()
 
 # define tests
 
+add_test(NAME KCs     WORKING_DIRECTORY ../test/KCs     COMMAND bash run_test.sh)
 add_test(NAME Cs     WORKING_DIRECTORY ../test/Cs     COMMAND bash run_test.sh)
 add_test(NAME K      WORKING_DIRECTORY ../test/K      COMMAND bash run_test.sh)
 add_test(NAME Tl_qz  WORKING_DIRECTORY ../test/Tl_qz  COMMAND bash run_test.sh)
 add_test(NAME H2O    WORKING_DIRECTORY ../test/H2O    COMMAND bash run_test.sh)
-add_test(NAME KCs    WORKING_DIRECTORY ../test/KCs    COMMAND bash run_test.sh)
 add_test(NAME ThO    WORKING_DIRECTORY ../test/ThO    COMMAND bash run_test.sh)
 add_test(NAME UO2    WORKING_DIRECTORY ../test/UO2    COMMAND bash run_test.sh)
 
-foreach (t Cs K Tl_qz H2O KCs ThO UO2)
+foreach (t KCs)
     set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 endforeach ()
-
-
-

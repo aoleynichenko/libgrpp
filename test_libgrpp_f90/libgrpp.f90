@@ -19,6 +19,14 @@ module libgrpp
 
     interface
 
+        subroutine libgrpp_init()
+            ! no arguments
+        end subroutine libgrpp_init
+
+        subroutine libgrpp_finalize()
+            ! no arguments
+        end subroutine libgrpp_finalize
+
         subroutine libgrpp_set_default_parameters()
             ! no arguments
         end subroutine libgrpp_set_default_parameters

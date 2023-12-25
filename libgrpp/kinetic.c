@@ -26,8 +26,13 @@
 #include <string.h>
 
 
-void kinetic_energy_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                                     double alpha_A, double alpha_B, double *kinetic_matrix);
+void kinetic_energy_integrals_shell_pair_obara_saika(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *kinetic_matrix
+);
 
 
 void libgrpp_kinetic_energy_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B, double *kinetic_matrix)
@@ -57,8 +62,13 @@ void libgrpp_kinetic_energy_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t 
 }
 
 
-void kinetic_energy_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                                     double alpha_A, double alpha_B, double *kinetic_matrix)
+void kinetic_energy_integrals_shell_pair_obara_saika(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *kinetic_matrix
+)
 {
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
@@ -97,8 +107,7 @@ void kinetic_energy_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, l
                     if (j - 1 > 0) {
                         S_ij += (j - 1) * pfac * S[coord][i][j - 2];
                     }
-                }
-                else { // upward by i
+                } else { // upward by i
                     S_ij += X_PA * S[coord][i - 1][j];
                     if (i - 1 > 0) {
                         S_ij += (i - 1) * pfac * S[coord][i - 2][j];
@@ -144,9 +153,9 @@ void kinetic_energy_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, l
             int m_B = shell_B->cart_list[3 * n + 2];
 
             kinetic_matrix[m * size_B + n] = -0.5 * N_A * N_B * (
-                    D2[0][n_A][n_B] * S[1][l_A][l_B] * S[2][m_A][m_B] +
-                    S[0][n_A][n_B] * D2[1][l_A][l_B] * S[2][m_A][m_B] +
-                    S[0][n_A][n_B] * S[1][l_A][l_B] * D2[2][m_A][m_B]
+                D2[0][n_A][n_B] * S[1][l_A][l_B] * S[2][m_A][m_B] +
+                S[0][n_A][n_B] * D2[1][l_A][l_B] * S[2][m_A][m_B] +
+                S[0][n_A][n_B] * S[1][l_A][l_B] * D2[2][m_A][m_B]
             );
         }
     }

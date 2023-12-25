@@ -16,19 +16,19 @@
 
 
 void overlap_gradient_diff_bra_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double **grad,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double **grad,
+    double factor
 );
 
 void overlap_gradient_diff_bra_overlap_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double **overlap_down,
-        double **overlap_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double **overlap_down,
+    double **overlap_up,
+    int *cart_size_down,
+    int *cart_size_up
 );
 
 int nlm_to_linear(int *nlm);
@@ -39,10 +39,10 @@ int nlm_to_linear(int *nlm);
  * with respect to the point 'point_3d'.
  */
 void libgrpp_overlap_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *point_3d,
-        double **grad
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *point_3d,
+    double **grad
 )
 {
     int cart_size_A = libgrpp_get_shell_size(shell_A);
@@ -90,10 +90,10 @@ void libgrpp_overlap_integrals_gradient(
  * (bra basis function is differentiated).
  */
 void overlap_gradient_diff_bra_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double **grad,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double **grad,
+    double factor
 )
 {
     /*
@@ -129,7 +129,7 @@ void overlap_gradient_diff_bra_contribution(
                     bra_nlm[icoord] += 1;
 
                     grad[icoord][index] -=
-                            factor * bra_nlm[icoord] * overlap_down[shell_B->cart_size * bra_index + ket_index];
+                        factor * bra_nlm[icoord] * overlap_down[shell_B->cart_size * bra_index + ket_index];
                 }
 
                 /*
@@ -164,12 +164,12 @@ void overlap_gradient_diff_bra_contribution(
  *
  */
 void overlap_gradient_diff_bra_overlap_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double **overlap_down,
-        double **overlap_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double **overlap_down,
+    double **overlap_up,
+    int *cart_size_down,
+    int *cart_size_up
 )
 {
     /*
@@ -192,8 +192,7 @@ void overlap_gradient_diff_bra_overlap_integrals(
     if (shell_A_down != NULL) {
         *overlap_down = (double *) calloc(shell_A_down->cart_size * shell_B->cart_size, sizeof(double));
         libgrpp_overlap_integrals(shell_A_down, shell_B, *overlap_down);
-    }
-    else {
+    } else {
         *overlap_down = NULL;
     }
 

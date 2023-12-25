@@ -10,7 +10,13 @@
 
 #include "libgrpp.h"
 
-void libgrpp_type1_integrals_mcmurchie_davidson_1978(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                                     double *origin_C, double alpha_C, int ecp_power, double *rpp_matrix);
+void libgrpp_type1_integrals_mcmurchie_davidson_1978(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *origin_C,
+    double alpha_C,
+    int ecp_power,
+    double *rpp_matrix
+);
 
 #endif // TYPE1_MCMURCHIE_DAVIDSON_H

@@ -128,7 +128,7 @@
 
 {\bf a library for the evaluation of molecular integrals \\
 of the generalized relativistic pseudopotential operator (GRPP) over Gaussian functions \\
-v 1.1.0}
+v 1.2.0}
 
 \bigskip
 
@@ -193,7 +193,8 @@ Other one-electron integrals:
 
 \noindent
 \texttt{libgrpp} provides C and Fortran 90 programming interfaces. \\
-\texttt{libgrpp} does not depend on any external libraries.
+\texttt{libgrpp} does not depend on any external libraries. \\
+\texttt{libgrpp} is designed to be thread-safe and can be used in multi-threaded applications.
 
 \subsection{How to compile library and run tests}
 
@@ -441,6 +442,25 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *grpp);
 \end{lstlisting}
 %
 Please note that for the \texttt{libgrpp\_grpp\_t} object the semi-local spin-orbit potentials $U^{SO}_l(r)$ are multiplied by $\frac{2}{2l+1}$ \textit{inside} the \texttt{libgrpp} subroutines. This factor should not be accounted for during the construction of the \texttt{libgrpp\_grpp\_t} object!
+
+
+\subsection{Initialization and finalization}
+
+To be ready for calculations, \texttt{libgrpp} must be initialized. Initialization is needed to perform some pre-tabulations in a thread-safe manner. Optionally finalization can also be done at exit.
+
+C interface:
+%
+\begin{lstlisting}[language=C++]
+void libgrpp_init();
+void libgrpp_finalize();
+\end{lstlisting}
+
+Fortran 90 interface:
+%
+\begin{lstlisting}[language=Fortran]
+subroutine libgrpp_init()
+subroutine libgrpp_finalize()
+\end{lstlisting}
 
 
 \subsection{Scalar-relativistic part: local potential integrals (type 1 integrals)}
@@ -1205,6 +1225,8 @@ Fortran 90 interface is the same as for the \texttt{libgrpp\_nuclear\_attraction
 
 \texttt{libgrpp} provides two simple demonstration programs, \texttt{test\_libgrpp\_c} and \texttt{test\_libgrpp\_f90}. These programs illustrate how to call the \texttt{libgrpp} routines. Here we present the most important code samples in both C and Fortran languages. Note that \texttt{libgrpp} should not be initialized before the use; this initialization
 is implicit and is performed the first time when the library is accessed from the client code.
+
+\emph{\color{red}Do not forget to invoke the \texttt{libgrpp\_init()} subroutine for initialization before any other calls to the \texttt{libgrpp} interface!}
 
 \subsection{Example: C}
 

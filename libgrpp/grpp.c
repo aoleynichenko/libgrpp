@@ -74,11 +74,9 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *grpp)
         libgrpp_delete_potential(grpp->U_L);
     }
 
-    if (grpp->n_arep > 0) {
-        for (int i = 0; i < grpp->n_arep; i++) {
-            if (grpp->U_arep[i] != NULL) {
-                libgrpp_delete_potential(grpp->U_arep[i]);
-            }
+    for (int i = 0; i < grpp->n_arep; i++) {
+        if (grpp->U_arep[i] != NULL) {
+            libgrpp_delete_potential(grpp->U_arep[i]);
         }
     }
     free(grpp->U_arep);
@@ -86,11 +84,9 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *grpp)
     /*
      * effective spin-orbit operator
      */
-    if (grpp->n_esop > 0) {
-        for (int i = 0; i < grpp->n_esop; i++) {
-            if (grpp->U_esop[i] != NULL) {
-                libgrpp_delete_potential(grpp->U_esop[i]);
-            }
+    for (int i = 0; i < grpp->n_esop; i++) {
+        if (grpp->U_esop[i] != NULL) {
+            libgrpp_delete_potential(grpp->U_esop[i]);
         }
     }
     free(grpp->U_esop);
@@ -98,14 +94,12 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *grpp)
     /*
      * outercore shells and potentials
      */
-    if (grpp->n_oc_shells > 0) {
-        for (int i = 0; i < grpp->n_oc_shells; i++) {
-            if (grpp->U_oc[i] != NULL) {
-                libgrpp_delete_potential(grpp->U_oc[i]);
-            }
-            if (grpp->oc_shells[i] != NULL) {
-                libgrpp_delete_shell(grpp->oc_shells[i]);
-            }
+    for (int i = 0; i < grpp->n_oc_shells; i++) {
+        if (grpp->U_oc[i] != NULL) {
+            libgrpp_delete_potential(grpp->U_oc[i]);
+        }
+        if (grpp->oc_shells[i] != NULL) {
+            libgrpp_delete_shell(grpp->oc_shells[i]);
         }
     }
     free(grpp->U_oc);

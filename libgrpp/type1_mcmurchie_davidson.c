@@ -43,8 +43,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "boys.h"
-#include "gfun.h"
+#include "specfunc.h"
 #include "libgrpp.h"
 #include "norm_gaussian.h"
 #include "utils.h"
@@ -74,24 +73,24 @@ struct mmd_data {
  */
 
 double evaluate_rpp_type1_mmd_n2_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 );
 
 double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 );
 
 double evaluate_rpp_type1_mmd_n0_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 );
 
 void setup_E_array(struct mmd_data *data, int L_A, int L_B);
@@ -106,8 +105,8 @@ void setup_G_array(struct mmd_data *data, int L_A, int L_B);
  * over the radially local RPP operator.
  */
 void libgrpp_type1_integrals_mcmurchie_davidson_1978(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double *origin_C, double alpha_C, int ecp_power, double *rpp_matrix
+    libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
+    double *origin_C, double alpha_C, int ecp_power, double *rpp_matrix
 )
 {
     assert((ecp_power == 0) || (ecp_power == 1) || (ecp_power == 2));
@@ -124,38 +123,38 @@ void libgrpp_type1_integrals_mcmurchie_davidson_1978(
      */
     for (int i = 0; i < shell_A->num_primitives; i++) {
         double coef_A_i = shell_A->coeffs[i];
-        if (fabs(coef_A_i) < 1e-15) {
+        if (fabs(coef_A_i) < LIBGRPP_ZERO_THRESH) {
             continue;
         }
 
         for (int j = 0; j < shell_B->num_primitives; j++) {
             double coef_B_j = shell_B->coeffs[j];
-            if (fabs(coef_B_j) < 1e-15) {
+            if (fabs(coef_B_j) < LIBGRPP_ZERO_THRESH) {
                 continue;
             }
 
             if (ecp_power == 2) {
                 evaluate_rpp_type1_mmd_n2_primitive_shell_pair(
-                        shell_A, shell_A->alpha[i],
-                        shell_B, shell_B->alpha[j],
-                        origin_C, alpha_C,
-                        buf
+                    shell_A, shell_A->alpha[i],
+                    shell_B, shell_B->alpha[j],
+                    origin_C, alpha_C,
+                    buf
                 );
             }
             else if (ecp_power == 1) {
                 evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
-                        shell_A, shell_A->alpha[i],
-                        shell_B, shell_B->alpha[j],
-                        origin_C, alpha_C,
-                        buf
+                    shell_A, shell_A->alpha[i],
+                    shell_B, shell_B->alpha[j],
+                    origin_C, alpha_C,
+                    buf
                 );
             }
             else if (ecp_power == 0) {
                 evaluate_rpp_type1_mmd_n0_primitive_shell_pair(
-                        shell_A, shell_A->alpha[i],
-                        shell_B, shell_B->alpha[j],
-                        origin_C, alpha_C,
-                        buf
+                    shell_A, shell_A->alpha[i],
+                    shell_B, shell_B->alpha[j],
+                    origin_C, alpha_C,
+                    buf
                 );
             }
 
@@ -171,10 +170,10 @@ void libgrpp_type1_integrals_mcmurchie_davidson_1978(
  * Integrals of the operator: e^{-ar^2}/r^2
  */
 double evaluate_rpp_type1_mmd_n0_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 )
 {
     double a = alpha_A;
@@ -272,10 +271,10 @@ double evaluate_rpp_type1_mmd_n0_primitive_shell_pair(
  * Integrals of the operator: e^{-ar^2}/r
  */
 double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 )
 {
     double a = alpha_A;
@@ -374,10 +373,10 @@ double evaluate_rpp_type1_mmd_n1_primitive_shell_pair(
  * Integrals of the operator: e^{-ar^2}
  */
 double evaluate_rpp_type1_mmd_n2_primitive_shell_pair(
-        libgrpp_shell_t *shell_A, double alpha_A,
-        libgrpp_shell_t *shell_B, double alpha_B,
-        double *rpp_origin, double rpp_alpha,
-        double *rpp_matrix
+    libgrpp_shell_t *shell_A, double alpha_A,
+    libgrpp_shell_t *shell_B, double alpha_B,
+    double *rpp_origin, double rpp_alpha,
+    double *rpp_matrix
 )
 {
     double a = alpha_A;

@@ -5,7 +5,7 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
-#include "mymathlib.h"
+#include "specfunc.h"
 
 /*
  * This code is taken from the website:
@@ -13,7 +13,7 @@
  */
 
 ////////////////////////////////////////////////////////////////////////////////
-// File: dawsons_integral.c                                                   //
+// File: specfunc_dawson.c                                                    //
 // Routine(s):                                                                //
 //    Dawsons_Integral                                                        //
 //    xDawsons_Integral                                                       //
