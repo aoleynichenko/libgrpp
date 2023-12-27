@@ -14,8 +14,12 @@ find_package(OpenMP)
 
 add_subdirectory(libgrpp)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -O3")
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS} -O3")
+if (OpenMP_C_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -O3")
+endif ()
+if (OpenMP_Fortran_FOUND)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS} -O3")
+endif ()
 #add_compile_options(-pg)
 
 # testing binary
@@ -43,8 +47,12 @@ add_executable(test_libgrpp_f90.x
         test_libgrpp_f90/libgrpp.f90
         )
 
-target_link_libraries(test_libgrpp_c.x libgrpp -lm ${OpenMP_C_LIBRARIES}) # -pg)
-target_link_libraries(test_libgrpp_f90.x libgrpp -lm ${OpenMP_C_LIBRARIES})
+target_link_libraries(test_libgrpp_c.x libgrpp -lm) # -pg)
+target_link_libraries(test_libgrpp_f90.x libgrpp -lm)
+if (OpenMP_C_FOUND)
+    target_link_libraries(test_libgrpp_c.x ${OpenMP_C_LIBRARIES})
+    target_link_libraries(test_libgrpp_f90.x ${OpenMP_C_LIBRARIES})
+endif ()
 
 
 # enable testing functionality
@@ -60,6 +68,6 @@ add_test(NAME H2O    WORKING_DIRECTORY ../test/H2O    COMMAND bash run_test.sh)
 add_test(NAME ThO    WORKING_DIRECTORY ../test/ThO    COMMAND bash run_test.sh)
 add_test(NAME UO2    WORKING_DIRECTORY ../test/UO2    COMMAND bash run_test.sh)
 
-foreach (t KCs)
+foreach (t KCs Cs K Tl_qz H2O ThO UO2)
     set_property(TEST ${t} PROPERTY ENVIRONMENT "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}")
 endforeach ()

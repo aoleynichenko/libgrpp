@@ -11,7 +11,9 @@ project(libgrpp C)
 set(CMAKE_C_STANDARD 11)
 
 find_package(OpenMP)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -O3")
+if (OpenMP_C_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -O3")
+endif ()
 #add_compile_options(-pg)
 
 add_library(libgrpp
