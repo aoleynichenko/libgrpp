@@ -8,20 +8,16 @@
 add_library(grpp
         angular_integrals.c
         binomial.c
-        bessel_table.c
-        boys.c
         diff_gaussian.c
         factorial.c
         fortran.c
         full_grpp_integrals.c
-        gfun.c
         grpp.c
         grpp_integrals_gradient.c
+        init_finalize.c
         kinetic.c
         lmatrix.c
         momentum.c
-        mymathlib_dawson.c
-        mymathlib.c
         norm_gaussian.c
         nuclear_attraction.c
         nuclear_models.c
@@ -32,17 +28,21 @@ add_library(grpp
         potential.c
         radial_type1_integral.c
         radial_type2_integral.c
-        scaled_mod_sph_bessel.c
         screening.c
         shell.c
+        specfunc_bessel_table.c
+        specfunc_boys.c
+        specfunc_dawson.c
         specfunc_fermi_sk.c
+        specfunc_gfun.c
+        specfunc_scaled_mod_sph_bessel.c
         spherical_harmonics.c
         spin_orbit_integrals.c
         type1_integrals.c
         type1_mcmurchie_davidson.c
         type2_integrals.c
         utils.c
-        )
+)
 
 target_link_libraries(grpp INTERFACE -lm)
 

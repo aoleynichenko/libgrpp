@@ -5,7 +5,7 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
-#include "specfunc_fermi_sk.h"
+#include "specfunc.h"
 
 #include <assert.h>
 #include <math.h>
@@ -30,7 +30,7 @@
  * overall 2000 x-points.
  */
 
-extern double specfunc_fermi_sk_table[2001][10];
+extern const double specfunc_fermi_sk_table[2001][10];
 
 
 /**
@@ -67,13 +67,11 @@ double specfunc_fermi_sk(int k, double x)
     double x0 = -10.0 + i0 * 0.005;
     double dx = x - x0;
 
-    //printf("x=%10.6f  x0=%10.6f  i0=%d\n", x, x0, i0);
-
     if (i0 == 2000) { // special case: x == 0.0
         return specfunc_fermi_sk_table[i0][k + 2];
     }
 
-    double *derivatives = specfunc_fermi_sk_table[i0];
+    const double *derivatives = specfunc_fermi_sk_table[i0];
 
     double d0 = derivatives[k + 2]; // f(x0)
     double d1 = derivatives[k + 1]; // f'(x0)
@@ -128,7 +126,7 @@ double fermi_model_Sk(int k, double x)
 }
 
 
-double specfunc_fermi_sk_table[2001][10] = {
+const double specfunc_fermi_sk_table[2001][10] = {
 // x = -10.0000
         {
                 -4.5391685990113197e-05, -4.5395807735951667e-05, -4.5397868702434395e-05, -4.5398899216864647e-05,

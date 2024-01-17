@@ -5,7 +5,8 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
-#include "scaled_mod_sph_bessel.h"
+
+#include "specfunc.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -37,9 +38,27 @@ double modified_scaled_bessel_derivative(int n, int lambda, int ix);
 
 double bessel_asymptotic_R_function(int n, double x);
 
-extern double rfun_coeffs[50][50];
+extern const double rfun_coeffs[50][50];
+extern const double bessel_table_0[1601][60];
 
-extern double bessel_table_0[1601][60];
+
+void pretabulate_bessel()
+{
+    for (int i = 0; i <= 1600; i++) {
+
+        // Bessel functions
+        for (int lam = 0; lam <= 3 * LMAX - 1; lam++) {
+            bessel_table[i][lam][0] = bessel_table_0[i][lam];
+        }
+
+        // and their 1st, 2nd, 3rd, 4th derivatives
+        for (int k = 1; k < 5; k++) {
+            for (int lam = 0; lam <= 3 * LMAX - 1 - 5; lam++) {
+                bessel_table[i][lam][k] = modified_scaled_bessel_derivative(k, lam, i);
+            }
+        }
+    }
+}
 
 
 /*
@@ -47,66 +66,16 @@ extern double bessel_table_0[1601][60];
  */
 double modified_bessel_scaled(int n, double x)
 {
-    static int bessel_pretabulated = 0;
+    //static int bessel_pretabulated = 0;
 
     /*
      * pre-tabulation step.
      * this code is invoked only once at start of the LIBGRPP library
      */
-    if (bessel_pretabulated == 0) {
-
-
-        /*FILE *f_bessel_tab = fopen("bessel_table.dat", "w");
-
-        for (int i = 0; i <= 1600; i++) {
-            double xi = 0.01 * i;
-
-            fprintf(f_bessel_tab, "// x = %.4f\n", xi);
-            fprintf(f_bessel_tab, "{\n");
-
-            // Bessel functions
-            for (int lam = 0; lam <= 3 * LMAX - 1; lam++) {
-                bessel_table[i][lam][0] = gsl_sf_bessel_il_scaled(lam, xi);
-                fprintf(f_bessel_tab, "%26.16e", bessel_table[i][lam][0]);
-
-                if (lam != 3 * LMAX - 1) {
-                    fprintf(f_bessel_tab, ",");
-                }
-
-                if ((lam + 1) % 4 == 0) {
-                    fprintf(f_bessel_tab, "\n");
-                }
-            }
-
-            fprintf(f_bessel_tab, "},\n");
-
-            // and their 1st, 2nd, 3rd, 4th derivatives
-            for (int k = 1; k < 5; k++) {
-                for (int lam = 0; lam <= 3 * LMAX - 1 - 5; lam++) {
-                    bessel_table[i][lam][k] = modified_scaled_bessel_derivative(k, lam, i);
-                }
-            }
-        }
-
-        fclose(f_bessel_tab);*/
-
-        for (int i = 0; i <= 1600; i++) {
-
-            // Bessel functions
-            for (int lam = 0; lam <= 3 * LMAX - 1; lam++) {
-                bessel_table[i][lam][0] = bessel_table_0[i][lam];
-            }
-
-            // and their 1st, 2nd, 3rd, 4th derivatives
-            for (int k = 1; k < 5; k++) {
-                for (int lam = 0; lam <= 3 * LMAX - 1 - 5; lam++) {
-                    bessel_table[i][lam][k] = modified_scaled_bessel_derivative(k, lam, i);
-                }
-            }
-        }
-
+    /*if (bessel_pretabulated == 0) {
+        pretabulate_bessel();
         bessel_pretabulated = 1;
-    }
+    }*/
 
     /*
      * use Taylor expansion
@@ -122,8 +91,7 @@ double modified_bessel_scaled(int n, double x)
             default:
                 return 0.0;
         }
-    }
-    else if (x <= 16.0) {
+    } else if (x <= 16.0) {
 
         int i0 = (int) (round(x * 100) + 1e-5);
         double x0 = i0 * 0.01;
@@ -148,39 +116,9 @@ double modified_bessel_scaled(int n, double x)
                      d4 * dx4 * (1.0 / 24.0);
 
         return sum;
-    }
-    else {
+    } else {
         return bessel_asymptotic_R_function(n, -x) / (2.0 * x);
     }
-
-
-    /*
-     * GSL version (works slower)
-     */
-
-    /*
-    gsl_sf_result result;
-
-    gsl_set_error_handler_off();
-
-    int status = gsl_sf_bessel_il_scaled_e(n, x, &result);
-
-    if (status == 0) {
-
-    }
-    else if (status == 11) {
-        //printf ("error: %s\n", gsl_strerror (status));
-        //printf("val = %30.16e\n", result.val);
-        //printf("err = %30.16e\n", result.err);
-    }
-    else {
-        printf("error in modified bessel function!\n");
-        printf("error: %s\n", gsl_strerror(status));
-        exit(0);
-    }
-
-    return result.val;
-    */
 }
 
 
@@ -241,7 +179,7 @@ double bessel_asymptotic_R_function(int n, double x)
 
     double denom = 1.0;
     double inv_x = 1.0 / x;
-    double *coeffs = rfun_coeffs[n];
+    const double *coeffs = rfun_coeffs[n];
 
     for (int k = 0; k <= n; k++) {
         sum += coeffs[k] * denom;
@@ -256,7 +194,7 @@ double bessel_asymptotic_R_function(int n, double x)
  * pretabulated coefficients which are required for the fast calculation
  * of the R_lambda(z) asymptotic relation.
  */
-double rfun_coeffs[50][50] = {
+const double rfun_coeffs[50][50] = {
         // lambda = 0
         {1.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00,
                 0.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00, 0.0000000000000000e+00,

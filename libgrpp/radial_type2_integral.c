@@ -24,7 +24,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "scaled_mod_sph_bessel.h"
+#include "specfunc.h"
 #include "screening.h"
 #include "utils.h"
 #include "norm_gaussian.h"
@@ -66,26 +66,26 @@ typedef struct {
  */
 
 double calculate_radial_type2_integral(
-        radial_type2_grid_t *grid,
-        int n, int lambda1, int lambda2,
-        double tolerance, int *converged
+    radial_type2_grid_t *grid,
+    int n, int lambda1, int lambda2,
+    double tolerance, int *converged
 );
 
 radial_type2_grid_t *create_radial_type2_grid(
-        int lambda1_max,
-        int lambda2_max,
-        int n_max,
-        radial_type2_params_t *params
+    int lambda1_max,
+    int lambda2_max,
+    int n_max,
+    radial_type2_params_t *params
 );
 
 void delete_radial_type2_grid(radial_type2_grid_t *grid);
 
 double radial_type2_integrand_fun_contracted(
-        double r,
-        int lambda,
-        double *k,
-        double CA,
-        libgrpp_shell_t *gauss_fun
+    double r,
+    int lambda,
+    double *k,
+    double CA,
+    libgrpp_shell_t *gauss_fun
 );
 
 void expand_radial_type2_grid(radial_type2_grid_t *grid, int nr);
@@ -99,14 +99,14 @@ double gaussian_integral(int n, double a);
  * Creates table with pre-calculated radial type 2 integrals.
  */
 radial_type2_table_t *tabulate_radial_type2_integrals(
-        int lambda1_max,
-        int lambda2_max,
-        int n_max,
-        double CA_2,
-        double CB_2,
-        libgrpp_potential_t *potential,
-        libgrpp_shell_t *bra,
-        libgrpp_shell_t *ket
+    int lambda1_max,
+    int lambda2_max,
+    int n_max,
+    double CA_2,
+    double CB_2,
+    libgrpp_potential_t *potential,
+    libgrpp_shell_t *bra,
+    libgrpp_shell_t *ket
 )
 {
     /*
@@ -263,15 +263,15 @@ double calculate_radial_type2_integral(radial_type2_grid_t *grid, int n, int lam
 
     double screened = 0.0;
     int screen_success = screening_radial_type2(
-            lambda1,
-            lambda2,
-            n,
-            CA * CA,
-            CB * CB,
-            grid->params->bra,
-            grid->params->ket,
-            grid->params->potential,
-            &screened
+        lambda1,
+        lambda2,
+        n,
+        CA * CA,
+        CB * CB,
+        grid->params->bra,
+        grid->params->ket,
+        grid->params->potential,
+        &screened
     );
 
     if (screen_success == EXIT_SUCCESS && fabs(screened) < tolerance) {
@@ -322,10 +322,10 @@ double calculate_radial_type2_integral(radial_type2_grid_t *grid, int n, int lam
  * Numerical integration on the Log3 grid
  */
 radial_type2_grid_t *create_radial_type2_grid(
-        int lambda1_max,
-        int lambda2_max,
-        int n_max,
-        radial_type2_params_t *params
+    int lambda1_max,
+    int lambda2_max,
+    int n_max,
+    radial_type2_params_t *params
 )
 {
     radial_type2_grid_t *grid = (radial_type2_grid_t *) calloc(1, sizeof(radial_type2_grid_t));
@@ -369,11 +369,11 @@ radial_type2_grid_t *create_radial_type2_grid(
         }
         for (int lambda1 = 0; lambda1 <= lambda1_max; lambda1++) {
             grid->F1[lambda1][i - 1] = radial_type2_integrand_fun_contracted(
-                    ri, lambda1, bra_k, params->CA, params->bra);
+                ri, lambda1, bra_k, params->CA, params->bra);
         }
         for (int lambda2 = 0; lambda2 <= lambda2_max; lambda2++) {
             grid->F2[lambda2][i - 1] = radial_type2_integrand_fun_contracted(
-                    ri, lambda2, ket_k, params->CB, params->ket);
+                ri, lambda2, ket_k, params->CB, params->ket);
         }
     }
 
@@ -427,11 +427,11 @@ void expand_radial_type2_grid(radial_type2_grid_t *grid, int nr)
 
         for (int lambda1 = 0; lambda1 <= grid->lambda1_max; lambda1++) {
             grid->F1[lambda1][idx] = radial_type2_integrand_fun_contracted(
-                    ri, lambda1, bra_k, grid->params->CA, params->bra);
+                ri, lambda1, bra_k, grid->params->CA, params->bra);
         }
         for (int lambda2 = 0; lambda2 <= grid->lambda2_max; lambda2++) {
             grid->F2[lambda2][idx] = radial_type2_integrand_fun_contracted(
-                    ri, lambda2, ket_k, grid->params->CB, params->ket);
+                ri, lambda2, ket_k, grid->params->CB, params->ket);
         }
 
         idx++;

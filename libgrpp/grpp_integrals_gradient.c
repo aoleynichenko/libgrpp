@@ -17,96 +17,96 @@
 
 
 void grpp_gradient_diff_bra_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    double factor
 );
 
 
 void grpp_gradient_diff_bra_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up
 );
 
 
 void grpp_gradient_diff_ket_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    double factor
 );
 
 
 void grpp_gradient_diff_ket_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up
 );
 
 void grpp_gradient_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        int diff_bra,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    int diff_bra,
+    double factor
 );
 
 
 void grpp_gradient_diff_gaussian(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up,
-        int diff_bra
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up,
+    int diff_bra
 );
 
 int nlm_to_linear(int *nlm);
@@ -121,12 +121,12 @@ void libgrpp_dealloc_gradients(double **grad);
  * with respect to the point 'point_3d'.
  */
 void libgrpp_type1_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_arep
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_arep
 )
 {
     libgrpp_grpp_t *grpp_operator = libgrpp_new_grpp();
@@ -141,8 +141,8 @@ void libgrpp_type1_integrals_gradient(
     double **stub_grad_so_z = libgrpp_alloc_gradients(shell_A, shell_B);
 
     libgrpp_full_grpp_integrals_gradient(
-            shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
-            grad_arep, stub_grad_so_x, stub_grad_so_y, stub_grad_so_z
+        shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
+        grad_arep, stub_grad_so_x, stub_grad_so_y, stub_grad_so_z
     );
 
     libgrpp_dealloc_gradients(stub_grad_so_x);
@@ -159,12 +159,12 @@ void libgrpp_type1_integrals_gradient(
  * with respect to the point 'point_3d'.
  */
 void libgrpp_type2_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_arep
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_arep
 )
 {
     libgrpp_grpp_t *grpp_operator = libgrpp_new_grpp();
@@ -179,8 +179,8 @@ void libgrpp_type2_integrals_gradient(
     double **stub_grad_so_z = libgrpp_alloc_gradients(shell_A, shell_B);
 
     libgrpp_full_grpp_integrals_gradient(
-            shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
-            grad_arep, stub_grad_so_x, stub_grad_so_y, stub_grad_so_z
+        shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
+        grad_arep, stub_grad_so_x, stub_grad_so_y, stub_grad_so_z
     );
 
     libgrpp_dealloc_gradients(stub_grad_so_x);
@@ -197,18 +197,17 @@ void libgrpp_type2_integrals_gradient(
  * operator (potential) for a given shell pair (with respect to the point 'point_3d').
  */
 void libgrpp_spin_orbit_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 )
 {
     libgrpp_grpp_t *grpp_operator = libgrpp_new_grpp();
-    libgrpp_grpp_add_spin_orbit_potential(grpp_operator, potential); // kostyl'
     libgrpp_grpp_add_spin_orbit_potential(grpp_operator, potential);
 
     /*
@@ -218,9 +217,24 @@ void libgrpp_spin_orbit_integrals_gradient(
     double **stub_grad_arep = libgrpp_alloc_gradients(shell_A, shell_B);
 
     libgrpp_full_grpp_integrals_gradient(
-            shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
-            stub_grad_arep, grad_so_x, grad_so_y, grad_so_z
+        shell_A, shell_B, grpp_operator, grpp_origin, point_3d,
+        stub_grad_arep, grad_so_x, grad_so_y, grad_so_z
     );
+
+    /*
+     * inside the libgrpp_full_grpp_integrals_gradient() function
+     * the SO potential was scaled by 2/(2L+1). Thus the result has to be
+     * re-scaled by (2L+1)/2 to get rid of any problems with pre-factor
+     */
+    int L = potential->L;
+    int buf_size = shell_A->cart_size * shell_B->cart_size;
+    for (int icoord = 0; icoord < 3; icoord++) {
+        for (int i = 0; i < buf_size; i++) {
+            grad_so_x[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+            grad_so_y[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+            grad_so_z[icoord][i] *= (2.0 * L + 1.0) / 2.0;
+        }
+    }
 
     libgrpp_dealloc_gradients(stub_grad_arep);
 
@@ -230,17 +244,17 @@ void libgrpp_spin_orbit_integrals_gradient(
 
 
 void libgrpp_outercore_potential_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        int num_oc_shells,
-        libgrpp_potential_t **oc_potentials,
-        libgrpp_shell_t **oc_shells,
-        double *point_3d,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    int num_oc_shells,
+    libgrpp_potential_t **oc_potentials,
+    libgrpp_shell_t **oc_shells,
+    double *point_3d,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 )
 {
     libgrpp_grpp_t *grpp_operator = libgrpp_new_grpp();
@@ -249,8 +263,8 @@ void libgrpp_outercore_potential_integrals_gradient(
     }
 
     libgrpp_full_grpp_integrals_gradient(
-            shell_A, shell_B, grpp_operator, rpp_origin, point_3d,
-            grad_arep, grad_so_x, grad_so_y, grad_so_z
+        shell_A, shell_B, grpp_operator, rpp_origin, point_3d,
+        grad_arep, grad_so_x, grad_so_y, grad_so_z
     );
 
     grpp_operator->n_oc_shells = 0;
@@ -264,15 +278,15 @@ void libgrpp_outercore_potential_integrals_gradient(
  * (for the full GRPP operator which includes local, semi-local and non-local parts)
  */
 void libgrpp_full_grpp_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double *point_3d,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double *point_3d,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 )
 {
     int cart_size_A = shell_A->cart_size;
@@ -305,7 +319,6 @@ void libgrpp_full_grpp_integrals_gradient(
         !points_are_equal(grpp_origin, point_3d)) {
         return;
     }
-
 
     double *A = shell_A->origin;
     double *B = shell_B->origin;
@@ -388,15 +401,15 @@ void libgrpp_full_grpp_integrals_gradient(
  * (bra basis function is differentiated).
  */
 void grpp_gradient_diff_bra_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    double factor
 )
 {
     /*
@@ -414,10 +427,10 @@ void grpp_gradient_diff_bra_contribution(
     int cart_size_up = 0;
 
     grpp_gradient_diff_bra_grpp_integrals(
-            shell_A, shell_B, grpp_operator, grpp_origin,
-            &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
-            &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
-            &cart_size_down, &cart_size_up
+        shell_A, shell_B, grpp_operator, grpp_origin,
+        &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
+        &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
+        &cart_size_down, &cart_size_up
     );
 
     /*
@@ -450,13 +463,13 @@ void grpp_gradient_diff_bra_contribution(
                     bra_nlm[icoord] += 1;
 
                     grad_arep[icoord][index] -=
-                            factor * bra_nlm[icoord] * arep_matrix_down[shell_B->cart_size * bra_index + ket_index];
+                        factor * bra_nlm[icoord] * arep_matrix_down[shell_B->cart_size * bra_index + ket_index];
                     grad_so_x[icoord][index] -=
-                            factor * bra_nlm[icoord] * so_x_matrix_down[shell_B->cart_size * bra_index + ket_index];
+                        factor * bra_nlm[icoord] * so_x_matrix_down[shell_B->cart_size * bra_index + ket_index];
                     grad_so_y[icoord][index] -=
-                            factor * bra_nlm[icoord] * so_y_matrix_down[shell_B->cart_size * bra_index + ket_index];
+                        factor * bra_nlm[icoord] * so_y_matrix_down[shell_B->cart_size * bra_index + ket_index];
                     grad_so_z[icoord][index] -=
-                            factor * bra_nlm[icoord] * so_z_matrix_down[shell_B->cart_size * bra_index + ket_index];
+                        factor * bra_nlm[icoord] * so_z_matrix_down[shell_B->cart_size * bra_index + ket_index];
                 }
 
                 /*
@@ -500,20 +513,20 @@ void grpp_gradient_diff_bra_contribution(
  *
  */
 void grpp_gradient_diff_bra_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up
 )
 {
     /*
@@ -540,9 +553,8 @@ void grpp_gradient_diff_bra_grpp_integrals(
         *so_z_matrix_down = (double *) calloc(mat_size_down, sizeof(double));
 
         libgrpp_full_grpp_integrals(
-                //evaluate_grpp_integrals_shell_pair(
-                shell_A_down, shell_B, grpp_operator, grpp_origin,
-                *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
+            shell_A_down, shell_B, grpp_operator, grpp_origin,
+            *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
         );
     } else {
         *arep_matrix_down = NULL;
@@ -561,9 +573,8 @@ void grpp_gradient_diff_bra_grpp_integrals(
     *so_z_matrix_up = (double *) calloc(mat_size_up, sizeof(double));
 
     libgrpp_full_grpp_integrals(
-            //evaluate_grpp_integrals_shell_pair(
-            shell_A_up, shell_B, grpp_operator, grpp_origin,
-            *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
+        shell_A_up, shell_B, grpp_operator, grpp_origin,
+        *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
     );
 
     /*
@@ -584,15 +595,15 @@ void grpp_gradient_diff_bra_grpp_integrals(
  * (bra basis function is differentiated).
  */
 void grpp_gradient_diff_ket_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    double factor
 )
 {
     /*
@@ -610,10 +621,10 @@ void grpp_gradient_diff_ket_contribution(
     int cart_size_up = 0;
 
     grpp_gradient_diff_ket_grpp_integrals(
-            shell_A, shell_B, grpp_operator, grpp_origin,
-            &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
-            &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
-            &cart_size_down, &cart_size_up
+        shell_A, shell_B, grpp_operator, grpp_origin,
+        &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
+        &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
+        &cart_size_down, &cart_size_up
     );
 
     /*
@@ -646,13 +657,13 @@ void grpp_gradient_diff_ket_contribution(
                     ket_nlm[icoord] += 1;
 
                     grad_arep[icoord][index] -=
-                            factor * ket_nlm[icoord] * arep_matrix_down[cart_size_down * bra_index + ket_index];
+                        factor * ket_nlm[icoord] * arep_matrix_down[cart_size_down * bra_index + ket_index];
                     grad_so_x[icoord][index] -=
-                            factor * ket_nlm[icoord] * so_x_matrix_down[cart_size_down * bra_index + ket_index];
+                        factor * ket_nlm[icoord] * so_x_matrix_down[cart_size_down * bra_index + ket_index];
                     grad_so_y[icoord][index] -=
-                            factor * ket_nlm[icoord] * so_y_matrix_down[cart_size_down * bra_index + ket_index];
+                        factor * ket_nlm[icoord] * so_y_matrix_down[cart_size_down * bra_index + ket_index];
                     grad_so_z[icoord][index] -=
-                            factor * ket_nlm[icoord] * so_z_matrix_down[cart_size_down * bra_index + ket_index];
+                        factor * ket_nlm[icoord] * so_z_matrix_down[cart_size_down * bra_index + ket_index];
                 }
 
                 /*
@@ -696,20 +707,20 @@ void grpp_gradient_diff_ket_contribution(
  *
  */
 void grpp_gradient_diff_ket_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up
 )
 {
     /*
@@ -736,9 +747,9 @@ void grpp_gradient_diff_ket_grpp_integrals(
         *so_z_matrix_down = (double *) calloc(mat_size_down, sizeof(double));
 
         libgrpp_full_grpp_integrals(
-                //evaluate_grpp_integrals_shell_pair(
-                shell_A, shell_B_down, grpp_operator, grpp_origin,
-                *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
+            //evaluate_grpp_integrals_shell_pair(
+            shell_A, shell_B_down, grpp_operator, grpp_origin,
+            *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
         );
     } else {
         *arep_matrix_down = NULL;
@@ -757,9 +768,9 @@ void grpp_gradient_diff_ket_grpp_integrals(
     *so_z_matrix_up = (double *) calloc(mat_size_up, sizeof(double));
 
     libgrpp_full_grpp_integrals(
-            //evaluate_grpp_integrals_shell_pair(
-            shell_A, shell_B_up, grpp_operator, grpp_origin,
-            *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
+        //evaluate_grpp_integrals_shell_pair(
+        shell_A, shell_B_up, grpp_operator, grpp_origin,
+        *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
     );
 
     /*
@@ -773,16 +784,16 @@ void grpp_gradient_diff_ket_grpp_integrals(
 
 
 void grpp_gradient_contribution(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z,
-        int diff_bra,
-        double factor
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z,
+    int diff_bra,
+    double factor
 )
 {
     int diff_ket = 0;
@@ -810,10 +821,10 @@ void grpp_gradient_contribution(
     int cart_size_up = 0;
 
     grpp_gradient_diff_gaussian(
-            shell_A, shell_B, grpp_operator, grpp_origin,
-            &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
-            &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
-            &cart_size_down, &cart_size_up, diff_bra
+        shell_A, shell_B, grpp_operator, grpp_origin,
+        &arep_matrix_down, &so_x_matrix_down, &so_y_matrix_down, &so_z_matrix_down,
+        &arep_matrix_up, &so_x_matrix_up, &so_y_matrix_up, &so_z_matrix_up,
+        &cart_size_down, &cart_size_up, diff_bra
     );
 
     /*
@@ -901,21 +912,21 @@ void grpp_gradient_contribution(
  *
  */
 void grpp_gradient_diff_gaussian(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double **arep_matrix_down,
-        double **so_x_matrix_down,
-        double **so_y_matrix_down,
-        double **so_z_matrix_down,
-        double **arep_matrix_up,
-        double **so_x_matrix_up,
-        double **so_y_matrix_up,
-        double **so_z_matrix_up,
-        int *cart_size_down,
-        int *cart_size_up,
-        int diff_bra
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double **arep_matrix_down,
+    double **so_x_matrix_down,
+    double **so_y_matrix_down,
+    double **so_z_matrix_down,
+    double **arep_matrix_up,
+    double **so_x_matrix_up,
+    double **so_y_matrix_up,
+    double **so_z_matrix_up,
+    int *cart_size_down,
+    int *cart_size_up,
+    int diff_bra
 )
 {
     int diff_ket = 0;
@@ -965,12 +976,11 @@ void grpp_gradient_diff_gaussian(
         *so_y_matrix_down = (double *) calloc(mat_size_down, sizeof(double));
         *so_z_matrix_down = (double *) calloc(mat_size_down, sizeof(double));
 
-        //evaluate_grpp_integrals_shell_pair(
         libgrpp_full_grpp_integrals(
-                diff_bra ? shell_down : shell_A,
-                diff_bra ? shell_B : shell_down,
-                grpp_operator, grpp_origin,
-                *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
+            diff_bra ? shell_down : shell_A,
+            diff_bra ? shell_B : shell_down,
+            grpp_operator, grpp_origin,
+            *arep_matrix_down, *so_x_matrix_down, *so_y_matrix_down, *so_z_matrix_down
         );
     } else {
         *arep_matrix_down = NULL;
@@ -990,11 +1000,10 @@ void grpp_gradient_diff_gaussian(
     *so_z_matrix_up = (double *) calloc(mat_size_up, sizeof(double));
 
     libgrpp_full_grpp_integrals(
-            //evaluate_grpp_integrals_shell_pair(
-            diff_bra ? shell_up : shell_A,
-            diff_bra ? shell_B : shell_up,
-            grpp_operator, grpp_origin,
-            *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
+        diff_bra ? shell_up : shell_A,
+        diff_bra ? shell_B : shell_up,
+        grpp_operator, grpp_origin,
+        *arep_matrix_up, *so_x_matrix_up, *so_y_matrix_up, *so_z_matrix_up
     );
 
     /*

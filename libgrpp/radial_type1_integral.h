@@ -17,16 +17,16 @@ typedef struct {
 } radial_type1_table_t;
 
 radial_type1_table_t *tabulate_radial_type1_integrals(
-        int lambda_max,
-        int n_max,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k,
-        double prefactor,
-        double (*potential)(double r, void *params),
-        void *potential_params
+    int lambda_max,
+    int n_max,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k,
+    double prefactor,
+    double (*potential)(double r, void *params),
+    void *potential_params
 );
 
 void delete_radial_type1_integrals(radial_type1_table_t *table);

@@ -94,7 +94,6 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
         fscanf(inp_file, "%d%d", &n_prim, &n_oc);
         skip_line(inp_file);
 
-
         for (int row = 0; row < n_prim; row++) {
 
             // power, exponent
@@ -123,7 +122,7 @@ libgrpp_grpp_t *read_grpp(char *path, int nuc_charge)
 
         if (L == 0) {
             // no SO term for angular momentum S => put NULL
-            libgrpp_grpp_add_spin_orbit_potential(grpp, NULL);
+            //libgrpp_grpp_add_spin_orbit_potential(grpp, NULL);
         }
         else {
             libgrpp_potential_t *esop = libgrpp_new_potential(L, 0, n_prim, pow_buf, coef_buf[1], exp_buf);
@@ -177,8 +176,8 @@ void print_grpp(FILE *out, libgrpp_grpp_t *grpp)
     }
 
     printf("\t\tsemi-local spin-orbit potentials:\n\n");
-    for (int L = 1; L < grpp->n_esop; L++) {
-        print_rpp_expansion(stdout, grpp->U_esop[L]);
+    for (int i_so = 0; i_so < grpp->n_esop; i_so++) {
+        print_rpp_expansion(stdout, grpp->U_esop[i_so]);
         printf("\n");
     }
 

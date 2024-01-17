@@ -14,23 +14,7 @@
  * We go to some effort to handle overflow situations.
  */
 
-static uint64_t gcd_ui(uint64_t x, uint64_t y)
-{
-    uint64_t t;
-
-    if (y < x) {
-        t = x;
-        x = y;
-        y = t;
-    }
-    while (y > 0) {
-        t = y;
-        y = x % y;
-        x = t;  /* y1 <- x0 % y0 ; x1 <- y0 */
-    }
-    return x;
-}
-
+static uint64_t gcd_ui(uint64_t x, uint64_t y);
 
 /*
  * returns binomial coefficient:
@@ -72,4 +56,22 @@ uint64_t binomial(uint64_t n, uint64_t k)
         }
     }
     return r;
+}
+
+
+static uint64_t gcd_ui(uint64_t x, uint64_t y)
+{
+    uint64_t t;
+
+    if (y < x) {
+        t = x;
+        x = y;
+        y = t;
+    }
+    while (y > 0) {
+        t = y;
+        y = x % y;
+        x = t;  /* y1 <- x0 % y0 ; x1 <- y0 */
+    }
+    return x;
 }

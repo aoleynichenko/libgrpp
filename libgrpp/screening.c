@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #include "libgrpp.h"
-#include "scaled_mod_sph_bessel.h"
+#include "specfunc.h"
 #include "factorial.h"
 
 
@@ -34,31 +34,31 @@
  */
 
 int screening_radial_type1_integral_primitive(
-        int lambda,
-        int n,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k,
-        double eta,
-        double *screened_value
+    int lambda,
+    int n,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k,
+    double eta,
+    double *screened_value
 );
 
 double screening_type1_equation_for_maximum(double r, int n, int lambda, double p, double k);
 
 int screening_radial_type2_integral_primitive(
-        int lambda1,
-        int lambda2,
-        int n,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k1,
-        double k2,
-        double eta,
-        double *screened_value
+    int lambda1,
+    int lambda2,
+    int n,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k1,
+    double k2,
+    double eta,
+    double *screened_value
 );
 
 double screening_type2_equation_for_maximum(double r, int n, int lambda1, int lambda2, double p, double k1, double k2);
@@ -71,16 +71,16 @@ double analytic_one_center_rpp_integral_primitive(int L, double alpha1, double a
  * for the pair of contracted gaussian functions.
  */
 int screening_radial_type1(
-        int lambda,
-        int n,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k,
-        double prefactor,
-        libgrpp_potential_t *potential,
-        double *screened_value
+    int lambda,
+    int n,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k,
+    double prefactor,
+    libgrpp_potential_t *potential,
+    double *screened_value
 )
 {
     *screened_value = 0.0;
@@ -99,7 +99,7 @@ int screening_radial_type1(
 
         double val_i = 0.0;
         int err_code = screening_radial_type1_integral_primitive(
-                lambda, ni, CA_2, CB_2, alpha_A, alpha_B, k, eta, &val_i
+            lambda, ni, CA_2, CB_2, alpha_A, alpha_B, k, eta, &val_i
         );
         if (err_code == EXIT_FAILURE) {
             return EXIT_FAILURE;
@@ -117,15 +117,15 @@ int screening_radial_type1(
  * for the pair of primitive gaussian functions.
  */
 int screening_radial_type1_integral_primitive(
-        int lambda,
-        int n,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k,
-        double eta,
-        double *screened_value
+    int lambda,
+    int n,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k,
+    double eta,
+    double *screened_value
 )
 {
     double p = alpha_A + alpha_B + eta;
@@ -191,15 +191,15 @@ double screening_type1_equation_for_maximum(double r, int n, int lambda, double 
  * for the pair of contracted gaussian functions.
  */
 int screening_radial_type2(
-        int lambda1,
-        int lambda2,
-        int n,
-        double CA_2,
-        double CB_2,
-        libgrpp_shell_t *bra,
-        libgrpp_shell_t *ket,
-        libgrpp_potential_t *potential,
-        double *screened_value
+    int lambda1,
+    int lambda2,
+    int n,
+    double CA_2,
+    double CB_2,
+    libgrpp_shell_t *bra,
+    libgrpp_shell_t *ket,
+    libgrpp_potential_t *potential,
+    double *screened_value
 )
 {
     *screened_value = 0.0;
@@ -233,7 +233,7 @@ int screening_radial_type2(
 
                 double val_ijk = 0.0;
                 int err_code = screening_radial_type2_integral_primitive(
-                        lambda1, lambda2, ni, CA_2, CB_2, alpha_A, alpha_B, k1, k2, eta, &val_ijk
+                    lambda1, lambda2, ni, CA_2, CB_2, alpha_A, alpha_B, k1, k2, eta, &val_ijk
                 );
                 if (err_code == EXIT_FAILURE) {
                     return EXIT_FAILURE;
@@ -270,17 +270,17 @@ double gaussian_integral(int n, double a)
  * for the pair of primitive gaussian functions.
  */
 int screening_radial_type2_integral_primitive(
-        int lambda1,
-        int lambda2,
-        int n,
-        double CA_2,
-        double CB_2,
-        double alpha_A,
-        double alpha_B,
-        double k1,
-        double k2,
-        double eta,
-        double *screened_value
+    int lambda1,
+    int lambda2,
+    int n,
+    double CA_2,
+    double CB_2,
+    double alpha_A,
+    double alpha_B,
+    double k1,
+    double k2,
+    double eta,
+    double *screened_value
 )
 {
     *screened_value = 0.0;

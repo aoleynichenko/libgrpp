@@ -27,9 +27,13 @@
 
 
 void momentum_integrals_shell_pair_obara_saika(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double alpha_A, double alpha_B,
-        double *momentum_x_matrix, double *momentum_y_matrix, double *momentum_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *momentum_x_matrix,
+    double *momentum_y_matrix,
+    double *momentum_z_matrix
 );
 
 
@@ -37,8 +41,13 @@ void momentum_integrals_shell_pair_obara_saika(
  * returns imaginary(!) part of integrals over the momentum operator p = -i \hbar \nabla.
  * The "minus" sign is included.
  */
-void libgrpp_momentum_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                double *momentum_x_matrix, double *momentum_y_matrix, double *momentum_z_matrix)
+void libgrpp_momentum_integrals(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *momentum_x_matrix,
+    double *momentum_y_matrix,
+    double *momentum_z_matrix
+)
 {
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
@@ -59,8 +68,7 @@ void libgrpp_momentum_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell
             double coef_A_i = shell_A->coeffs[i];
             double coef_B_j = shell_B->coeffs[j];
 
-            momentum_integrals_shell_pair_obara_saika(shell_A, shell_B, alpha_i, alpha_j,
-                                                      buf_x, buf_y, buf_z);
+            momentum_integrals_shell_pair_obara_saika(shell_A, shell_B, alpha_i, alpha_j, buf_x, buf_y, buf_z);
 
             libgrpp_daxpy(size_A * size_B, coef_A_i * coef_B_j, buf_x, momentum_x_matrix);
             libgrpp_daxpy(size_A * size_B, coef_A_i * coef_B_j, buf_y, momentum_y_matrix);
@@ -75,9 +83,13 @@ void libgrpp_momentum_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell
 
 
 void momentum_integrals_shell_pair_obara_saika(
-        libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-        double alpha_A, double alpha_B,
-        double *momentum_x_matrix, double *momentum_y_matrix, double *momentum_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *momentum_x_matrix,
+    double *momentum_y_matrix,
+    double *momentum_z_matrix
 )
 {
     int size_A = libgrpp_get_shell_size(shell_A);
@@ -117,8 +129,7 @@ void momentum_integrals_shell_pair_obara_saika(
                     if (j - 1 > 0) {
                         S_ij += (j - 1) * pfac * S[coord][i][j - 2];
                     }
-                }
-                else { // upward by i
+                } else { // upward by i
                     S_ij += X_PA * S[coord][i - 1][j];
                     if (i - 1 > 0) {
                         S_ij += (i - 1) * pfac * S[coord][i - 2][j];

@@ -25,7 +25,7 @@
 #include "spherical_harmonics.h"
 
 
-double integrate_unitary_sphere_polynomial(int i, int j, int k);
+static double integrate_unitary_sphere_polynomial(int i, int j, int k);
 
 
 /**
@@ -115,7 +115,7 @@ double angular_type2_integral(const int lambda, const int L, const int m, const 
  * Integral of the unitary sphere polynomial over full solid angle.
  * (see MrMurchie & Davidson, formula (30))
  */
-inline double integrate_unitary_sphere_polynomial(int i, int j, int k)
+static double integrate_unitary_sphere_polynomial(int i, int j, int k)
 {
     if ((i % 2 == 0) && (j % 2 == 0) && (k % 2 == 0)) {
         double dfac_i = (double) double_factorial(i - 1);

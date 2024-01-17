@@ -43,9 +43,6 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
                              molecule_t *molecule, libgrpp_grpp_t **grpp_list,
                              double *arep_matrix, double *so_x_matrix, double *so_y_matrix, double *so_z_matrix)
 {
-    double buf_arep[MAX_BUF];
-    double buf_spin_orbit[3][MAX_BUF];
-
     int dim = calculate_basis_dim(shell_list, num_shells);
 
     memset(arep_matrix, 0, sizeof(double) * dim * dim);
@@ -53,52 +50,83 @@ void evaluate_grpp_integrals(int num_shells, libgrpp_shell_t **shell_list,
     memset(so_y_matrix, 0, sizeof(double) * dim * dim);
     memset(so_z_matrix, 0, sizeof(double) * dim * dim);
 
+    /*
+     * arrays used for more efficient load balancing in parallelization
+     */
+    int *offsets = (int *) calloc(num_shells, sizeof(int));
     int ioffset = 0;
     for (int ishell = 0; ishell < num_shells; ishell++) {
+        offsets[ishell] = ioffset;
+        libgrpp_shell_t *bra = shell_list[ishell];
+        ioffset += libgrpp_get_shell_size(bra);
+    }
+
+    int *shell_pairs = (int *) calloc(num_shells * num_shells * 2, sizeof(int));
+    int n_shell_pairs = 0;
+    for (int ishell = 0; ishell < num_shells; ishell++) {
+        for (int jshell = 0; jshell < num_shells; jshell++) {
+            shell_pairs[2 * n_shell_pairs] = ishell;
+            shell_pairs[2 * n_shell_pairs + 1] = jshell;
+            n_shell_pairs++;
+        }
+    }
+
+    /*
+     * openmp parallelization
+     * to test thread-safety of libgrpp
+     */
+    #pragma omp parallel for schedule(dynamic) \
+    default(none) \
+    shared(shell_pairs, n_shell_pairs, offsets, dim, \
+    arep_matrix, so_x_matrix, so_y_matrix, so_z_matrix, \
+    num_shells, shell_list, molecule, grpp_list)
+    for (int ipair = 0; ipair < n_shell_pairs; ipair++) {
+
+        int ishell = shell_pairs[2 * ipair];
+        int jshell = shell_pairs[2 * ipair + 1];
+        int ioffset = offsets[ishell];
+        int joffset = offsets[jshell];
+
+        double buf_arep[MAX_BUF];
+        double buf_spin_orbit[3][MAX_BUF];
 
         libgrpp_shell_t *bra = shell_list[ishell];
         int bra_dim = libgrpp_get_shell_size(bra);
 
-        int joffset = 0;
-        for (int jshell = 0; jshell < num_shells; jshell++) {
+        libgrpp_shell_t *ket = shell_list[jshell];
+        int ket_dim = libgrpp_get_shell_size(ket);
 
-            libgrpp_shell_t *ket = shell_list[jshell];
-            int ket_dim = libgrpp_get_shell_size(ket);
+        double t1 = abs_time();
+        printf("grpp: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
 
-            double t1 = abs_time();
-            printf("grpp: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra->L, jshell + 1, ket->L);
-
-            for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
-                int z = molecule->charges[iatom];
-                libgrpp_grpp_t *grpp = grpp_list[z];
-                if (grpp == NULL) {
-                    continue;
-                }
-
-                double ecp_origin[3];
-                ecp_origin[0] = molecule->coord_x[iatom];
-                ecp_origin[1] = molecule->coord_y[iatom];
-                ecp_origin[2] = molecule->coord_z[iatom];
-
-                evaluate_grpp_integrals_shell_pair(
-                        bra, ket, grpp, ecp_origin,
-                        buf_arep, buf_spin_orbit[0], buf_spin_orbit[1], buf_spin_orbit[2]
-                );
-
-                add_block_to_matrix(dim, dim, arep_matrix, bra_dim, ket_dim, buf_arep, ioffset, joffset, 1.0);
-                add_block_to_matrix(dim, dim, so_x_matrix, bra_dim, ket_dim, buf_spin_orbit[0], ioffset, joffset, 1.0);
-                add_block_to_matrix(dim, dim, so_y_matrix, bra_dim, ket_dim, buf_spin_orbit[1], ioffset, joffset, 1.0);
-                add_block_to_matrix(dim, dim, so_z_matrix, bra_dim, ket_dim, buf_spin_orbit[2], ioffset, joffset, 1.0);
+        for (int iatom = 0; iatom < molecule->n_atoms; iatom++) {
+            int z = molecule->charges[iatom];
+            libgrpp_grpp_t *grpp = grpp_list[z];
+            if (grpp == NULL) {
+                continue;
             }
 
-            double t2 = abs_time();
-            printf("%10.3f sec\n", t2 - t1);
+            double ecp_origin[3];
+            ecp_origin[0] = molecule->coord_x[iatom];
+            ecp_origin[1] = molecule->coord_y[iatom];
+            ecp_origin[2] = molecule->coord_z[iatom];
 
-            joffset += ket_dim;
+            evaluate_grpp_integrals_shell_pair(
+                    bra, ket, grpp, ecp_origin,
+                    buf_arep, buf_spin_orbit[0], buf_spin_orbit[1], buf_spin_orbit[2]
+            );
+
+            add_block_to_matrix(dim, dim, arep_matrix, bra_dim, ket_dim, buf_arep, ioffset, joffset, 1.0);
+            add_block_to_matrix(dim, dim, so_x_matrix, bra_dim, ket_dim, buf_spin_orbit[0], ioffset, joffset, 1.0);
+            add_block_to_matrix(dim, dim, so_y_matrix, bra_dim, ket_dim, buf_spin_orbit[1], ioffset, joffset, 1.0);
+            add_block_to_matrix(dim, dim, so_z_matrix, bra_dim, ket_dim, buf_spin_orbit[2], ioffset, joffset, 1.0);
         }
 
-        ioffset += bra_dim;
+        double t2 = abs_time();
+        printf("%10.3f sec\n", t2 - t1);
     }
+
+    free(offsets);
 }
 
 
@@ -141,10 +169,12 @@ void evaluate_grpp_integrals_shell_pair(
     /*
      * semilocal SO ("type-3") integrals
      */
-    for (int L = 1; L < grpp_operator->n_esop; L++) {
-        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, grpp_operator->U_esop[L],
+    for (int ipot = 0; ipot < grpp_operator->n_esop; ipot++) {
+        libgrpp_potential_t *so_potential = grpp_operator->U_esop[ipot];
+        libgrpp_spin_orbit_integrals(shell_A, shell_B, grpp_origin, so_potential,
                                      buf_so_x, buf_so_y, buf_so_z);
 
+        int L = so_potential->L;
         update_vector(size, so_x_matrix, 2.0 / (2 * L + 1), buf_so_x);
         update_vector(size, so_y_matrix, 2.0 / (2 * L + 1), buf_so_y);
         update_vector(size, so_z_matrix, 2.0 / (2 * L + 1), buf_so_z);
@@ -202,7 +232,8 @@ void evaluate_overlap_integrals(int num_shells, libgrpp_shell_t **shell_list, do
             int ket_dim = libgrpp_get_shell_size(ket_shell);
 
             double t1 = abs_time();
-            printf("overlap: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+            printf("overlap: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1,
+                   ket_shell->L);
 
             libgrpp_overlap_integrals(bra_shell, ket_shell, buf);
             add_block_to_matrix(dim, dim, overlap_matrix, bra_dim, ket_dim, buf, ioffset, joffset, 1.0);
@@ -242,7 +273,8 @@ void evaluate_kinetic_energy_integrals(int num_shells, libgrpp_shell_t **shell_l
             int ket_dim = libgrpp_get_shell_size(ket_shell);
 
             double t1 = abs_time();
-            printf("kinetic: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+            printf("kinetic: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1,
+                   ket_shell->L);
 
             libgrpp_kinetic_energy_integrals(bra_shell, ket_shell, buf);
             add_block_to_matrix(dim, dim, kinetic_matrix, bra_dim, ket_dim, buf, ioffset, joffset, 1.0);
@@ -287,7 +319,8 @@ void evaluate_momentum_integrals(int num_shells, libgrpp_shell_t **shell_list,
             int ket_dim = libgrpp_get_shell_size(ket_shell);
 
             double t1 = abs_time();
-            printf("momentum: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1, ket_shell->L);
+            printf("momentum: ishell=%3d (L=%d)\tjshell=%3d (L=%d)\t", ishell + 1, bra_shell->L, jshell + 1,
+                   ket_shell->L);
 
             libgrpp_momentum_integrals(bra_shell, ket_shell, buf_x, buf_y, buf_z);
             add_block_to_matrix(dim, dim, px_matrix, bra_dim, ket_dim, buf_x, ioffset, joffset, 1.0);
@@ -346,12 +379,10 @@ void evaluate_nuclear_attraction_integrals(int num_shells, libgrpp_shell_t **she
                 if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE ||
                     nuclear_model == LIBGRPP_NUCLEAR_MODEL_POINT_CHARGE_NUMERICAL) {
                     // do nothing
-                }
-                else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
-                         nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
+                } else if (nuclear_model == LIBGRPP_NUCLEAR_MODEL_GAUSSIAN ||
+                           nuclear_model == LIBGRPP_NUCLEAR_MODEL_CHARGED_BALL) {
                     nucmod_params[0] = R_rms * FERMI_UNITS_TO_ATOMIC;
-                }
-                else { // Fermi
+                } else { // Fermi
                     double c, a;
                     libgrpp_estimate_fermi_model_parameters(R_rms, &c, &a);
                     nucmod_params[0] = c * FERMI_UNITS_TO_ATOMIC;

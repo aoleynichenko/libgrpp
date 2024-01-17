@@ -25,9 +25,9 @@ libgrpp_potential_t *libgrpp_new_potential(int L, int J, int num_primitives, int
 
     pot->L = L;
     pot->J = J;
-    pot->powers = (int *) malloc(sizeof(int) * num_primitives);
-    pot->coeffs = (double *) malloc(sizeof(double) * num_primitives);
-    pot->alpha = (double *) malloc(sizeof(double) * num_primitives);
+    pot->powers = (int *) calloc(num_primitives, sizeof(int));
+    pot->coeffs = (double *) calloc(num_primitives, sizeof(double));
+    pot->alpha = (double *) calloc(num_primitives, sizeof(double));
 
     pot->num_primitives = 0;
     for (int i = 0; i < num_primitives; i++) {
@@ -65,7 +65,7 @@ void libgrpp_delete_potential(libgrpp_potential_t *potential)
 /*
  * calculates value of the pseudopotential at the point 'r'
  *
- * TODO: remove the invokation of 'pow()'
+ * TODO: remove the invocation of 'pow()'
  */
 double libgrpp_potential_value(libgrpp_potential_t *potential, double r)
 {
@@ -83,6 +83,7 @@ double libgrpp_potential_value(libgrpp_potential_t *potential, double r)
 
 /*
  * removes redundant (zero) primitives from the RPP.
+ * argument remains constant.
  */
 libgrpp_potential_t *libgrpp_shrink_potential(libgrpp_potential_t *src_potential)
 {

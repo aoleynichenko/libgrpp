@@ -22,9 +22,7 @@
  *     doi: 10.1002/qua.22886
  */
 
-#include "gfun.h"
-
-#include "mymathlib.h"
+#include "specfunc.h"
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -32,7 +30,7 @@
 #include "factorial.h"
 
 
-double gfun_taylor(int n, double x);
+static double gfun_taylor(int n, double x);
 
 
 /**
@@ -58,9 +56,7 @@ void gfun_values(double x, int nmax, double *g)
          * upward recursion
          */
         double sqrt_x = sqrt(x);
-        //g[0] = gsl_sf_dawson(sqrt_x) / sqrt_x;
         g[0] = Dawsons_Integral(sqrt_x) / sqrt_x;
-        //g[0] = 0.0;
 
         for (int n = 0; n < nmax; n++) {
             g[n + 1] = (1.0 - (2 * n + 1) * g[n]) / (2.0 * x);
@@ -73,9 +69,9 @@ void gfun_values(double x, int nmax, double *g)
  * Calculates value of the Gn(x) auxiliary function using the Taylor expansion.
  * The Taylor series converges for x <= 30.
  */
-double gfun_taylor(int n, double x)
+static double gfun_taylor(int n, double x)
 {
-    double thresh = 1e-15;
+    const double thresh = 1e-15;
     double sum = 0.0;
 
     for (int k = 0; k < 100; k++) {

@@ -18,20 +18,27 @@ program test_libgrpp_f90
     integer :: iatom
     integer :: z
     integer :: basis_dim
-    integer :: i
+    integer :: i, j
     character(len=32), allocatable :: basis_labels(:)
+    character(len=50) :: file_name
+    character, parameter :: xyz_letters(3) = (/'x', 'y', 'z'/)
     real(8), allocatable :: nuc_attr_matrix(:,:)
     real(8), allocatable :: overlap_matrix(:,:)
     real(8), allocatable :: arep_matrix(:,:)
     real(8), allocatable :: esop_matrices(:,:,:)
+    real(8), allocatable :: arep_grad(:,:,:,:)
+    real(8), allocatable :: spin_orbit_grad(:,:,:,:,:)
 
     print *
     print *, '    -----------------------------------------------------'
     print *, '        the fortran front-end to the libgrpp library     '
     print *, '    -----------------------------------------------------'
-    print *, '    a. oleynichenko                            9 feb 2023'
+    print *, '    a. oleynichenko                           25 dec 2023'
     print *, '    -----------------------------------------------------'
     print *
+
+    ! initialization of libgrpp
+    call libgrpp_init
 
     call read_molecule
     call print_molecule
@@ -82,6 +89,12 @@ program test_libgrpp_f90
 
     call calculate_ecp_integrals(arep_matrix, esop_matrices)
 
+    ! calculate gradients of GRPP matrix elements
+    ! wrt coordinates of nuclei
+    allocate(arep_grad(natoms,3,basis_dim,basis_dim))
+    allocate(spin_orbit_grad(natoms,3,3,basis_dim,basis_dim))
+    call calculate_rpp_integrals_gradients(arep_grad,spin_orbit_grad)
+
     ! overlap matrix
     allocate(overlap_matrix(basis_dim,basis_dim))
     overlap_matrix = 0.0
@@ -101,6 +114,24 @@ program test_libgrpp_f90
     call print_matrix('libgrpp_f90_so_z.txt', esop_matrices(3,:,:), basis_dim, basis_dim)
     call print_matrix('libgrpp_f90_overlap.txt', overlap_matrix, basis_dim, basis_dim)
     call print_matrix('libgrpp_f90_nucattr.txt', nuc_attr_matrix, basis_dim, basis_dim)
+
+    ! gradients of AREP integrals - wrt nuclear coordinates
+    do iatom = 1, natoms
+        do i = 1, 3
+            write (file_name,"('libgrpp_f90_arep_grad_',i0,a,'.txt')") iatom - 1, xyz_letters(i)
+            call print_matrix(trim(file_name), arep_grad(iatom,i,:,:), basis_dim, basis_dim)
+        end do
+    end do
+
+    ! gradients of SO integrals - wrt nuclear coordinates
+    do iatom = 1, natoms
+        do i = 1, 3
+            do j = 1, 3
+                write (file_name,"('libgrpp_f90_so_',a,'_grad_',i0,a,'.txt')") xyz_letters(j), iatom - 1, xyz_letters(i)
+                call print_matrix(trim(file_name), spin_orbit_grad(iatom,i,j,:,:), basis_dim, basis_dim)
+            end do
+        end do
+    end do
 
     ! cleanup
     deallocate(overlap_matrix)

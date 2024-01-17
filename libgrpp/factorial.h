@@ -14,4 +14,4 @@ double factorial_ratio(int n, int m);
 
 double double_factorial(int n);
 
-#endif //LIBGRPP_FACTORIAL_H
+#endif // LIBGRPP_FACTORIAL_H

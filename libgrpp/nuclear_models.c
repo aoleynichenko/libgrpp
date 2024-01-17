@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "specfunc_fermi_sk.h"
+#include "specfunc.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -104,8 +104,7 @@ double libgrpp_charge_density_ball(double r, double Z, double R_rms)
 
     if (r <= R0) {
         return 3.0 * Z / (4.0 * M_PI * R0 * R0 * R0);
-    }
-    else {
+    } else {
         return 0.0;
     }
 }
@@ -125,8 +124,7 @@ double libgrpp_coulomb_potential_ball(double r, double Z, double R_rms)
 
     if (r <= R0) {
         return -Z / (2.0 * R0) * (3.0 - r * r / (R0 * R0));
-    }
-    else {
+    } else {
         return -Z / r;
     }
 }
@@ -183,10 +181,10 @@ double libgrpp_rms_radius_fermi(int Z, double c, double a)
     double rho0 = 3.0 * Z / (4 * M_PI * c3 * N);
 
     double r2 = 4 * M_PI * rho0 / Z * pow(c, 5) / 5.0 * (
-            1.0
-            + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
-            + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
-            - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
+        1.0
+        + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
+        + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
+        - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
     );
 
     return sqrt(r2);
@@ -208,21 +206,6 @@ double libgrpp_coulomb_potential_fermi(double r, double Z, double c, double a)
     double a3 = a * a * a;
     double c2 = c * c;
     double c3 = c * c * c;
-
-    /*double x = -20.0;
-    double dx = 0.001;
-    double xmax = 1e-5;
-    while (x < xmax) {
-
-        double Sk_exact = fermi_model_Sk(7, x);
-        double Sk_approx = specfunc_fermi_sk(7, x);
-
-        printf("%10.6f%24.16e%24.16e    %24.16e\n", x, Sk_exact, Sk_approx, Sk_approx - Sk_exact);
-
-        x += dx;
-    }
-    exit(0);*/
-
     double N = fermi_model_norm_factor(c, a);
 
     if (r > c) {
@@ -230,8 +213,7 @@ double libgrpp_coulomb_potential_fermi(double r, double Z, double c, double a)
         double S3 = specfunc_fermi_sk(3, (c - r) / a);
 
         return -Z / (N * r) * (N + 3 * a2 * r / c3 * S2 + 6 * a3 / c3 * S3);
-    }
-    else {
+    } else {
         double P2 = specfunc_fermi_sk(2, (r - c) / a);
         double P3 = specfunc_fermi_sk(3, (r - c) / a);
         double S3 = specfunc_fermi_sk(3, -c / a);
@@ -280,18 +262,18 @@ double libgrpp_rms_radius_fermi_bubble(int Z, double c, double a, double k)
     double rho0 = 3.0 * Z / (4 * M_PI * c3 * Nk);
 
     double part_r4 = pow(c, 5) / 5.0 * (
-            1.0
-            + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
-            + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
-            - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
+        1.0
+        + 10.0 / 3.0 * a * a * M_PI * M_PI / (c * c)
+        + 7.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
+        - 120.0 * pow(a, 5) / pow(c, 5) * specfunc_fermi_sk(5, -c / a)
     );
 
     double part_r6 = pow(c, 7) / 7.0 * (
-            1.0
-            + 7.0 * a * a * M_PI * M_PI / (c * c)
-            + 49.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
-            + 31.0 / 3.0 * pow(M_PI, 6) * pow(a, 6) / pow(c, 6)
-            - 5040.0 * pow(a, 7) / pow(c, 7) * specfunc_fermi_sk(7, -c / a)
+        1.0
+        + 7.0 * a * a * M_PI * M_PI / (c * c)
+        + 49.0 / 3.0 * pow(M_PI, 4) * pow(a, 4) / pow(c, 4)
+        + 31.0 / 3.0 * pow(M_PI, 6) * pow(a, 6) / pow(c, 6)
+        - 5040.0 * pow(a, 7) / pow(c, 7) * specfunc_fermi_sk(7, -c / a)
     );
 
     double r2 = 4 * M_PI * rho0 / Z * (part_r4 + k / (c * c) * part_r6);
@@ -331,7 +313,7 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
         double S5 = specfunc_fermi_sk(5, (r - c) / a);
 
         // contribution from the "classical" Fermi term
-        F0 = - pow(r, 3) / 6.0
+        F0 = -pow(r, 3) / 6.0
              - r * a * a * S2
              + 2.0 * pow(a, 3) * S3
              + r * c * c / 2.0
@@ -339,7 +321,7 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
              - 2.0 * pow(a, 3) * specfunc_fermi_sk(3, -c / a);
 
         // contribution from the quadratic, "hole" term
-        F2 = - pow(r, 5) / 20.0
+        F2 = -pow(r, 5) / 20.0
              - pow(r, 3) * pow(a, 2) * S2
              + 6.0 * pow(r, 2) * pow(a, 3) * S3
              - 18.0 * r * pow(a, 4) * S4
@@ -347,9 +329,8 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
              + r * pow(c, 4) / 4.0
              + r * M_PI * M_PI * c * c * a * a / 2.0
              + r * pow(a, 4) * pow(M_PI, 4) * 7.0 / 60.0
-             - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, - c / a);
-    }
-    else {
+             - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, -c / a);
+    } else {
         double S2 = specfunc_fermi_sk(2, (c - r) / a);
         double S3 = specfunc_fermi_sk(3, (c - r) / a);
         double S4 = specfunc_fermi_sk(4, (c - r) / a);
@@ -364,13 +345,13 @@ double libgrpp_coulomb_potential_fermi_bubble(double r, double Z, double c, doub
 
         // contribution from the quadratic, "hole" term
         F2 = pow(c, 5) / 5.0
-                + 2.0 * pow(c, 3) * a * a * M_PI * M_PI / 3.0
-                + 7.0 * pow(a, 4) * c * pow(M_PI, 4) / 15.0
-                - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, - c / a)
-                + pow(a, 2) * pow(r, 3) * S2
-                + 6.0 * pow(a, 3) * pow(r, 2) * S3
-                + 18.0 * r * pow(a, 4) * S4
-                + 24.0 * pow(a, 5) * S5;
+             + 2.0 * pow(c, 3) * a * a * M_PI * M_PI / 3.0
+             + 7.0 * pow(a, 4) * c * pow(M_PI, 4) / 15.0
+             - 24.0 * pow(a, 5) * specfunc_fermi_sk(5, -c / a)
+             + pow(a, 2) * pow(r, 3) * S2
+             + 6.0 * pow(a, 3) * pow(r, 2) * S3
+             + 18.0 * r * pow(a, 4) * S4
+             + 24.0 * pow(a, 5) * S5;
     }
 
     return -Z / (Nk * r) * 3.0 / pow(c, 3) * (F0 + k / (c * c) * F2);

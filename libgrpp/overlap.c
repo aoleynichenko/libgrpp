@@ -25,8 +25,13 @@
 #include "utils.h"
 
 
-void overlap_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                              double alpha_A, double alpha_B, double *overlap_matrix);
+void overlap_integrals_shell_pair_obara_saika(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *overlap_matrix
+);
 
 /**
  * Calculates overlap integral between two shells represented by contracted Gaussian functions.
@@ -58,8 +63,13 @@ void libgrpp_overlap_integrals(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_
 }
 
 
-void overlap_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, libgrpp_shell_t *shell_B,
-                                              double alpha_A, double alpha_B, double *overlap_matrix)
+void overlap_integrals_shell_pair_obara_saika(
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double alpha_A,
+    double alpha_B,
+    double *overlap_matrix
+)
 {
     int size_A = libgrpp_get_shell_size(shell_A);
     int size_B = libgrpp_get_shell_size(shell_B);
@@ -93,18 +103,17 @@ void overlap_integrals_shell_pair_obara_saika(libgrpp_shell_t *shell_A, libgrpp_
                 }
 
                 if (i == 0) { // upward by j
-                    S_ij += X_PB * S[coord][i][j-1];
+                    S_ij += X_PB * S[coord][i][j - 1];
                     if (j - 1 > 0) {
-                        S_ij += (j - 1) * pfac * S[coord][i][j-2];
+                        S_ij += (j - 1) * pfac * S[coord][i][j - 2];
                     }
-                }
-                else { // upward by i
-                    S_ij += X_PA * S[coord][i-1][j];
+                } else { // upward by i
+                    S_ij += X_PA * S[coord][i - 1][j];
                     if (i - 1 > 0) {
-                        S_ij += (i - 1) * pfac * S[coord][i-2][j];
+                        S_ij += (i - 1) * pfac * S[coord][i - 2][j];
                     }
                     if (j > 0) {
-                        S_ij += j * pfac * S[coord][i-1][j-1];
+                        S_ij += j * pfac * S[coord][i - 1][j - 1];
                     }
                 }
 

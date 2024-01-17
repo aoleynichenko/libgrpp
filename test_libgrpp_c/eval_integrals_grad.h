@@ -48,6 +48,17 @@ void evaluate_spin_orbit_integrals_gradient(
         double **gradient_so_z
 );
 
+void evaluate_outercore_potential_integrals_gradient(
+        int num_shells,
+        libgrpp_shell_t **shell_list,
+        molecule_t *molecule,
+        libgrpp_grpp_t **grpp_list,
+        double **gradient_arep,
+        double **gradient_so_x,
+        double **gradient_so_y,
+        double **gradient_so_z
+);
+
 void evaluate_overlap_integrals_gradient(
         int num_shells,
         libgrpp_shell_t **shell_list,

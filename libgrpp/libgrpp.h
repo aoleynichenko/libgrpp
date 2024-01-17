@@ -5,8 +5,8 @@
  *  Copyright (C) 2021-2023 Alexander Oleynichenko
  */
 
-#ifndef LIBGRPP_LIBGRECP_H
-#define LIBGRPP_LIBGRECP_H
+#ifndef LIBGRPP_LIBGRPP_H
+#define LIBGRPP_LIBGRPP_H
 
 #include "parameters.h"
 
@@ -30,6 +30,11 @@
  */
 #define LIBGRPP_RADIAL_TOL 1e-14
 
+void libgrpp_init();
+
+void libgrpp_finalize();
+
+int libgrpp_is_initialized();
 
 /*
  * representation of (generalized) effective core potentials
@@ -116,53 +121,53 @@ void libgrpp_delete_grpp(libgrpp_grpp_t *);
  */
 
 void libgrpp_type1_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        libgrpp_potential_t *potential,
-        double *matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    libgrpp_potential_t *potential,
+    double *matrix
 );
 
 void libgrpp_type2_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        libgrpp_potential_t *potential,
-        double *matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    libgrpp_potential_t *potential,
+    double *matrix
 );
 
 void libgrpp_spin_orbit_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        libgrpp_potential_t *potential,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    libgrpp_potential_t *potential,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 );
 
 void libgrpp_outercore_potential_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        int num_oc_shells,
-        libgrpp_potential_t **oc_potentials,
-        libgrpp_shell_t **oc_shells,
-        double *arep,
-        double *esop_x,
-        double *esop_y,
-        double *esop_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    int num_oc_shells,
+    libgrpp_potential_t **oc_potentials,
+    libgrpp_shell_t **oc_shells,
+    double *arep,
+    double *esop_x,
+    double *esop_y,
+    double *esop_z
 );
 
 void libgrpp_full_grpp_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double *arep_matrix,
-        double *so_x_matrix,
-        double *so_y_matrix,
-        double *so_z_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double *arep_matrix,
+    double *so_x_matrix,
+    double *so_y_matrix,
+    double *so_z_matrix
 );
 
 /*
@@ -171,58 +176,58 @@ void libgrpp_full_grpp_integrals(
  */
 
 void libgrpp_type1_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_arep
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_arep
 );
 
 void libgrpp_type2_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_arep
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_arep
 );
 
 void libgrpp_spin_orbit_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *grpp_origin,
-        libgrpp_potential_t *potential,
-        double *point_3d,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *grpp_origin,
+    libgrpp_potential_t *potential,
+    double *point_3d,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 );
 
 void libgrpp_outercore_potential_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *rpp_origin,
-        int num_oc_shells,
-        libgrpp_potential_t **oc_potentials,
-        libgrpp_shell_t **oc_shells,
-        double *point_3d,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *rpp_origin,
+    int num_oc_shells,
+    libgrpp_potential_t **oc_potentials,
+    libgrpp_shell_t **oc_shells,
+    double *point_3d,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 );
 
 void libgrpp_full_grpp_integrals_gradient(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        libgrpp_grpp_t *grpp_operator,
-        double *grpp_origin,
-        double *point_3d,
-        double **grad_arep,
-        double **grad_so_x,
-        double **grad_so_y,
-        double **grad_so_z
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    libgrpp_grpp_t *grpp_operator,
+    double *grpp_origin,
+    double *point_3d,
+    double **grad_arep,
+    double **grad_so_x,
+    double **grad_so_y,
+    double **grad_so_z
 );
 
 
@@ -249,65 +254,65 @@ enum {
 };
 
 void libgrpp_nuclear_attraction_integrals(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        int nuclear_model,
-        double *model_params,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    int nuclear_model,
+    double *model_params,
+    double *coulomb_matrix
 );
 
 
 void libgrpp_nuclear_attraction_integrals_point_charge(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    double *coulomb_matrix
 );
 
 
 void libgrpp_nuclear_attraction_integrals_charged_ball(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        double r_rms,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    double r_rms,
+    double *coulomb_matrix
 );
 
 
 void libgrpp_nuclear_attraction_integrals_gaussian_model(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        double r_rms,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    double r_rms,
+    double *coulomb_matrix
 );
 
 
 void libgrpp_nuclear_attraction_integrals_fermi_model(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        double fermi_param_c,
-        double fermi_param_a,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    double fermi_param_c,
+    double fermi_param_a,
+    double *coulomb_matrix
 );
 
 
 void libgrpp_nuclear_attraction_integrals_fermi_bubble_model(
-        libgrpp_shell_t *shell_A,
-        libgrpp_shell_t *shell_B,
-        double *charge_origin,
-        int charge,
-        double param_c,
-        double param_a,
-        double param_k,
-        double *coulomb_matrix
+    libgrpp_shell_t *shell_A,
+    libgrpp_shell_t *shell_B,
+    double *charge_origin,
+    int charge,
+    double param_c,
+    double param_a,
+    double param_k,
+    double *coulomb_matrix
 );
 
 
@@ -318,4 +323,4 @@ void libgrpp_nuclear_attraction_integrals_fermi_bubble_model(
 #include "nuclear_models.h"
 
 
-#endif // LIBGRPP_LIBGRECP_H
+#endif // LIBGRPP_LIBGRPP_H

@@ -29,7 +29,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "scaled_mod_sph_bessel.h"
+#include "specfunc.h"
 #include "screening.h"
 #include "utils.h"
 
@@ -105,8 +105,6 @@ radial_type1_table_t *tabulate_radial_type1_integrals(
 
     for (int lambda = 0; lambda <= lambda_max; lambda++) {
         for (int n = 0; n <= n_max; n++) {
-
-            //printf("lambda=%d n=%d\n", lambda, n);
 
             int converged;
             double Q = calculate_radial_type1_integral(grid, n, lambda, tolerance, &converged);
